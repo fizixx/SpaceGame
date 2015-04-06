@@ -23,7 +23,9 @@
 int main() {
   LOG(Info) << "Starting SpaceGame";
 
-  sf::RenderWindow window(sf::VideoMode(1600, 900, 32), "SpaceGame");
+  sf::ContextSettings settings{0U, 0U, 0U, 4U, 2U, sf::ContextSettings::Core};
+  sf::RenderWindow window(sf::VideoMode(1600, 900, 32), "SpaceGame",
+                          sf::Style::Default, settings);
   window.setVerticalSyncEnabled(true);
 
   sf::Vector2u windowSize{window.getSize()};
@@ -43,7 +45,7 @@ int main() {
       }
 
       // Let the universe also handle events.
-      universe.handleInput(evt);
+      // universe.handleInput(evt);
     }
 
     // We expect that 16.666ms went by since the last tick.  (60fps)
@@ -60,7 +62,7 @@ int main() {
     window.clear(sf::Color(0, 0, 0));
 
     // Draw the universe.
-    window.draw(universe);
+    //window.draw(universe);
 
     window.display();
   }
