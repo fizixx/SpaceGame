@@ -17,7 +17,7 @@
 #include <base/logging.h>
 #include <SFML/Graphics/RenderTarget.hpp>
 
-Camera::Camera() {
+Camera::Camera(const sf::Vector2f& viewportSize) : m_viewportSize(viewportSize) {
   // Adjust some values on the camera target shape.
   sf::FloatRect bounds{m_cameraTargetShape.getGlobalBounds()};
   m_cameraTargetShape.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
@@ -27,11 +27,11 @@ Camera::Camera() {
 Camera::~Camera() {
 }
 
-sf::View Camera::calculateCameraView(const sf::Vector2f& viewportSize) const {
+sf::View Camera::calculateCameraView() const {
   // Adjust the viewport size.
-  float ratio = 1080.f / viewportSize.y;
+  float ratio = 1080.f / m_viewportSize.y;
 
-  sf::Vector2f size{viewportSize.x * ratio, viewportSize.y * ratio};
+  sf::Vector2f size{m_viewportSize.x * ratio, m_viewportSize.y * ratio};
 
   sf::View result{m_cameraPos, size};
   result.zoom(m_zoomLevel);
@@ -87,6 +87,15 @@ void Camera::handleInput(sf::Event& event) {
         m_targetZoomLevel = 1.f;
       if (m_targetZoomLevel > 10.f)
         m_targetZoomLevel = 10.f;
+
+      // TODO(tiaan.louw): Adjuat the mouse position to the view's position.
+#if 0
+      // We also move the camera target to where we scrolled the mouse wheel.
+      m_cameraTarget = sf::Vector2f{static_cast<float>(event.mouseWheel.x),
+                                    static_cast<float>(event.mouseWheel.y)};
+      m_cameraTargetShape.setPosition(m_cameraTarget);
+#endif  // 0
+
       break;
   }
 }

@@ -12,12 +12,28 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef OBJECTS_OBJECT_H_
-#define OBJECTS_OBJECT_H_
+#ifndef UNIVERSE_OBJECTS_COMMAND_CENTER_H_
+#define UNIVERSE_OBJECTS_COMMAND_CENTER_H_
 
-class Entity {
+#include <SFML/Graphics/CircleShape.hpp>
+#include "universe/objects/object.h"
+
+class CommandCenter : public Object {
 public:
-  Entity();
+  explicit CommandCenter(Universe* universe);
+  virtual ~CommandCenter() override;
+
+  // Override: Object
+  virtual void moveTo(const sf::Vector2f& pos) override;
+  virtual bool inBounds(const sf::Vector2f& pos) const override;
+  virtual void tick(float adjustment) override;
+  virtual void draw(sf::RenderTarget& target,
+                    sf::RenderStates states) const override;
+
+private:
+  sf::CircleShape m_shape;
+
+  DISALLOW_IMPLICIT_CONSTRUCTORS(CommandCenter);
 };
 
-#endif  // OBJECTS_OBJECT_H_
+#endif  // UNIVERSE_OBJECTS_COMMAND_CENTER_H_

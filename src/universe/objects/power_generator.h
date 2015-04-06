@@ -12,3 +12,29 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+#ifndef UNIVERSE_OBJECTS_POWER_GENERATOR_H_
+#define UNIVERSE_OBJECTS_POWER_GENERATOR_H_
+
+#include <SFML/Graphics/CircleShape.hpp>
+
+#include "universe/objects/object.h"
+
+class PowerGenerator : public Object {
+public:
+  explicit PowerGenerator(Universe* universe);
+  virtual ~PowerGenerator() override;
+
+  // Override: Object
+  virtual void moveTo(const sf::Vector2f& pos) override;
+  virtual bool inBounds(const sf::Vector2f& pos) const override;
+  virtual void tick(float adjustment) override;
+  virtual void draw(sf::RenderTarget& target,
+                    sf::RenderStates states) const override;
+
+private:
+  sf::CircleShape m_shape;
+
+  DISALLOW_IMPLICIT_CONSTRUCTORS(PowerGenerator);
+};
+
+#endif  // UNIVERSE_OBJECTS_POWER_GENERATOR_H_

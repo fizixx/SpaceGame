@@ -12,3 +12,33 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+#include "universe/objects/command_center.h"
+
+#include <SFML/Graphics/RenderTarget.hpp>
+
+CommandCenter::CommandCenter(Universe* universe)
+  : Object(universe), m_shape(100.f) {
+  m_shape.setOrigin(m_shape.getGlobalBounds().width / 2.f,
+                    m_shape.getGlobalBounds().height / 2.f);
+}
+
+CommandCenter::~CommandCenter() {
+}
+
+void CommandCenter::moveTo(const sf::Vector2f& pos) {
+  Object::moveTo(pos);
+
+  m_shape.move(pos);
+}
+
+bool CommandCenter::inBounds(const sf::Vector2f& pos) const {
+  return m_shape.getGlobalBounds().contains(pos);
+}
+
+void CommandCenter::tick(float adjustment) {
+}
+
+void CommandCenter::draw(sf::RenderTarget& target,
+                         sf::RenderStates states) const {
+  target.draw(m_shape);
+}

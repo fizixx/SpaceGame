@@ -12,3 +12,19 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+#include "universe/objects/object.h"
+
+Object::Object(Universe* universe) : m_universe(universe) {
+}
+
+Object::~Object() {
+}
+
+void Object::moveTo(const sf::Vector2f& pos) {
+  m_pos = pos;
+}
+
+bool Object::inBounds(const sf::Vector2f& pos) const {
+  // We return false by default, meaning the pos is not inside this object.
+  return false;
+}

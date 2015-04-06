@@ -12,38 +12,44 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef UNIVERSE_H_
-#define UNIVERSE_H_
+#ifndef UNIVERSE_LINK_H_
+#define UNIVERSE_LINK_H_
 
 #include <base/macros.h>
-#include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/Drawable.hpp>
-#include <SFML/Graphics/View.hpp>
-#include <SFML/Window/Event.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 
-#include "camera.h"
+class Universe;
+class Object;
 
-class Universe : public sf::Drawable {
+class Link : public sf::Drawable {
 public:
-  // Construct the universe with the specified viewport size.
-  explicit Universe(const sf::Vector2f& viewportSize);
-  ~Universe();
+  Link(Universe* universe, Object* source, Object* destination);
+  virtual ~Link() override;
 
-  // Handle any input events.
-  void handleInput(sf::Event& event);
-
-  // Tick the universe.
-  void tick(float adjustment);
+  // Getters/Setters
+  Object* getSource() { return m_source; }
+  Object* getDestination() { return m_destination; }
 
   // Override: sf::Drawable
   virtual void draw(sf::RenderTarget& target,
                     sf::RenderStates states) const override;
 
 private:
-  // The camera we use to look into the universe.
-  Camera m_camera;
+  // Calculate the position and size of the shape.
+  void calculateShape();
 
-  DISALLOW_IMPLICIT_CONSTRUCTORS(Universe);
+  // The universe we belong to.
+  Universe* m_universe;
+
+  // The source and destination that the link connects.
+  Object* m_source{nullptr};
+  Object* m_destination{nullptr};
+
+  // The shape we draw for the link.
+  sf::RectangleShape m_shape;
+
+  DISALLOW_IMPLICIT_CONSTRUCTORS(Link);
 };
 
-#endif  // UNIVERSE_H_
+#endif  // UNIVERSE_LINK_H_

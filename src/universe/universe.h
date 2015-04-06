@@ -12,8 +12,10 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef CAMERA_H_
-#define CAMERA_H_
+#ifndef UNIVERSE_H_
+#define UNIVERSE_H_
+
+#include <memory>
 
 #include <base/macros.h>
 #include <SFML/Graphics/CircleShape.hpp>
@@ -21,13 +23,24 @@
 #include <SFML/Graphics/View.hpp>
 #include <SFML/Window/Event.hpp>
 
-class Camera : public sf::Drawable {
-public:
-  Camera();
-  ~Camera();
+#include "universe/camera.h"
 
-  // Calculate a view taking the position and zoom level into account.
-  sf::View calculateCameraView(const sf::Vector2f& viewportSize) const;
+class Link;
+class Object;
+
+class Universe : public sf::Drawable {
+public:
+  // Construct the universe with the specified viewport size.
+  explicit Universe(const sf::Vector2f& viewportSize);
+  ~Universe();
+
+  // Add or remove objects from the universe.
+  void addObject(Object* object);
+  void removeObject(Object* object);
+
+  // Add or remove links.
+  void addLink(Object* source, Object* destination);
+  void removeLink(Object* any);
 
   // Handle any input events.
   void handleInput(sf::Event& event);
@@ -40,28 +53,20 @@ public:
                     sf::RenderStates states) const override;
 
 private:
-  // This is set to true if we are currently dragging the viewport around.
-  bool m_isDraggingView{false};
+  sf::Vector2f mousePosToUniversePos(const sf::Vector2f& mousePos) const;
 
-  // This is the position where we started to drag the view from.
-  sf::Vector2f m_startDragViewPos;
+  // The camera we use to look into the universe.
+  Camera m_camera;
 
-  // The current position of the camera.
-  sf::Vector2f m_cameraPos;
+  // The entire list of links that exist in the universe.
+  std::vector<Link*> m_links;
 
-  // The location where we want the camera to animate to.
-  sf::Vector2f m_cameraTarget;
+  // The entire list of objects that exist in the universe.
+  std::vector<Object*> m_objects;
 
-  // A circle we use to render the camera target.
-  sf::CircleShape m_cameraTargetShape{30.f};
+  sf::CircleShape m_mousePosShape;
 
-  // The current zoom level of the camera.
-  float m_zoomLevel{1.f};
-
-  // The target zoom level for the camera.
-  float m_targetZoomLevel{1.f};
-
-  DISALLOW_COPY_AND_ASSIGN(Camera);
+  DISALLOW_IMPLICIT_CONSTRUCTORS(Universe);
 };
 
-#endif  // CAMERA_H_
+#endif  // UNIVERSE_H_
