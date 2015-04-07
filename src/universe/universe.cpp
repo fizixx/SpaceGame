@@ -131,7 +131,7 @@ void Universe::handleInput(sf::Event& event) {
     case sf::Event::MouseButtonPressed:
       // If we clicked, then set the selected object as the current hover
       // object.
-      if (m_hoverObject) {
+      if (event.mouseButton.button == sf::Mouse::Left && m_hoverObject) {
         m_selectedObject = m_hoverObject;
       }
       break;
