@@ -53,8 +53,6 @@ public:
                     sf::RenderStates states) const override;
 
 private:
-  sf::Vector2f mousePosToUniversePos(const sf::Vector2f& mousePos) const;
-
   // The camera we use to look into the universe.
   Camera m_camera;
 
@@ -64,6 +62,7 @@ private:
   // The entire list of objects that exist in the universe.
   std::vector<Object*> m_objects;
 
+  // A shape to show where the current mouse position is in the universe.
   sf::CircleShape m_mousePosShape;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(Universe);

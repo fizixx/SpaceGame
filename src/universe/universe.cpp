@@ -84,7 +84,7 @@ void Universe::handleInput(sf::Event& event) {
 
   switch (event.type) {
     case sf::Event::MouseMoved:
-      m_mousePosShape.setPosition(mousePosToUniversePos(
+      m_mousePosShape.setPosition(m_camera.mousePosToUniversePos(
           sf::Vector2f{static_cast<float>(event.mouseMove.x),
                        static_cast<float>(event.mouseMove.y)}));
       break;
@@ -103,7 +103,7 @@ void Universe::draw(sf::RenderTarget& target, sf::RenderStates states) const {
                             static_cast<float>(target.getSize().y)};
 
   // Set the new view to our camera view.
-  target.setView(m_camera.calculateCameraView());
+  target.setView(m_camera.getView());
 
   // Render the links first.
   for (const auto& link : m_links) {
@@ -118,31 +118,9 @@ void Universe::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   // Render the camera target.
   target.draw(m_camera);
 
-  target.draw(m_mousePosShape);
+  // Draw the mouse position.
+  // target.draw(m_mousePosShape);
 
   // Reset the target view.
   target.setView(origView);
-}
-
-sf::Vector2f Universe::mousePosToUniversePos(
-    const sf::Vector2f& mousePos) const {
-  sf::View cameraView{m_camera.calculateCameraView()};
-
-  float width = static_cast<float>(cameraView.getSize().x);
-  float height = static_cast<float>(cameraView.getSize().y);
-  const sf::FloatRect& viewport = cameraView.getViewport();
-
-  sf::IntRect adjViewport{static_cast<int>(0.5f + width * viewport.left),
-                          static_cast<int>(0.5f + height * viewport.top),
-                          static_cast<int>(0.5f + width * viewport.width),
-                          static_cast<int>(0.5f + height * viewport.height)};
-
-  sf::Vector2f normalized;
-  normalized.x =
-      -1.f + 2.f * (mousePos.x - adjViewport.left) / adjViewport.width;
-  normalized.y =
-      1.f - 2.f * (mousePos.y - adjViewport.top) / adjViewport.height;
-
-  // Then transform by the inverse of the view matrix
-  return cameraView.getInverseTransform().transformPoint(normalized);
 }

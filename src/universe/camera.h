@@ -26,8 +26,11 @@ public:
   explicit Camera(const sf::Vector2f& viewportSize);
   ~Camera();
 
-  // Calculate a view taking the position and zoom level into account.
-  sf::View calculateCameraView() const;
+  // Return our current view.
+  const sf::View& getView() const { return m_view; }
+
+  // Given a mouse position in the viewport, return the universe position.
+  sf::Vector2f mousePosToUniversePos(const sf::Vector2f& mousePos) const;
 
   // Handle any input events.
   void handleInput(sf::Event& event);
@@ -40,6 +43,9 @@ public:
                     sf::RenderStates states) const override;
 
 private:
+  // Calculate a view taking the position and zoom level into account.
+  void updateView();
+
   // The size of the viewport we're looking into.
   sf::Vector2f m_viewportSize;
 
@@ -55,14 +61,17 @@ private:
   // The location where we want the camera to animate to.
   sf::Vector2f m_cameraTarget;
 
-  // A circle we use to render the camera target.
-  sf::CircleShape m_cameraTargetShape{30.f};
-
   // The current zoom level of the camera.
   float m_zoomLevel{1.f};
 
   // The target zoom level for the camera.
   float m_targetZoomLevel{1.f};
+
+  // The final calculated view we use to translate everything.
+  sf::View m_view;
+
+  // A circle we use to render the camera target.
+  sf::CircleShape m_cameraTargetShape{30.f};
 
   DISALLOW_COPY_AND_ASSIGN(Camera);
 };

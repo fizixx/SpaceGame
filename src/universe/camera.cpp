@@ -17,26 +17,37 @@
 #include <base/logging.h>
 #include <SFML/Graphics/RenderTarget.hpp>
 
-Camera::Camera(const sf::Vector2f& viewportSize) : m_viewportSize(viewportSize) {
+Camera::Camera(const sf::Vector2f& viewportSize)
+  : m_viewportSize(viewportSize) {
   // Adjust some values on the camera target shape.
   sf::FloatRect bounds{m_cameraTargetShape.getGlobalBounds()};
   m_cameraTargetShape.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
   m_cameraTargetShape.setFillColor(sf::Color(255, 0, 0));
+
+  updateView();
 }
 
 Camera::~Camera() {
 }
 
-sf::View Camera::calculateCameraView() const {
-  // Adjust the viewport size.
-  float ratio = 1080.f / m_viewportSize.y;
+sf::Vector2f Camera::mousePosToUniversePos(const sf::Vector2f& mousePos) const {
+  float width = static_cast<float>(m_viewportSize.x);
+  float height = static_cast<float>(m_viewportSize.y);
+  const sf::FloatRect& viewport = m_view.getViewport();
 
-  sf::Vector2f size{m_viewportSize.x * ratio, m_viewportSize.y * ratio};
+  sf::IntRect adjViewport{static_cast<int>(0.5f + width * viewport.left),
+                          static_cast<int>(0.5f + height * viewport.top),
+                          static_cast<int>(0.5f + width * viewport.width),
+                          static_cast<int>(0.5f + height * viewport.height)};
 
-  sf::View result{m_cameraPos, size};
-  result.zoom(m_zoomLevel);
+  sf::Vector2f normalized;
+  normalized.x =
+      -1.f + 2.f * (mousePos.x - adjViewport.left) / adjViewport.width;
+  normalized.y =
+      1.f - 2.f * (mousePos.y - adjViewport.top) / adjViewport.height;
 
-  return result;
+  // Then transform by the inverse of the view matrix
+  return m_view.getInverseTransform().transformPoint(normalized);
 }
 
 void Camera::handleInput(sf::Event& event) {
@@ -70,7 +81,7 @@ void Camera::handleInput(sf::Event& event) {
             m_startDragViewPos;
 
         // Update the position of the camera.
-        m_cameraTarget += delta * m_zoomLevel;
+        m_cameraTarget -= delta * m_zoomLevel;
         m_cameraTargetShape.setPosition(m_cameraTarget);
 
         // Set the last view position to the current position for the next drag
@@ -81,22 +92,31 @@ void Camera::handleInput(sf::Event& event) {
       }
       break;
 
-    case sf::Event::MouseWheelMoved:
+    case sf::Event::MouseWheelMoved: {
       m_targetZoomLevel -= static_cast<float>(event.mouseWheel.delta);
       if (m_targetZoomLevel < 1.f)
         m_targetZoomLevel = 1.f;
       if (m_targetZoomLevel > 10.f)
         m_targetZoomLevel = 10.f;
 
-      // TODO(tiaan.louw): Adjuat the mouse position to the view's position.
-#if 0
       // We also move the camera target to where we scrolled the mouse wheel.
-      m_cameraTarget = sf::Vector2f{static_cast<float>(event.mouseWheel.x),
-                                    static_cast<float>(event.mouseWheel.y)};
-      m_cameraTargetShape.setPosition(m_cameraTarget);
+      // NOTE: We only do it half way between the current camera target and the
+      // mouse position so that movements aren't so sudden.
+      sf::Vector2f uniPos{mousePosToUniversePos(
+          sf::Vector2f{static_cast<float>(event.mouseWheel.x),
+                       static_cast<float>(event.mouseWheel.y)})};
+
+#if 0
+      sf::Vector2f halfPos{
+        m_cameraTarget.x + (uniPos.x + m_cameraPos.x) / 2.f,
+        m_cameraTarget.y + (uniPos.y + m_cameraPos.y) / 2.f,
+      };
 #endif  // 0
 
-      break;
+      m_cameraTarget = uniPos;
+      m_cameraTargetShape.setPosition(m_cameraTarget);
+
+    } break;
   }
 }
 
@@ -110,8 +130,26 @@ void Camera::tick(float adjustment) {
   // Adjust the zoom level towards the target zoom level.
   m_zoomLevel =
       m_zoomLevel + (m_targetZoomLevel - m_zoomLevel) / 7.5f * adjustment;
+
+  // If we changed the zoom level of the camera position, we have to update the
+  // view.
+  updateView();
 }
 
 void Camera::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+#if 0
   target.draw(m_cameraTargetShape);
+#endif  // 0
+}
+
+void Camera::updateView() {
+  // Adjust the viewport size.
+  float ratio = 1080.f / m_viewportSize.y;
+
+  sf::Vector2f size{m_viewportSize.x * ratio, m_viewportSize.y * ratio};
+
+  sf::View result{m_cameraPos, size};
+  result.zoom(m_zoomLevel);
+
+  m_view = result;
 }
