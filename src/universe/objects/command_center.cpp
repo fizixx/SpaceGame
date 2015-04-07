@@ -31,8 +31,8 @@ void CommandCenter::moveTo(const sf::Vector2f& pos) {
   m_shape.move(pos);
 }
 
-bool CommandCenter::inBounds(const sf::Vector2f& pos) const {
-  return m_shape.getGlobalBounds().contains(pos);
+sf::FloatRect CommandCenter::getBounds() const {
+  return m_shape.getGlobalBounds();
 }
 
 void CommandCenter::tick(float adjustment) {

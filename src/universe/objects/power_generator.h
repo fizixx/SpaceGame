@@ -26,7 +26,7 @@ public:
 
   // Override: Object
   virtual void moveTo(const sf::Vector2f& pos) override;
-  virtual bool inBounds(const sf::Vector2f& pos) const override;
+  virtual sf::FloatRect getBounds() const override;
   virtual void tick(float adjustment) override;
   virtual void draw(sf::RenderTarget& target,
                     sf::RenderStates states) const override;

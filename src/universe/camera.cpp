@@ -96,8 +96,8 @@ void Camera::handleInput(sf::Event& event) {
       m_targetZoomLevel -= static_cast<float>(event.mouseWheel.delta);
       if (m_targetZoomLevel < 1.f)
         m_targetZoomLevel = 1.f;
-      if (m_targetZoomLevel > 10.f)
-        m_targetZoomLevel = 10.f;
+      if (m_targetZoomLevel > 5.f)
+        m_targetZoomLevel = 5.f;
 
       // We also move the camera target to where we scrolled the mouse wheel.
       // NOTE: We only do it half way between the current camera target and the

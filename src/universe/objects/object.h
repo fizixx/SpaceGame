@@ -31,9 +31,8 @@ public:
   // Move the object to the specified coordinates.
   virtual void moveTo(const sf::Vector2f& pos);
 
-  // Return true of the current universe coordinates are inside the bounds of
-  // the object.
-  virtual bool inBounds(const sf::Vector2f& pos) const;
+  // Return the bounds of the object.
+  virtual sf::FloatRect getBounds() const;
 
   // Tick the object.
   virtual void tick(float adjustment) = 0;

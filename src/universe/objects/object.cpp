@@ -24,7 +24,6 @@ void Object::moveTo(const sf::Vector2f& pos) {
   m_pos = pos;
 }
 
-bool Object::inBounds(const sf::Vector2f& pos) const {
-  // We return false by default, meaning the pos is not inside this object.
-  return false;
+sf::FloatRect Object::getBounds() const {
+  return sf::FloatRect{};
 }

@@ -32,8 +32,8 @@ void PowerGenerator::moveTo(const sf::Vector2f& pos) {
   m_shape.move(pos);
 }
 
-bool PowerGenerator::inBounds(const sf::Vector2f& pos) const {
-  return m_shape.getGlobalBounds().contains(pos);
+sf::FloatRect PowerGenerator::getBounds() const {
+  return m_shape.getGlobalBounds();
 }
 
 void PowerGenerator::tick(float adjustment) {
