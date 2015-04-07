@@ -32,7 +32,8 @@ public:
 
   // Override: View
   virtual void layout(const sf::IntRect& rect) override;
-  virtual void render(sf::RenderTarget* target) override;
+  virtual void draw(sf::RenderTarget& target,
+                    sf::RenderStates states) const override;
 
 private:
   // The color of the view.

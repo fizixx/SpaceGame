@@ -18,11 +18,12 @@
 #include <string>
 
 #include <base/macros.h>
+#include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 
 class Context;
 
-class View {
+class View : public sf::Drawable {
 public:
   enum AlignType {
     AlignLeft,
@@ -64,7 +65,10 @@ public:
 
   virtual sf::Vector2i calculateMinSize() const;
   virtual void layout(const sf::IntRect& rect);
-  virtual void render(sf::RenderTarget* target);
+
+  // Override: sf::Drawable
+  virtual void draw(sf::RenderTarget& target,
+                    sf::RenderStates states) const override;
 
 protected:
   // The context we belong to.

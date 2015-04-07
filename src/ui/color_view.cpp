@@ -38,6 +38,6 @@ void ColorView::layout(const sf::IntRect& rect) {
                                   static_cast<float>(rect.height)));
 }
 
-void ColorView::render(sf::RenderTarget* target) {
-  target->draw(m_drawable);
+void ColorView::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+  target.draw(m_drawable, states);
 }

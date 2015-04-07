@@ -66,8 +66,8 @@ void GroupView::removeChild(View* view) {
   m_children.erase(it);
 }
 
-void GroupView::render(sf::RenderTarget* target) {
+void GroupView::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   for (auto& child : m_children) {
-    child->render(target);
+    target.draw(*child, states);
   }
 }

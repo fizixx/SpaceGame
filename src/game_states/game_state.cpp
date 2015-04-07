@@ -12,25 +12,23 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "ui/context.h"
+#include "game_states/game_state.h"
 
-Context::Context() : m_contextView(this) {
+GameState::GameState() : m_uiContext(std::make_unique<Context>()) {
 }
 
-Context::~Context() {
+GameState::~GameState() {
 }
 
-void Context::handleInput(sf::Event& event) {
+void GameState::handleInput(sf::Event& event) {
+  m_uiContext->handleInput(event);
 }
 
-void Context::tick(float adjustment) {
+void GameState::tick(float adjustment)  {
+  m_uiContext->tick(adjustment);
 }
 
-void Context::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-  // Get the size of the render target in pixels for the UI to render.
-  sf::IntRect layoutRect{0, 0, static_cast<int>(target.getSize().x),
-                         static_cast<int>(target.getSize().y)};
-
-  m_contextView.layout(layoutRect);
-  target.draw(m_contextView, states);
+void GameState::draw(sf::RenderTarget& target,
+                    sf::RenderStates states) const  {
+  m_uiContext->draw(target, states);
 }

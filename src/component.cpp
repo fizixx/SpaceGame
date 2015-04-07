@@ -12,25 +12,7 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "ui/context.h"
+#include "component.h"
 
-Context::Context() : m_contextView(this) {
-}
-
-Context::~Context() {
-}
-
-void Context::handleInput(sf::Event& event) {
-}
-
-void Context::tick(float adjustment) {
-}
-
-void Context::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-  // Get the size of the render target in pixels for the UI to render.
-  sf::IntRect layoutRect{0, 0, static_cast<int>(target.getSize().x),
-                         static_cast<int>(target.getSize().y)};
-
-  m_contextView.layout(layoutRect);
-  target.draw(m_contextView, states);
+Component::~Component() {
 }

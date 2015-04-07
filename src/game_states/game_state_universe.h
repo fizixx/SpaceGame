@@ -12,25 +12,29 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "ui/context.h"
+#ifndef GAME_STATES_GAME_STATE_UNIVERSE_H_
+#define GAME_STATES_GAME_STATE_UNIVERSE_H_
 
-Context::Context() : m_contextView(this) {
-}
+#include <memory>
 
-Context::~Context() {
-}
+#include "game_states/game_state.h"
+#include "universe/universe.h"
 
-void Context::handleInput(sf::Event& event) {
-}
+class GameStateUniverse : public GameState {
+public:
+  GameStateUniverse(const sf::Vector2f& viewportSize);
+  virtual ~GameStateUniverse() override;
 
-void Context::tick(float adjustment) {
-}
+  // Override: GameState
+  virtual void handleInput(sf::Event& event) override;
+  virtual void tick(float adjustment) override;
+  virtual void draw(sf::RenderTarget& target,
+                    sf::RenderStates states) const override;
 
-void Context::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-  // Get the size of the render target in pixels for the UI to render.
-  sf::IntRect layoutRect{0, 0, static_cast<int>(target.getSize().x),
-                         static_cast<int>(target.getSize().y)};
+private:
+  std::unique_ptr<Universe> m_universe;
 
-  m_contextView.layout(layoutRect);
-  target.draw(m_contextView, states);
-}
+  DISALLOW_COPY_AND_ASSIGN(GameStateUniverse);
+};
+
+#endif  // GAME_STATES_GAME_STATE_UNIVERSE_H_

@@ -30,7 +30,8 @@ public:
   void removeChild(View* view);
 
   // Override: View
-  virtual void render(sf::RenderTarget* target) override;
+  virtual void draw(sf::RenderTarget& target,
+                    sf::RenderStates states) const override;
 
 protected:
   // This view's child views.

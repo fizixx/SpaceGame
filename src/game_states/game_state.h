@@ -12,47 +12,34 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "ui/view.h"
+#ifndef GAME_STATES_GAME_STATE_H_
+#define GAME_STATES_GAME_STATE_H_
 
+#include <memory>
+
+#include <base/macros.h>
+#include <SFML/Window/Event.hpp>
+
+#include "component.h"
 #include "ui/context.h"
 
-View::View(Context* context)
-  : m_context(context),
-    m_horizontalAlign(AlignCenter),
-    m_verticalAlign(AlignCenter),
-    m_expand(ExpandNone) {
-}
+class GameState : public Component {
+public:
+  GameState();
+  virtual ~GameState() override;
 
-View::~View() {
-}
+  // Override: Component
+  virtual void handleInput(sf::Event& event) override;
+  virtual void tick(float adjustment) override;
+  virtual void draw(sf::RenderTarget& target,
+                    sf::RenderStates states) const override;
 
-void View::setName(const std::string& name) {
-  m_name = name;
-}
+protected:
+  // Every game state has a UI component.
+  std::unique_ptr<Context> m_uiContext;
 
-void View::setMinSize(const sf::Vector2i& minSize) {
-  m_minSize = minSize;
-}
+private:
+  DISALLOW_COPY_AND_ASSIGN(GameState);
+};
 
-void View::setHorizontalAlign(AlignType align) {
-  m_horizontalAlign = align;
-}
-
-void View::setVerticalAling(AlignType align) {
-  m_verticalAlign = align;
-}
-
-void View::setExpand(ExpandType expand) {
-  m_expand = expand;
-}
-
-sf::Vector2i View::calculateMinSize() const {
-  return m_minSize;
-}
-
-void View::layout(const sf::IntRect& rect) {
-  m_rect = rect;
-}
-
-void View::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-}
+#endif  // GAME_STATES_GAME_STATE_H_

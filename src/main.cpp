@@ -18,7 +18,7 @@
 #include <SFML/Window/Event.hpp>
 #include <base/logging.h>
 
-#include "universe/universe.h"
+#include "game_states/game_state_universe.h"
 
 int main() {
   LOG(Info) << "Starting SpaceGame";
@@ -26,10 +26,13 @@ int main() {
   sf::RenderWindow window{sf::VideoMode{1600, 900, 32}, "SpaceGame"};
   window.setVerticalSyncEnabled(true);
 
-  sf::Vector2u windowSize{window.getSize()};
-  Universe universe{sf::Vector2f(static_cast<float>(windowSize.x),
-                                 static_cast<float>(windowSize.y))};
+  sf::Vector2f windowSize{static_cast<float>(window.getSize().x),
+                          static_cast<float>(window.getSize().y)};
 
+  // Construct the universe game state.
+  std::unique_ptr<GameState> gameState =
+      std::make_unique<GameStateUniverse>(windowSize);
+  
   using Clock = std::chrono::high_resolution_clock;
   auto lastTick = Clock::now();
 
@@ -43,7 +46,7 @@ int main() {
       }
 
       // Let the universe also handle events.
-      universe.handleInput(evt);
+      gameState->handleInput(evt);
     }
 
     // We expect that 16.666ms went by since the last tick.  (60fps)
@@ -54,13 +57,13 @@ int main() {
 
     // We calculate the adjust we must make to get a smooth 60fps tick.
     float adjustment = timePassed.count() * 60.f / 1000.f;
-    universe.tick(adjustment);
+    gameState->tick(adjustment);
 
     // Clear the viewport with black.
     window.clear(sf::Color(0, 0, 0));
 
     // Draw the universe.
-    window.draw(universe);
+    window.draw(*gameState);
 
     window.display();
   }

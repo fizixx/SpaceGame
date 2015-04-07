@@ -12,25 +12,21 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "ui/context.h"
+#ifndef COMPONENT_H_
+#define COMPONENT_H_
 
-Context::Context() : m_contextView(this) {
-}
+#include <SFML/Graphics/Drawable.hpp>
+#include <SFML/Window/Event.hpp>
 
-Context::~Context() {
-}
+class Component : public sf::Drawable {
+public:
+  virtual ~Component();
 
-void Context::handleInput(sf::Event& event) {
-}
+  // Handle input on the component.
+  virtual void handleInput(sf::Event& event) = 0;
 
-void Context::tick(float adjustment) {
-}
+  // Tick the component with the supplied adjustment to make a smooth 60fps.
+  virtual void tick(float adjustment) = 0;
+};
 
-void Context::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-  // Get the size of the render target in pixels for the UI to render.
-  sf::IntRect layoutRect{0, 0, static_cast<int>(target.getSize().x),
-                         static_cast<int>(target.getSize().y)};
-
-  m_contextView.layout(layoutRect);
-  target.draw(m_contextView, states);
-}
+#endif  // COMPONENT_H_
