@@ -14,7 +14,7 @@
 
 #include "camera.h"
 
-#include <base/logging.h>
+#include <nucleus/logging.h>
 #include <SFML/Graphics/RenderTarget.hpp>
 
 Camera::Camera(const sf::Vector2f& viewportSize)

@@ -15,7 +15,7 @@
 #ifndef UNIVERSE_OBJECTS_OBJECT_H_
 #define UNIVERSE_OBJECTS_OBJECT_H_
 
-#include <base/macros.h>
+#include <nucleus/macros.h>
 #include <SFML/Graphics/Drawable.hpp>
 
 class Universe;

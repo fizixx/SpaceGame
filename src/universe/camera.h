@@ -15,7 +15,7 @@
 #ifndef CAMERA_H_
 #define CAMERA_H_
 
-#include <base/macros.h>
+#include <nucleus/macros.h>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/View.hpp>

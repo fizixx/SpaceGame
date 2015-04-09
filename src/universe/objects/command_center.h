@@ -16,6 +16,7 @@
 #define UNIVERSE_OBJECTS_COMMAND_CENTER_H_
 
 #include <SFML/Graphics/CircleShape.hpp>
+
 #include "universe/objects/object.h"
 
 class CommandCenter : public Object {

@@ -16,7 +16,7 @@
 
 #include <algorithm>
 
-#include <base/logging.h>
+#include <nucleus/logging.h>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 

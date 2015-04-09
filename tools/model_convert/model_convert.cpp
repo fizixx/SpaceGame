@@ -17,7 +17,7 @@
 #include <string>
 #include <vector>
 
-#include <base/files/file_utils.h>
+#include <nucleus/files/file_utils.h>
 
 #include "models/model_data.h"
 #include "parser.h"
@@ -52,7 +52,7 @@ int main(int argc, char* argv[]) {
   std::cout << "outfile: " << outFile << std::endl;
 
   std::vector<char> fileData;
-  base::readFileToVector(inFile, &fileData);
+  nu::readFileToVector(inFile, &fileData);
 
   ModelData modelData;
   Parser parser(fileData.data(), fileData.size());
@@ -81,7 +81,7 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  base::writeVectorToFile(outFile, out);
+  nu::writeVectorToFile(outFile, out);
 
   return 0;
 }

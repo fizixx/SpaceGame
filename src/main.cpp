@@ -16,7 +16,7 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
-#include <base/logging.h>
+#include <nucleus/logging.h>
 
 #include "game_states/game_state_universe.h"
 

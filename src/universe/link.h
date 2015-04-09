@@ -15,7 +15,7 @@
 #ifndef UNIVERSE_LINK_H_
 #define UNIVERSE_LINK_H_
 
-#include <base/macros.h>
+#include <nucleus/macros.h>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
