@@ -85,46 +85,30 @@ void Camera::onMouseReleased(sf::Event& event) {
   }
 }
 
-#if 0
-void Camera::handleInput(sf::Event& event) {
-  switch (event.type) {
-    case sf::Event::MouseButtonPressed:
-      break;
+void Camera::onMouseWheel(sf::Event& event) {
+  m_targetZoomLevel -= static_cast<float>(event.mouseWheel.delta);
+  if (m_targetZoomLevel < 1.f)
+    m_targetZoomLevel = 1.f;
+  if (m_targetZoomLevel > 5.f)
+    m_targetZoomLevel = 5.f;
 
-    case sf::Event::MouseButtonReleased:
-      break;
-
-    case sf::Event::MouseMoved:
-      break;
-
-    case sf::Event::MouseWheelMoved: {
-      m_targetZoomLevel -= static_cast<float>(event.mouseWheel.delta);
-      if (m_targetZoomLevel < 1.f)
-        m_targetZoomLevel = 1.f;
-      if (m_targetZoomLevel > 5.f)
-        m_targetZoomLevel = 5.f;
-
-      // We also move the camera target to where we scrolled the mouse wheel.
-      // NOTE: We only do it half way between the current camera target and the
-      // mouse position so that movements aren't so sudden.
-      sf::Vector2f uniPos{mousePosToUniversePos(
-          sf::Vector2f{static_cast<float>(event.mouseWheel.x),
-                       static_cast<float>(event.mouseWheel.y)})};
+  // We also move the camera target to where we scrolled the mouse wheel.
+  // NOTE: We only do it half way between the current camera target and the
+  // mouse position so that movements aren't so sudden.
+  sf::Vector2f uniPos{mousePosToUniversePos(
+      sf::Vector2f{static_cast<float>(event.mouseWheel.x),
+                   static_cast<float>(event.mouseWheel.y)})};
 
 #if 0
-      sf::Vector2f halfPos{
-        m_cameraTarget.x + (uniPos.x + m_cameraPos.x) / 2.f,
-        m_cameraTarget.y + (uniPos.y + m_cameraPos.y) / 2.f,
-      };
+  sf::Vector2f halfPos{
+    m_cameraTarget.x + (uniPos.x + m_cameraPos.x) / 2.f,
+    m_cameraTarget.y + (uniPos.y + m_cameraPos.y) / 2.f,
+  };
 #endif  // 0
 
-      m_cameraTarget = uniPos;
-      m_cameraTargetShape.setPosition(m_cameraTarget);
-
-    } break;
-  }
+  m_cameraTarget = uniPos;
+  m_cameraTargetShape.setPosition(m_cameraTarget);
 }
-#endif  // 0
 
 void Camera::tick(float adjustment) {
   // Adjust the current camera position towards the camera target position.
@@ -150,7 +134,7 @@ void Camera::layout(const sf::IntRect& rect) {
 }
 
 void Camera::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-  target.draw(m_cameraTargetShape);
+  // target.draw(m_cameraTargetShape);
 }
 
 void Camera::updateView() {

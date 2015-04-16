@@ -80,6 +80,7 @@ public:
   virtual bool onMouseDragged(sf::Event& event);
   virtual void onMouseMoved(sf::Event& event);
   virtual void onMouseReleased(sf::Event& event);
+  virtual void onMouseWheel(sf::Event& event);
 
   // Override: sf::Drawable
   virtual void draw(sf::RenderTarget& target,

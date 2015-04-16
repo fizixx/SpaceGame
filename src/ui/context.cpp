@@ -37,7 +37,7 @@ void Context::handleInput(sf::Event& event) {
     } break;
 
     case sf::Event::MouseWheelMoved: {
-      // m_contextView->processMouseWheel(event);
+      m_contextView.processMouseWheel(event);
     } break;
 
     default:
@@ -46,6 +46,7 @@ void Context::handleInput(sf::Event& event) {
 }
 
 void Context::tick(float adjustment) {
+  m_contextView.tick(adjustment);
 }
 
 void Context::draw(sf::RenderTarget& target, sf::RenderStates states) const {

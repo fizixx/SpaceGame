@@ -126,16 +126,14 @@ void ContextView::processMouseMoved(sf::Event& event) {
 }
 
 void ContextView::processMouseWheel(sf::Event& event) {
-#if 0
-  // Get the control that is at the top, below the mouse position.
-  Control* top = GetControlAtPosition(pos);
+  View* view =
+      getViewAtPosition(sf::Vector2i{event.mouseWheel.x, event.mouseWheel.y});
 
-  if (!top)
+  if (!view) {
     return;
+  }
 
-  MouseWheelEvent evt(delta, pos.x, pos.y, 0);
-  top->OnMouseWheel(evt);
-#endif  // 0
+  view->onMouseWheel(event);
 }
 
 }  // namespace ui

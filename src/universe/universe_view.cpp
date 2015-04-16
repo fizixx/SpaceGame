@@ -46,18 +46,22 @@ UniverseView::~UniverseView() {
 }
 
 bool UniverseView::onMousePressed(sf::Event& event) {
+  ui::View::onMousePressed(event);
+
   m_camera.onMousePressed(event);
-#if 0
-    m_camera.handleInput(event);
-#endif  // 0
   return true;
 }
 
 bool UniverseView::onMouseDragged(sf::Event& event) {
+  ui::View::onMouseDragged(event);
+
+  m_camera.onMouseDragged(event);
   return true;
 }
 
 void UniverseView::onMouseMoved(sf::Event& event) {
+  ui::View::onMouseMoved(event);
+
   m_mousePos = m_camera.mousePosToUniversePos(
       sf::Vector2f{static_cast<float>(event.mouseMove.x),
                    static_cast<float>(event.mouseMove.y)});
@@ -66,11 +70,21 @@ void UniverseView::onMouseMoved(sf::Event& event) {
 }
 
 void UniverseView::onMouseReleased(sf::Event& event) {
+  ui::View::onMouseReleased(event);
+
+  m_camera.onMouseReleased(event);
+
   // If we clicked, then set the selected object as the current hover
   // object.
   if (event.mouseButton.button == sf::Mouse::Left && m_hoverObject) {
     m_selectedObject = m_hoverObject;
   }
+}
+
+void UniverseView::onMouseWheel(sf::Event& event) {
+  ui::View::onMouseWheel(event);
+
+  m_camera.onMouseWheel(event);
 }
 
 void UniverseView::tick(float adjustment) {
@@ -102,6 +116,8 @@ void UniverseView::tick(float adjustment) {
 }
 
 void UniverseView::layout(const sf::IntRect& rect) {
+  View::layout(rect);
+
   m_camera.layout(rect);
 }
 

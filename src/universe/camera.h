@@ -36,6 +36,7 @@ public:
   void onMousePressed(sf::Event& event);
   void onMouseDragged(sf::Event& event);
   void onMouseReleased(sf::Event& event);
+  void onMouseWheel(sf::Event& event);
 
   // Tick the universe.
   void tick(float adjustment);

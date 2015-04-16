@@ -87,7 +87,17 @@ View* GroupView::getViewAtPosition(const sf::Vector2i& pos) {
   return this;
 }
 
+void GroupView::tick(float adjustment) {
+  View::tick(adjustment);
+
+  for (auto& child: m_children) {
+    child->tick(adjustment);
+  }
+}
+
 void GroupView::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+  View::draw(target, states);
+
   for (auto& child : m_children) {
     target.draw(*child, states);
   }

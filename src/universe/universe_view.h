@@ -31,6 +31,7 @@ public:
   virtual bool onMouseDragged(sf::Event& event) override;
   virtual void onMouseMoved(sf::Event& event) override;
   virtual void onMouseReleased(sf::Event& event) override;
+  virtual void onMouseWheel(sf::Event& event) override;
   virtual void tick(float adjustment) override;
   virtual void layout(const sf::IntRect& rect) override;
   virtual void draw(sf::RenderTarget& target,

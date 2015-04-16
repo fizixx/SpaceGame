@@ -35,6 +35,7 @@ public:
   virtual View* getViewAtPosition(const sf::Vector2i& pos) override;
 
   // Override: View
+  virtual void tick(float adjustment) override;
   virtual void draw(sf::RenderTarget& target,
                     sf::RenderStates states) const override;
 
