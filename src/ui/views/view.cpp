@@ -16,6 +16,8 @@
 
 #include "ui/context.h"
 
+namespace ui {
+
 View::View(Context* context)
   : m_context(context),
     m_horizontalAlign(AlignCenter),
@@ -56,3 +58,5 @@ void View::layout(const sf::IntRect& rect) {
 
 void View::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 }
+
+}  // namespace ui

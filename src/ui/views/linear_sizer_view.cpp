@@ -16,6 +16,8 @@
 
 #include <cmath>
 
+namespace ui {
+
 LinearSizerView::LinearSizerView(Context* context)
   : GroupView(context), m_orientation(OrientationHorizontal) {
 }
@@ -88,3 +90,5 @@ void LinearSizerView::layoutVertical(const sf::IntRect& rect) {
     ++section;
   }
 }
+
+}  // namespace ui

@@ -14,6 +14,8 @@
 
 #include "ui/views/stacked_sizer_view.h"
 
+namespace ui {
+
 StackedSizerView::StackedSizerView(Context* context) : GroupView(context) {
 }
 
@@ -38,3 +40,5 @@ void StackedSizerView::layout(const sf::IntRect& rect) {
   for (auto& child : m_children)
     child->layout(GroupView::layoutControlInRect(child, rect));
 }
+
+}  // namespace ui

@@ -19,6 +19,8 @@
 
 #include "ui/views/view.h"
 
+namespace ui {
+
 class GroupView : public View {
 public:
   static sf::IntRect layoutControlInRect(View* view, const sf::IntRect& rect);
@@ -39,5 +41,7 @@ protected:
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(GroupView);
 };
+
+}  // namespace ui
 
 #endif  // UI_GROUP_VIEW_H_

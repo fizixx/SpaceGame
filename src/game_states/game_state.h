@@ -36,7 +36,7 @@ public:
 
 protected:
   // Every game state has a UI component.
-  std::unique_ptr<Context> m_uiContext;
+  std::unique_ptr<ui::Context> m_uiContext;
 
 private:
   DISALLOW_COPY_AND_ASSIGN(GameState);

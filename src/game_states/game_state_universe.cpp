@@ -21,7 +21,8 @@
 GameStateUniverse::GameStateUniverse(const sf::Vector2f& viewportSize)
   : m_universe(std::make_unique<Universe>(viewportSize)) {
   // Build the UI.
-  ColorView* colorView = new ColorView(m_uiContext.get(), sf::Color(255, 0, 0));
+  ui::ColorView* colorView =
+      new ui::ColorView(m_uiContext.get(), sf::Color(255, 0, 0));
   colorView->setMinSize(sf::Vector2i{100, 100});
 
   m_uiContext->getRoot()->addChild(colorView);

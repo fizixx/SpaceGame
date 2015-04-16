@@ -17,6 +17,8 @@
 
 #include "ui/views/group_view.h"
 
+namespace ui {
+
 class LinearSizerView : public GroupView {
 public:
   enum OrientationType {
@@ -45,5 +47,7 @@ private:
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(LinearSizerView);
 };
+
+}  // namespace ui
 
 #endif  // UI_LINEAR_SIZER_VIEW_H_

@@ -14,8 +14,12 @@
 
 #include "ui/views/context_view.h"
 
+namespace ui {
+
 ContextView::ContextView(Context* context) : StackedSizerView(context) {
 }
 
 ContextView::~ContextView() {
 }
+
+}  // namespace ui

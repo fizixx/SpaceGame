@@ -17,6 +17,8 @@
 
 #include "ui/views/group_view.h"
 
+namespace ui {
+
 class StackedSizerView : public GroupView {
 public:
   explicit StackedSizerView(Context* context);
@@ -29,5 +31,7 @@ public:
 private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(StackedSizerView);
 };
+
+}  // namespace ui
 
 #endif  // UI_STACKED_SIZER_VIEW_H_

@@ -20,6 +20,8 @@
 #include "ui/views/context_view.h"
 #include "component.h"
 
+namespace ui {
+
 class View;
 
 class Context : public Component {
@@ -44,5 +46,7 @@ protected:
 
   DISALLOW_COPY_AND_ASSIGN(Context);
 };
+
+}  // namespace ui
 
 #endif  // UI_CONTEXT_H_

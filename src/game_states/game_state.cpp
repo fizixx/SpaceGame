@@ -14,7 +14,7 @@
 
 #include "game_states/game_state.h"
 
-GameState::GameState() : m_uiContext(std::make_unique<Context>()) {
+GameState::GameState() : m_uiContext(std::make_unique<ui::Context>()) {
 }
 
 GameState::~GameState() {

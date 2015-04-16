@@ -14,6 +14,8 @@
 
 #include "ui/views/color_view.h"
 
+namespace ui {
+
 ColorView::ColorView(Context* context) : View(context) {
 }
 
@@ -41,3 +43,5 @@ void ColorView::layout(const sf::IntRect& rect) {
 void ColorView::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   target.draw(m_drawable, states);
 }
+
+}  // namespace ui

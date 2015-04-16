@@ -17,6 +17,8 @@
 
 #include "ui/views/stacked_sizer_view.h"
 
+namespace ui {
+
 class ContextView : public StackedSizerView {
 public:
   explicit ContextView(Context* context);
@@ -25,5 +27,7 @@ public:
 private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(ContextView);
 };
+
+}  // namespace ui
 
 #endif  // UI_CONTEXT_VIEW_H_

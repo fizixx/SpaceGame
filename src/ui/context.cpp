@@ -14,6 +14,8 @@
 
 #include "ui/context.h"
 
+namespace ui {
+
 Context::Context() : m_contextView(this) {
 }
 
@@ -34,3 +36,5 @@ void Context::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   m_contextView.layout(layoutRect);
   target.draw(m_contextView, states);
 }
+
+}  // namespace ui

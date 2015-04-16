@@ -20,6 +20,8 @@
 
 #include "ui/views/view.h"
 
+namespace ui {
+
 class ColorView : public View {
 public:
   explicit ColorView(Context* context);
@@ -44,5 +46,7 @@ private:
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(ColorView);
 };
+
+}  // namespace ui
 
 #endif  // UI_COLOR_VIEW_H_

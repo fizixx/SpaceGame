@@ -14,6 +14,8 @@
 
 #include "ui/views/group_view.h"
 
+namespace ui {
+
 // static
 sf::IntRect GroupView::layoutControlInRect(View* view,
                                            const sf::IntRect& rect) {
@@ -71,3 +73,5 @@ void GroupView::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(*child, states);
   }
 }
+
+}  // namespace ui

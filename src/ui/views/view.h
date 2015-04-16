@@ -21,6 +21,8 @@
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 
+namespace ui {
+
 class Context;
 
 class View : public sf::Drawable {
@@ -92,5 +94,7 @@ protected:
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(View);
 };
+
+}  // namespace ui
 
 #endif  // UI_VIEW_H_
