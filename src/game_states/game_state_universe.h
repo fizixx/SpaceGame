@@ -32,6 +32,10 @@ public:
                     sf::RenderStates states) const override;
 
 private:
+  // Create the user interface and add it to the parent ui specified.
+  void createUserInterface(ui::Context* context, ui::GroupView* parent) const;
+
+  // The universe for this game state.
   std::unique_ptr<Universe> m_universe;
 
   DISALLOW_COPY_AND_ASSIGN(GameStateUniverse);

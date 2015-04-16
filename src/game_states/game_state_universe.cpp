@@ -17,32 +17,40 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 
 #include "ui/views/color_view.h"
+#include "universe/universe_view.h"
 
 GameStateUniverse::GameStateUniverse(const sf::Vector2f& viewportSize)
   : m_universe(std::make_unique<Universe>(viewportSize)) {
-  // Build the UI.
-  ui::ColorView* colorView =
-      new ui::ColorView(m_uiContext.get(), sf::Color(255, 0, 0));
-  colorView->setMinSize(sf::Vector2i{100, 100});
-
-  m_uiContext->getRoot()->addChild(colorView);
+  // Add the user interface to the UI tree.
+  createUserInterface(m_uiContext.get(), m_uiContext->getRoot());
 }
 
 GameStateUniverse::~GameStateUniverse() {
 }
 
 void GameStateUniverse::handleInput(sf::Event& event) {
-  m_universe->handleInput(event);
+  //m_universe->handleInput(event);
   GameState::handleInput(event);
 }
 
 void GameStateUniverse::tick(float adjustment) {
-  m_universe->tick(adjustment);
+  //m_universe->tick(adjustment);
   GameState::tick(adjustment);
 }
 
 void GameStateUniverse::draw(sf::RenderTarget& target,
                              sf::RenderStates states) const {
-  target.draw(*m_universe, states);
+  //target.draw(*m_universe, states);
   GameState::draw(target, states);
+}
+
+void GameStateUniverse::createUserInterface(ui::Context* context,
+                                            ui::GroupView* parent) const {
+  // Add the universe view.
+  parent->addChild(new UniverseView{context, m_universe.get()});
+
+  // Add the root of the user controls.
+  auto colorView = std::make_unique<ui::ColorView>(context, sf::Color{255, 0, 255});
+  colorView->setMinSize(sf::Vector2i{100, 75});
+  parent->addChild(colorView.release());
 }
