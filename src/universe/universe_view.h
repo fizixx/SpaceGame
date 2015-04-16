@@ -29,9 +29,10 @@ public:
   // Override: ui::View
   virtual bool onMousePressed(sf::Event& event) override;
   virtual bool onMouseDragged(sf::Event& event) override;
+  virtual void onMouseMoved(sf::Event& event) override;
   virtual void onMouseReleased(sf::Event& event) override;
-  virtual void handleInput(sf::Event& event) override;
   virtual void tick(float adjustment) override;
+  virtual void layout(const sf::IntRect& rect) override;
   virtual void draw(sf::RenderTarget& target,
                     sf::RenderStates states) const override;
 

@@ -19,8 +19,7 @@
 #include "universe/universe.h"
 
 UniverseView::UniverseView(ui::Context* context, Universe* universe)
-  : ui::View(context), m_universe(universe), m_camera(sf::Vector2f{0.f, 0.f}) {
-
+  : ui::View(context), m_universe(universe) {
   // Set up the mouse position shape.
 
   m_mousePosShape.setRadius(25.f);
@@ -41,13 +40,16 @@ UniverseView::UniverseView(ui::Context* context, Universe* universe)
   m_selectedShape.setFillColor(sf::Color{0, 0, 0, 0});
   m_selectedShape.setOutlineThickness(3.f);
   m_selectedShape.setOutlineColor(sf::Color{0, 255, 255, 255});
-
 }
 
 UniverseView::~UniverseView() {
 }
 
 bool UniverseView::onMousePressed(sf::Event& event) {
+  m_camera.onMousePressed(event);
+#if 0
+    m_camera.handleInput(event);
+#endif  // 0
   return true;
 }
 
@@ -55,28 +57,19 @@ bool UniverseView::onMouseDragged(sf::Event& event) {
   return true;
 }
 
-void UniverseView::onMouseReleased(sf::Event& event) {
+void UniverseView::onMouseMoved(sf::Event& event) {
+  m_mousePos = m_camera.mousePosToUniversePos(
+      sf::Vector2f{static_cast<float>(event.mouseMove.x),
+                   static_cast<float>(event.mouseMove.y)});
+  m_mousePosShape.setPosition(m_mousePos);
+  updateHoverObject();
 }
 
-void UniverseView::handleInput(sf::Event& event) {
-  m_camera.handleInput(event);
-
-  switch (event.type) {
-    case sf::Event::MouseMoved:
-      m_mousePos = m_camera.mousePosToUniversePos(
-          sf::Vector2f{static_cast<float>(event.mouseMove.x),
-                       static_cast<float>(event.mouseMove.y)});
-      m_mousePosShape.setPosition(m_mousePos);
-      updateHoverObject();
-      break;
-
-    case sf::Event::MouseButtonPressed:
-      // If we clicked, then set the selected object as the current hover
-      // object.
-      if (event.mouseButton.button == sf::Mouse::Left && m_hoverObject) {
-        m_selectedObject = m_hoverObject;
-      }
-      break;
+void UniverseView::onMouseReleased(sf::Event& event) {
+  // If we clicked, then set the selected object as the current hover
+  // object.
+  if (event.mouseButton.button == sf::Mouse::Left && m_hoverObject) {
+    m_selectedObject = m_hoverObject;
   }
 }
 
@@ -108,13 +101,14 @@ void UniverseView::tick(float adjustment) {
   }
 }
 
+void UniverseView::layout(const sf::IntRect& rect) {
+  m_camera.layout(rect);
+}
+
 void UniverseView::draw(sf::RenderTarget& target,
                         sf::RenderStates states) const {
   // Store the original view state.
   sf::View origView = target.getView();
-
-  sf::Vector2f viewportSize{static_cast<float>(m_rect.width),
-                            static_cast<float>(m_rect.height)};
 
   // Set the new view to our camera view.
   target.setView(m_camera.getView());

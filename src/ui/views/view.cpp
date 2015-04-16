@@ -46,9 +46,6 @@ View* View::getViewAtPosition(const sf::Vector2i& pos) {
   return m_rect.contains(pos) ? this : nullptr;
 }
 
-void View::handleInput(sf::Event& event) {
-}
-
 void View::tick(float adjustment) {
 }
 
@@ -68,10 +65,10 @@ bool View::onMouseDragged(sf::Event& event) {
   return false;
 }
 
-void View::onMouseReleased(sf::Event& event) {
+void View::onMouseMoved(sf::Event& event) {
 }
 
-void View::onMouseMoved(sf::Event& event) {
+void View::onMouseReleased(sf::Event& event) {
 }
 
 void View::draw(sf::RenderTarget& target, sf::RenderStates states) const {

@@ -70,7 +70,6 @@ public:
 
   virtual View* getViewAtPosition(const sf::Vector2i& pos);
 
-  virtual void handleInput(sf::Event& event);
   virtual void tick(float adjustment);
   virtual sf::Vector2i calculateMinSize() const;
   virtual void layout(const sf::IntRect& rect);
@@ -79,8 +78,8 @@ public:
 
   virtual bool onMousePressed(sf::Event& event);
   virtual bool onMouseDragged(sf::Event& event);
-  virtual void onMouseReleased(sf::Event& event);
   virtual void onMouseMoved(sf::Event& event);
+  virtual void onMouseReleased(sf::Event& event);
 
   // Override: sf::Drawable
   virtual void draw(sf::RenderTarget& target,
