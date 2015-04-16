@@ -47,7 +47,9 @@ void GameStateUniverse::draw(sf::RenderTarget& target,
 void GameStateUniverse::createUserInterface(ui::Context* context,
                                             ui::GroupView* parent) const {
   // Add the universe view.
-  parent->addChild(new UniverseView{context, m_universe.get()});
+  auto universeView = std::make_unique<UniverseView>(context, m_universe.get());
+  universeView->setExpand(ui::View::ExpandBoth);
+  parent->addChild(universeView.release());
 
   // Add the root of the user controls.
   auto colorView = std::make_unique<ui::ColorView>(context, sf::Color{255, 0, 255});

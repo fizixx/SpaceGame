@@ -19,10 +19,8 @@
 namespace ui {
 
 View::View(Context* context)
-  : m_context(context),
-    m_horizontalAlign(AlignCenter),
-    m_verticalAlign(AlignCenter),
-    m_expand(ExpandNone) {
+  : m_context(context), m_horizontalAlign(AlignCenter),
+    m_verticalAlign(AlignCenter), m_expand(ExpandNone) {
 }
 
 View::~View() {
@@ -46,6 +44,12 @@ void View::setVerticalAling(AlignType align) {
 
 void View::setExpand(ExpandType expand) {
   m_expand = expand;
+}
+
+void View::handleInput(sf::Event& event) {
+}
+
+void View::tick(float adjustment) {
 }
 
 sf::Vector2i View::calculateMinSize() const {

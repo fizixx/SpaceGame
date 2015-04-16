@@ -20,6 +20,7 @@
 #include <nucleus/macros.h>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Window/Event.hpp>
 
 namespace ui {
 
@@ -65,6 +66,10 @@ public:
   ExpandType getExpand() const { return m_expand; }
   void setExpand(ExpandType expand);
 
+  // Virtual Interface
+
+  virtual void handleInput(sf::Event& event);
+  virtual void tick(float adjustment);
   virtual sf::Vector2i calculateMinSize() const;
   virtual void layout(const sf::IntRect& rect);
 

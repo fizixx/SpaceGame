@@ -56,41 +56,13 @@ public:
                     sf::RenderStates states) const override;
 
 private:
-  // Find the object that is currently under the mouse.
-  void updateHoverObject();
-
-  // The camera we use to look into the universe.
-  Camera m_camera;
+  friend class UniverseView;
 
   // The entire list of links that exist in the universe.
   std::vector<Link*> m_links;
 
   // The entire list of objects that exist in the universe.
   std::vector<Object*> m_objects;
-
-  // The current mouse position in the world.  Updated on every input event.
-  sf::Vector2f m_mousePos;
-
-  // The current object that is being hovered over.
-  Object* m_hoverObject{nullptr};
-
-  // The current object that is selected.
-  Object* m_selectedObject{nullptr};
-
-  // A shape to show where the current mouse position is in the universe.
-  sf::CircleShape m_mousePosShape;
-
-  // The rectangle we use to draw the hover outline.
-  sf::RectangleShape m_hoverShape;
-
-  // The rectangle we use to draw the selected outline.
-  sf::RectangleShape m_selectedShape;
-
-  // The background texture.
-  sf::Texture m_backgroundTexture;
-
-  // The geometry of the background image.
-  sf::VertexArray m_backgroundShape;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(Universe);
 };

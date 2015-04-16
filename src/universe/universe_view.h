@@ -16,17 +16,49 @@
 #define UNIVERSE_UNIVERSE_VIEW_H_
 
 #include "ui/views/color_view.h"
+#include "universe/camera.h"
 
 class Universe;
+class Object;
 
-class UniverseView : public ui::ColorView {
+class UniverseView : public ui::View {
 public:
   UniverseView(ui::Context* context, Universe* universe = nullptr);
   virtual ~UniverseView() override;
 
+  // Override: ui::View
+  virtual void handleInput(sf::Event& event) override;
+  virtual void tick(float adjustment) override;
+  virtual void draw(sf::RenderTarget& target,
+                    sf::RenderStates states) const override;
+
 private:
+  // Find the object that is currently under the mouse.
+  void updateHoverObject();
+
   // The universe we are looking at.
   Universe* m_universe;
+
+  // The camera we use to look into the universe.
+  Camera m_camera;
+
+  // The current mouse position in the world.  Updated on every input event.
+  sf::Vector2f m_mousePos;
+
+  // The current object that is being hovered over.
+  Object* m_hoverObject{nullptr};
+
+  // The current object that is selected.
+  Object* m_selectedObject{nullptr};
+
+  // A shape to show where the current mouse position is in the universe.
+  sf::CircleShape m_mousePosShape;
+
+  // The rectangle we use to draw the hover outline.
+  sf::RectangleShape m_hoverShape;
+
+  // The rectangle we use to draw the selected outline.
+  sf::RectangleShape m_selectedShape;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(UniverseView);
 };
