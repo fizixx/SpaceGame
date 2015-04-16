@@ -19,24 +19,25 @@
 
 #include "game_states/game_state.h"
 #include "universe/universe.h"
+#include "ui/views/button.h"
 
-class GameStateUniverse : public GameState {
+class GameStateUniverse : public GameState, public ui::Button::OnClickListener {
 public:
   GameStateUniverse(const sf::Vector2f& viewportSize);
   virtual ~GameStateUniverse() override;
 
-  // Override: GameState
-  virtual void handleInput(sf::Event& event) override;
-  virtual void tick(float adjustment) override;
-  virtual void draw(sf::RenderTarget& target,
-                    sf::RenderStates states) const override;
+  // Override: ui::Button::OnClickListener
+  virtual void onButtonClicked(ui::Button* sender) override;
 
 private:
   // Create the user interface and add it to the parent ui specified.
-  void createUserInterface(ui::Context* context, ui::GroupView* parent) const;
+  void createUserInterface(ui::Context* context, ui::GroupView* parent);
 
   // The universe for this game state.
   std::unique_ptr<Universe> m_universe;
+
+  // Mapped UI controls.
+  ui::Button* m_testButton{nullptr};
 
   DISALLOW_COPY_AND_ASSIGN(GameStateUniverse);
 };

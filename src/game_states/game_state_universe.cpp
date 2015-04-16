@@ -14,9 +14,10 @@
 
 #include "game_states/game_state_universe.h"
 
+#include <nucleus/logging.h>
 #include <SFML/Graphics/RenderTarget.hpp>
 
-#include "ui/views/color_view.h"
+#include "ui/views/button.h"
 #include "universe/universe_view.h"
 
 GameStateUniverse::GameStateUniverse(const sf::Vector2f& viewportSize)
@@ -28,31 +29,21 @@ GameStateUniverse::GameStateUniverse(const sf::Vector2f& viewportSize)
 GameStateUniverse::~GameStateUniverse() {
 }
 
-void GameStateUniverse::handleInput(sf::Event& event) {
-  //m_universe->handleInput(event);
-  GameState::handleInput(event);
-}
-
-void GameStateUniverse::tick(float adjustment) {
-  //m_universe->tick(adjustment);
-  GameState::tick(adjustment);
-}
-
-void GameStateUniverse::draw(sf::RenderTarget& target,
-                             sf::RenderStates states) const {
-  //target.draw(*m_universe, states);
-  GameState::draw(target, states);
+void GameStateUniverse::onButtonClicked(ui::Button* sender) {
+  if (sender == m_testButton) {
+    LOG(Info) << "Test button clicked";
+  }
 }
 
 void GameStateUniverse::createUserInterface(ui::Context* context,
-                                            ui::GroupView* parent) const {
+                                            ui::GroupView* parent) {
   // Add the universe view.
   auto universeView = std::make_unique<UniverseView>(context, m_universe.get());
   universeView->setExpand(ui::View::ExpandBoth);
   parent->addChild(universeView.release());
 
-  // Add the root of the user controls.
-  auto colorView = std::make_unique<ui::ColorView>(context, sf::Color{255, 0, 255});
-  colorView->setMinSize(sf::Vector2i{100, 75});
-  parent->addChild(colorView.release());
+  // Create a test button.
+  m_testButton = new ui::Button(context, "Test Button", this);
+  //testButton->setMinSize(sf::Vector2i{150, 100});
+  parent->addChild(m_testButton);
 }
