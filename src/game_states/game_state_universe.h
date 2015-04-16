@@ -39,6 +39,8 @@ private:
   // Mapped UI controls.
   ui::Button* m_testButton{nullptr};
 
+  ui::Button* m_createPowerGeneratorButton{nullptr};
+
   DISALLOW_COPY_AND_ASSIGN(GameStateUniverse);
 };
 

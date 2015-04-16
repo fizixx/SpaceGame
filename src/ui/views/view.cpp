@@ -26,6 +26,10 @@ View::View(Context* context)
 View::~View() {
 }
 
+void View::setName(const std::string& name) {
+  m_name = name;
+}
+
 void View::setMinSize(const sf::Vector2i& minSize) {
   m_minSize = minSize;
 }

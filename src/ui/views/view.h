@@ -50,6 +50,10 @@ public:
   // Return the parent of the view, if any.
   View* getParent() const { return m_parent; }
 
+  // name
+  const std::string& getName() const { return m_name; }
+  void setName(const std::string& name);
+
   // minsize
   const sf::Vector2i& getMinSize() const { return m_minSize; }
   void setMinSize(const sf::Vector2i& minSize);
@@ -96,6 +100,9 @@ protected:
 
   // The parent of this view.
   View* m_parent{nullptr};
+
+  // The (optional) name of the control.
+  std::string m_name;
 
   // The rect where this view has been layed out to.
   sf::IntRect m_rect;

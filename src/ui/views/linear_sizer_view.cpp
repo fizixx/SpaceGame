@@ -37,15 +37,23 @@ sf::Vector2i LinearSizerView::calculateMinSize() const {
   sf::Vector2i minSize(GroupView::calculateMinSize());
 
   int size = 0;
+  sf::Vector2i contentSize;
   if (m_orientation == OrientationHorizontal) {
-    for (const auto& child : m_children)
-      size += child->calculateMinSize().x;
-    minSize.x = size;
+    for (const auto& child : m_children) {
+      sf::Vector2i childMinSize{child->calculateMinSize()};
+      contentSize.x += childMinSize.x;
+      contentSize.y = std::max(contentSize.y, childMinSize.y);
+    }
   } else {
-    for (const auto& child : m_children)
-      size += child->calculateMinSize().y;
-    minSize.y = size;
+    for (const auto& child : m_children) {
+      sf::Vector2i childMinSize{child->calculateMinSize()};
+      contentSize.x = std::max(contentSize.x, childMinSize.x);
+      contentSize.y += childMinSize.y;
+    }
   }
+
+  minSize.x = std::max(minSize.x, contentSize.x);
+  minSize.y = std::max(minSize.y, contentSize.y);
 
   return minSize;
 }

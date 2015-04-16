@@ -18,6 +18,7 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 
 #include "ui/views/button.h"
+#include "ui/views/linear_sizer_view.h"
 #include "universe/universe_view.h"
 
 GameStateUniverse::GameStateUniverse(const sf::Vector2f& viewportSize)
@@ -39,11 +40,28 @@ void GameStateUniverse::createUserInterface(ui::Context* context,
                                             ui::GroupView* parent) {
   // Add the universe view.
   auto universeView = std::make_unique<UniverseView>(context, m_universe.get());
+  universeView->setName("universe");
   universeView->setExpand(ui::View::ExpandBoth);
   parent->addChild(universeView.release());
 
+  // Create a container for all the buttons.
+  ui::LinearSizerView* buttonContainer = new ui::LinearSizerView(
+      context, ui::LinearSizerView::OrientationVertical);
+  buttonContainer->setName("buttonContainer");
+  buttonContainer->setExpand(ui::View::ExpandVertical);
+  buttonContainer->setHorizontalAlign(ui::View::AlignLeft);
+
   // Create a test button.
   m_testButton = new ui::Button(context, "Test Button", this);
-  //testButton->setMinSize(sf::Vector2i{150, 100});
-  parent->addChild(m_testButton);
+  m_testButton->setName("testButton");
+  m_testButton->setMinSize(sf::Vector2i{300, 0});
+  buttonContainer->addChild(m_testButton);
+
+  m_createPowerGeneratorButton =
+      new ui::Button(context, "Power Generator", this);
+  m_createPowerGeneratorButton->setName("createPowerGenerator");
+  m_createPowerGeneratorButton->setMinSize(sf::Vector2i{300, 0});
+  buttonContainer->addChild(m_createPowerGeneratorButton);
+
+  parent->addChild(buttonContainer);
 }
