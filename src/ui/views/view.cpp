@@ -26,10 +26,6 @@ View::View(Context* context)
 View::~View() {
 }
 
-void View::setName(const std::string& name) {
-  m_name = name;
-}
-
 void View::setMinSize(const sf::Vector2i& minSize) {
   m_minSize = minSize;
 }
@@ -58,6 +54,20 @@ sf::Vector2i View::calculateMinSize() const {
 
 void View::layout(const sf::IntRect& rect) {
   m_rect = rect;
+}
+
+bool View::onMousePressed(sf::Event& event) {
+  return false;
+}
+
+bool View::onMouseDragged(sf::Event& event) {
+  return false;
+}
+
+void View::onMouseReleased(sf::Event& event) {
+}
+
+void View::onMouseMoved(sf::Event& event) {
 }
 
 void View::draw(sf::RenderTarget& target, sf::RenderStates states) const {

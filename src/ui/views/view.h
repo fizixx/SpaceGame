@@ -46,10 +46,6 @@ public:
   explicit View(Context* context);
   virtual ~View();
 
-  // name
-  const std::string getName() const { return m_name; }
-  void setName(const std::string& name);
-
   // minsize
   const sf::Vector2i& getMinSize() const { return m_minSize; }
   void setMinSize(const sf::Vector2i& minSize);
@@ -73,6 +69,13 @@ public:
   virtual sf::Vector2i calculateMinSize() const;
   virtual void layout(const sf::IntRect& rect);
 
+  // Events
+
+  virtual bool onMousePressed(sf::Event& event);
+  virtual bool onMouseDragged(sf::Event& event);
+  virtual void onMouseReleased(sf::Event& event);
+  virtual void onMouseMoved(sf::Event& event);
+
   // Override: sf::Drawable
   virtual void draw(sf::RenderTarget& target,
                     sf::RenderStates states) const override;
@@ -81,11 +84,11 @@ protected:
   // The context we belong to.
   Context* m_context;
 
+  // The parent of this view.
+  View* m_parent{nullptr};
+
   // The rect where this view has been layed out to.
   sf::IntRect m_rect;
-
-  // The name of the control.  This can remain empty for anonymous controls.
-  std::string m_name;
 
   // The minimum size of the view.
   sf::Vector2i m_minSize;

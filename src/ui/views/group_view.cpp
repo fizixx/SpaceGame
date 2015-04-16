@@ -68,6 +68,10 @@ void GroupView::removeChild(View* view) {
   m_children.erase(it);
 }
 
+GroupView* GroupView::getGroupViewAtPosition(const sf::Vector2i& pos) const {
+  return nullptr;
+}
+
 void GroupView::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   for (auto& child : m_children) {
     target.draw(*child, states);

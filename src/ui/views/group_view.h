@@ -31,6 +31,9 @@ public:
   void addChild(View* view);
   void removeChild(View* view);
 
+  // Return a pointer to the view that is at the given coordinates.
+  GroupView* getGroupViewAtPosition(const sf::Vector2i& pos) const;
+
   // Override: View
   virtual void draw(sf::RenderTarget& target,
                     sf::RenderStates states) const override;
