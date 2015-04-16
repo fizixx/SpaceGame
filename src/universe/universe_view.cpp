@@ -47,6 +47,17 @@ UniverseView::UniverseView(ui::Context* context, Universe* universe)
 UniverseView::~UniverseView() {
 }
 
+bool UniverseView::onMousePressed(sf::Event& event) {
+  return true;
+}
+
+bool UniverseView::onMouseDragged(sf::Event& event) {
+  return true;
+}
+
+void UniverseView::onMouseReleased(sf::Event& event) {
+}
+
 void UniverseView::handleInput(sf::Event& event) {
   m_camera.handleInput(event);
 

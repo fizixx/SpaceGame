@@ -25,6 +25,7 @@
 namespace ui {
 
 class Context;
+class GroupView;
 
 class View : public sf::Drawable {
 public:
@@ -46,6 +47,9 @@ public:
   explicit View(Context* context);
   virtual ~View();
 
+  // Return the parent of the view, if any.
+  View* getParent() const { return m_parent; }
+
   // minsize
   const sf::Vector2i& getMinSize() const { return m_minSize; }
   void setMinSize(const sf::Vector2i& minSize);
@@ -64,6 +68,8 @@ public:
 
   // Virtual Interface
 
+  virtual View* getViewAtPosition(const sf::Vector2i& pos);
+
   virtual void handleInput(sf::Event& event);
   virtual void tick(float adjustment);
   virtual sf::Vector2i calculateMinSize() const;
@@ -81,6 +87,8 @@ public:
                     sf::RenderStates states) const override;
 
 protected:
+  friend class GroupView;
+
   // The context we belong to.
   Context* m_context;
 

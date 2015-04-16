@@ -42,6 +42,10 @@ void View::setExpand(ExpandType expand) {
   m_expand = expand;
 }
 
+View* View::getViewAtPosition(const sf::Vector2i& pos) {
+  return m_rect.contains(pos) ? this : nullptr;
+}
+
 void View::handleInput(sf::Event& event) {
 }
 

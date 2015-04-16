@@ -58,6 +58,7 @@ GroupView::~GroupView() {
 }
 
 void GroupView::addChild(View* view) {
+  view->m_parent = this;
   m_children.push_back(view);
 }
 
@@ -65,11 +66,25 @@ void GroupView::removeChild(View* view) {
   auto it = std::find(std::begin(m_children), std::end(m_children), view);
   if (it == std::end(m_children))
     return;
+  view->m_parent = nullptr;
   m_children.erase(it);
 }
 
-GroupView* GroupView::getGroupViewAtPosition(const sf::Vector2i& pos) const {
-  return nullptr;
+View* GroupView::getViewAtPosition(const sf::Vector2i& pos) {
+  View* foundView = nullptr;
+
+  for (View* view : m_children) {
+    View* result = view->getViewAtPosition(pos);
+    if (result)
+      foundView = result;
+  }
+
+  // If we found something deeper, return that.
+  if (foundView) {
+    return foundView;
+  }
+
+  return this;
 }
 
 void GroupView::draw(sf::RenderTarget& target, sf::RenderStates states) const {

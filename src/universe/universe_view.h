@@ -27,6 +27,9 @@ public:
   virtual ~UniverseView() override;
 
   // Override: ui::View
+  virtual bool onMousePressed(sf::Event& event) override;
+  virtual bool onMouseDragged(sf::Event& event) override;
+  virtual void onMouseReleased(sf::Event& event) override;
   virtual void handleInput(sf::Event& event) override;
   virtual void tick(float adjustment) override;
   virtual void draw(sf::RenderTarget& target,
