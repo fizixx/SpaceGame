@@ -23,7 +23,7 @@
 
 class Camera : public sf::Drawable {
 public:
-  explicit Camera(const sf::Vector2f& viewportSize);
+  Camera();
   ~Camera();
 
   // Return our current view.
@@ -32,11 +32,17 @@ public:
   // Given a mouse position in the viewport, return the universe position.
   sf::Vector2f mousePosToUniversePos(const sf::Vector2f& mousePos) const;
 
-  // Handle any input events.
-  void handleInput(sf::Event& event);
+  // Handle input.
+  void onMousePressed(sf::Event& event);
+  void onMouseDragged(sf::Event& event);
+  void onMouseReleased(sf::Event& event);
+  void onMouseWheel(sf::Event& event);
 
   // Tick the universe.
   void tick(float adjustment);
+
+  // Set the camera dimensions.
+  void layout(const sf::IntRect& rect);
 
   // Override: sf::Drawable
   virtual void draw(sf::RenderTarget& target,
@@ -71,7 +77,7 @@ private:
   sf::View m_view;
 
   // A circle we use to render the camera target.
-  sf::CircleShape m_cameraTargetShape{30.f};
+  sf::CircleShape m_cameraTargetShape{100.f};
 
   DISALLOW_COPY_AND_ASSIGN(Camera);
 };

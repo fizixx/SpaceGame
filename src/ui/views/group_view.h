@@ -31,7 +31,11 @@ public:
   void addChild(View* view);
   void removeChild(View* view);
 
+  // Return a pointer to the view that is at the given coordinates.
+  virtual View* getViewAtPosition(const sf::Vector2i& pos) override;
+
   // Override: View
+  virtual void tick(float adjustment) override;
   virtual void draw(sf::RenderTarget& target,
                     sf::RenderStates states) const override;
 

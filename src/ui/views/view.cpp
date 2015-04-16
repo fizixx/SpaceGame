@@ -19,10 +19,8 @@
 namespace ui {
 
 View::View(Context* context)
-  : m_context(context),
-    m_horizontalAlign(AlignCenter),
-    m_verticalAlign(AlignCenter),
-    m_expand(ExpandNone) {
+  : m_context(context), m_horizontalAlign(AlignCenter),
+    m_verticalAlign(AlignCenter), m_expand(ExpandNone) {
 }
 
 View::~View() {
@@ -48,12 +46,42 @@ void View::setExpand(ExpandType expand) {
   m_expand = expand;
 }
 
+View* View::getViewAtPosition(const sf::Vector2i& pos) {
+  return m_rect.contains(pos) ? this : nullptr;
+}
+
+void View::tick(float adjustment) {
+}
+
 sf::Vector2i View::calculateMinSize() const {
   return m_minSize;
 }
 
 void View::layout(const sf::IntRect& rect) {
   m_rect = rect;
+}
+
+bool View::onMousePressed(sf::Event& event) {
+  return false;
+}
+
+bool View::onMouseDragged(sf::Event& event) {
+  return false;
+}
+
+void View::onMouseMoved(sf::Event& event) {
+}
+
+void View::onMouseReleased(sf::Event& event) {
+}
+
+void View::onMouseWheel(sf::Event& event) {
+}
+
+void View::onMouseEntered(sf::Event& event) {
+}
+
+void View::onMouseExited(sf::Event& event) {
 }
 
 void View::draw(sf::RenderTarget& target, sf::RenderStates states) const {

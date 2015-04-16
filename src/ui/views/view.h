@@ -20,10 +20,12 @@
 #include <nucleus/macros.h>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Window/Event.hpp>
 
 namespace ui {
 
 class Context;
+class GroupView;
 
 class View : public sf::Drawable {
 public:
@@ -45,8 +47,11 @@ public:
   explicit View(Context* context);
   virtual ~View();
 
+  // Return the parent of the view, if any.
+  View* getParent() const { return m_parent; }
+
   // name
-  const std::string getName() const { return m_name; }
+  const std::string& getName() const { return m_name; }
   void setName(const std::string& name);
 
   // minsize
@@ -65,22 +70,42 @@ public:
   ExpandType getExpand() const { return m_expand; }
   void setExpand(ExpandType expand);
 
+  // Virtual Interface
+
+  virtual View* getViewAtPosition(const sf::Vector2i& pos);
+
+  virtual void tick(float adjustment);
   virtual sf::Vector2i calculateMinSize() const;
   virtual void layout(const sf::IntRect& rect);
+
+  // Events
+
+  virtual bool onMousePressed(sf::Event& event);
+  virtual bool onMouseDragged(sf::Event& event);
+  virtual void onMouseMoved(sf::Event& event);
+  virtual void onMouseReleased(sf::Event& event);
+  virtual void onMouseWheel(sf::Event& event);
+  virtual void onMouseEntered(sf::Event& event);
+  virtual void onMouseExited(sf::Event& event);
 
   // Override: sf::Drawable
   virtual void draw(sf::RenderTarget& target,
                     sf::RenderStates states) const override;
 
 protected:
+  friend class GroupView;
+
   // The context we belong to.
   Context* m_context;
 
+  // The parent of this view.
+  View* m_parent{nullptr};
+
+  // The (optional) name of the control.
+  std::string m_name;
+
   // The rect where this view has been layed out to.
   sf::IntRect m_rect;
-
-  // The name of the control.  This can remain empty for anonymous controls.
-  std::string m_name;
 
   // The minimum size of the view.
   sf::Vector2i m_minSize;

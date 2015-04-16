@@ -23,9 +23,30 @@ Context::~Context() {
 }
 
 void Context::handleInput(sf::Event& event) {
+  switch (event.type) {
+    case sf::Event::MouseButtonPressed: {
+      m_contextView.processMousePressed(event, false);
+    } break;
+
+    case sf::Event::MouseMoved: {
+      m_contextView.processMouseMoved(event);
+    } break;
+
+    case sf::Event::MouseButtonReleased: {
+      m_contextView.processMouseReleased(event);
+    } break;
+
+    case sf::Event::MouseWheelMoved: {
+      m_contextView.processMouseWheel(event);
+    } break;
+
+    default:
+      break;
+  }
 }
 
 void Context::tick(float adjustment) {
+  m_contextView.tick(adjustment);
 }
 
 void Context::draw(sf::RenderTarget& target, sf::RenderStates states) const {
