@@ -12,7 +12,7 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "ui/group_view.h"
+#include "ui/views/group_view.h"
 
 // static
 sf::IntRect GroupView::layoutControlInRect(View* view,

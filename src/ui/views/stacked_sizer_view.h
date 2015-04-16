@@ -12,32 +12,22 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef UI_GROUP_VIEW_H_
-#define UI_GROUP_VIEW_H_
+#ifndef UI_STACKED_SIZER_VIEW_H_
+#define UI_STACKED_SIZER_VIEW_H_
 
-#include <vector>
+#include "ui/views/group_view.h"
 
-#include "ui/view.h"
-
-class GroupView : public View {
+class StackedSizerView : public GroupView {
 public:
-  static sf::IntRect layoutControlInRect(View* view, const sf::IntRect& rect);
+  explicit StackedSizerView(Context* context);
+  virtual ~StackedSizerView();
 
-  explicit GroupView(Context* context);
-  virtual ~GroupView();
+  // Implement: GroupView
+  virtual sf::Vector2i calculateMinSize() const override;
+  virtual void layout(const sf::IntRect& rect) override;
 
-  void addChild(View* view);
-  void removeChild(View* view);
-
-  // Override: View
-  virtual void draw(sf::RenderTarget& target,
-                    sf::RenderStates states) const override;
-
-protected:
-  // This view's child views.
-  std::vector<View*> m_children;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(GroupView);
+private:
+  DISALLOW_IMPLICIT_CONSTRUCTORS(StackedSizerView);
 };
 
-#endif  // UI_GROUP_VIEW_H_
+#endif  // UI_STACKED_SIZER_VIEW_H_

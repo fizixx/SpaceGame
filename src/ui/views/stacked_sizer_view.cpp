@@ -12,10 +12,29 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "ui/context_view.h"
+#include "ui/views/stacked_sizer_view.h"
 
-ContextView::ContextView(Context* context) : StackedSizerView(context) {
+StackedSizerView::StackedSizerView(Context* context) : GroupView(context) {
 }
 
-ContextView::~ContextView() {
+StackedSizerView::~StackedSizerView() {
+}
+
+sf::Vector2i StackedSizerView::calculateMinSize() const {
+  sf::Vector2i minSize(GroupView::calculateMinSize());
+
+  for (auto& child : m_children) {
+    sf::Vector2i childSize{child->calculateMinSize()};
+    minSize.x = std::max(minSize.x, childSize.x);
+    minSize.y = std::max(minSize.y, childSize.y);
+  }
+
+  return minSize;
+}
+
+void StackedSizerView::layout(const sf::IntRect& rect) {
+  GroupView::layout(rect);
+
+  for (auto& child : m_children)
+    child->layout(GroupView::layoutControlInRect(child, rect));
 }

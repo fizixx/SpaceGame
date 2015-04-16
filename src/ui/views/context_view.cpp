@@ -12,37 +12,10 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef UI_CONTEXT_H_
-#define UI_CONTEXT_H_
-
-#include <map>
-
 #include "ui/views/context_view.h"
-#include "component.h"
 
-class View;
+ContextView::ContextView(Context* context) : StackedSizerView(context) {
+}
 
-class Context : public Component {
-public:
-  Context();
-  ~Context();
-
-  // Get the root view of the context.
-  ContextView* getRoot() { return &m_contextView; }
-
-  // Override: Component
-  virtual void handleInput(sf::Event& event) override;
-  virtual void tick(float adjustment) override;
-  virtual void draw(sf::RenderTarget& target,
-                    sf::RenderStates states) const override;
-
-protected:
-  friend class View;
-
-  // The root view of our hierarchy.
-  mutable ContextView m_contextView;
-
-  DISALLOW_COPY_AND_ASSIGN(Context);
-};
-
-#endif  // UI_CONTEXT_H_
+ContextView::~ContextView() {
+}

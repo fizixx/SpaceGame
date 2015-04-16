@@ -12,29 +12,32 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "ui/stacked_sizer_view.h"
+#ifndef UI_GROUP_VIEW_H_
+#define UI_GROUP_VIEW_H_
 
-StackedSizerView::StackedSizerView(Context* context) : GroupView(context) {
-}
+#include <vector>
 
-StackedSizerView::~StackedSizerView() {
-}
+#include "ui/views/view.h"
 
-sf::Vector2i StackedSizerView::calculateMinSize() const {
-  sf::Vector2i minSize(GroupView::calculateMinSize());
+class GroupView : public View {
+public:
+  static sf::IntRect layoutControlInRect(View* view, const sf::IntRect& rect);
 
-  for (auto& child : m_children) {
-    sf::Vector2i childSize{child->calculateMinSize()};
-    minSize.x = std::max(minSize.x, childSize.x);
-    minSize.y = std::max(minSize.y, childSize.y);
-  }
+  explicit GroupView(Context* context);
+  virtual ~GroupView();
 
-  return minSize;
-}
+  void addChild(View* view);
+  void removeChild(View* view);
 
-void StackedSizerView::layout(const sf::IntRect& rect) {
-  GroupView::layout(rect);
+  // Override: View
+  virtual void draw(sf::RenderTarget& target,
+                    sf::RenderStates states) const override;
 
-  for (auto& child : m_children)
-    child->layout(GroupView::layoutControlInRect(child, rect));
-}
+protected:
+  // This view's child views.
+  std::vector<View*> m_children;
+
+  DISALLOW_IMPLICIT_CONSTRUCTORS(GroupView);
+};
+
+#endif  // UI_GROUP_VIEW_H_

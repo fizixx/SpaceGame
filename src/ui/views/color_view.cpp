@@ -12,7 +12,7 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "ui/color_view.h"
+#include "ui/views/color_view.h"
 
 ColorView::ColorView(Context* context) : View(context) {
 }

@@ -12,7 +12,7 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "ui/linear_sizer_view.h"
+#include "ui/views/linear_sizer_view.h"
 
 #include <cmath>
 

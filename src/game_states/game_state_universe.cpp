@@ -16,7 +16,7 @@
 
 #include <SFML/Graphics/RenderTarget.hpp>
 
-#include "ui/color_view.h"
+#include "ui/views/color_view.h"
 
 GameStateUniverse::GameStateUniverse(const sf::Vector2f& viewportSize)
   : m_universe(std::make_unique<Universe>(viewportSize)) {

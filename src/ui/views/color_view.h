@@ -18,7 +18,7 @@
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
-#include "ui/view.h"
+#include "ui/views/view.h"
 
 class ColorView : public View {
 public:

@@ -12,22 +12,38 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef UI_STACKED_SIZER_VIEW_H_
-#define UI_STACKED_SIZER_VIEW_H_
+#ifndef UI_LINEAR_SIZER_VIEW_H_
+#define UI_LINEAR_SIZER_VIEW_H_
 
-#include "ui/group_view.h"
+#include "ui/views/group_view.h"
 
-class StackedSizerView : public GroupView {
+class LinearSizerView : public GroupView {
 public:
-  explicit StackedSizerView(Context* context);
-  virtual ~StackedSizerView();
+  enum OrientationType {
+    OrientationHorizontal,
+    OrientationVertical,
+  };
 
-  // Implement: GroupView
+  LinearSizerView(Context* context);
+  LinearSizerView(Context* context, OrientationType orientation);
+  virtual ~LinearSizerView();
+
+  // orientation
+  OrientationType GetOrientation() const { return m_orientation; }
+  void SetOrientation(OrientationType orientation);
+
+  // Override: GroupView
   virtual sf::Vector2i calculateMinSize() const override;
   virtual void layout(const sf::IntRect& rect) override;
 
 private:
-  DISALLOW_IMPLICIT_CONSTRUCTORS(StackedSizerView);
+  void layoutHorizontal(const sf::IntRect& rect);
+  void layoutVertical(const sf::IntRect& rect);
+
+  // The orientaion of the sizer.
+  OrientationType m_orientation;
+
+  DISALLOW_IMPLICIT_CONSTRUCTORS(LinearSizerView);
 };
 
-#endif  // UI_STACKED_SIZER_VIEW_H_
+#endif  // UI_LINEAR_SIZER_VIEW_H_

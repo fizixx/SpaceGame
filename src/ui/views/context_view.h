@@ -15,7 +15,7 @@
 #ifndef UI_CONTEXT_VIEW_H_
 #define UI_CONTEXT_VIEW_H_
 
-#include "ui/stacked_sizer_view.h"
+#include "ui/views/stacked_sizer_view.h"
 
 class ContextView : public StackedSizerView {
 public:
