@@ -41,7 +41,8 @@ public:
   // Override: View
   virtual bool onMousePressed(sf::Event& event) override;
   virtual void onMouseReleased(sf::Event& event) override;
-  virtual void onMouseMoved(sf::Event& event) override;
+  virtual void onMouseEntered(sf::Event& event) override;
+  virtual void onMouseExited(sf::Event& event) override;
   virtual sf::Vector2i calculateMinSize() const override;
   virtual void layout(const sf::IntRect& rect) override;
   virtual void draw(sf::RenderTarget& target,

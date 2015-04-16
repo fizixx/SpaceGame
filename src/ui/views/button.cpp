@@ -14,8 +14,6 @@
 
 #include "ui/views/button.h"
 
-#include <mutex>
-
 #include <nucleus/logging.h>
 
 namespace ui {
@@ -36,13 +34,14 @@ Button::Button(Context* context, const std::string& label,
   }
 
   // Set up the background shape.
-  m_backgroundShape.setFillColor(sf::Color{63, 63, 63});
-  m_backgroundShape.setOutlineColor(sf::Color{127, 127, 127});
+  m_backgroundShape.setFillColor(sf::Color{255, 255, 255, 127});
+  m_backgroundShape.setOutlineColor(sf::Color{127, 255, 127});
   m_backgroundShape.setOutlineThickness(1);
 
   // Set up the label.
   m_labelShape.setString(m_label);
   m_labelShape.setFont(*kButtonFont);
+  m_labelShape.setColor(sf::Color{127, 255, 127});
   m_labelShape.setCharacterSize(30);
 }
 
@@ -67,16 +66,14 @@ void Button::onMouseReleased(sf::Event& event) {
   }
 }
 
-void Button::onMouseMoved(sf::Event& event) {
-  View::onMouseMoved(event);
+void Button::onMouseEntered(sf::Event& event) {
+  m_backgroundShape.setFillColor(sf::Color{255, 255, 255, 191});
+  //m_labelShape.setColor(sf::Color{255, 127, 127});
+}
 
-  bool hovering =
-      m_rect.contains(sf::Vector2i{event.mouseMove.x, event.mouseMove.y});
-
-  if (hovering)
-    m_backgroundShape.setOutlineColor(sf::Color(255, 127, 127));
-  else
-    m_backgroundShape.setOutlineColor(sf::Color(127, 127, 127));
+void Button::onMouseExited(sf::Event& event) {
+  m_backgroundShape.setFillColor(sf::Color{255, 255, 255, 127});
+  //m_labelShape.setColor(sf::Color{255, 255, 255});
 }
 
 sf::Vector2i Button::calculateMinSize() const {

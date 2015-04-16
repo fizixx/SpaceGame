@@ -81,6 +81,8 @@ public:
   virtual void onMouseMoved(sf::Event& event);
   virtual void onMouseReleased(sf::Event& event);
   virtual void onMouseWheel(sf::Event& event);
+  virtual void onMouseEntered(sf::Event& event);
+  virtual void onMouseExited(sf::Event& event);
 
   // Override: sf::Drawable
   virtual void draw(sf::RenderTarget& target,

@@ -74,6 +74,12 @@ void View::onMouseReleased(sf::Event& event) {
 void View::onMouseWheel(sf::Event& event) {
 }
 
+void View::onMouseEntered(sf::Event& event) {
+}
+
+void View::onMouseExited(sf::Event& event) {
+}
+
 void View::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 }
 

@@ -77,6 +77,32 @@ void ContextView::onMouseReleased(sf::Event& event) {
   }
 }
 
+void ContextView::onMouseMoved(sf::Event& event) {
+  View* topMost =
+      getViewAtPosition(sf::Vector2i{event.mouseMove.x, event.mouseMove.y});
+
+  if (topMost && topMost != this) {
+    // If we switched topMost controls, then we entered a new control.
+    if (topMost != m_mouseMoveHandler) {
+      // If we had a previous move handler, then we send it an exit event.
+      if (m_mouseMoveHandler) {
+        m_mouseMoveHandler->onMouseExited(event);
+      }
+
+      // Set the new mouse move handler to what we have as top most now.
+      m_mouseMoveHandler = topMost;
+
+      // Send the new move handler an aneter event.
+      m_mouseMoveHandler->onMouseEntered(event);
+    }
+
+    // Now send the move event.
+    m_mouseMoveHandler->onMouseMoved(event);
+  } else if (!m_mouseMoveHandler) {
+    m_mouseMoveHandler->onMouseExited(event);
+  }
+}
+
 bool ContextView::processMousePressed(sf::Event& event, bool isDouble) {
   m_lastMouseEventWasMove = false;
 

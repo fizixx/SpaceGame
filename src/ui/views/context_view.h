@@ -28,6 +28,7 @@ public:
   virtual bool onMousePressed(sf::Event& event) override;
   virtual bool onMouseDragged(sf::Event& event) override;
   virtual void onMouseReleased(sf::Event& event) override;
+  virtual void onMouseMoved(sf::Event& event) override;
 
 private:
   friend class Context;
