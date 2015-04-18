@@ -5,6 +5,12 @@ project("SpaceGame")
 
 set("CMAKE_RUNTIME_OUTPUT_DIRECTORY" "${PROJECT_BINARY_DIR}/out")
 
+# Compiler settings
+
+if(NOT WIN32)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y")
+endif()
+
 include("cmake/sfml.cmake")
 include("cmake/nucleus.cmake")
 
@@ -14,8 +20,11 @@ include_directories("src")
 
 file(GLOB_RECURSE "SOURCE_FILES" "src/*.cpp" "src/*.h")
 
-add_executable("SpaceGame" WIN32 ${SOURCE_FILES})
-target_link_libraries("SpaceGame" "sfml-main" "sfml-graphics" "nucleus")
+add_executable("SpaceGame" WIN32 MACOSX_BUNDLE ${SOURCE_FILES})
+target_link_libraries("SpaceGame" "sfml-graphics" "nucleus")
+if(WIN32)
+  target_link_libraries("SpaceGame" "sfml-main")
+endif()
 
 # tools/model_convert
 

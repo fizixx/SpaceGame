@@ -14,14 +14,15 @@
 
 #include "ui/views/button.h"
 
+#include <cmath>
+
 #include <nucleus/logging.h>
 
 namespace ui {
 
 sf::Font* kButtonFont = nullptr;
 
-Button::OnClickListener::~OnClickListener() {
-}
+Button::OnClickListener::~OnClickListener() {}
 
 Button::Button(Context* context, const std::string& label,
                OnClickListener* listener)
@@ -45,8 +46,7 @@ Button::Button(Context* context, const std::string& label,
   m_labelShape.setCharacterSize(30);
 }
 
-Button::~Button() {
-}
+Button::~Button() {}
 
 void Button::setLabel(const std::string& label) {
   m_label = label;
@@ -68,12 +68,12 @@ void Button::onMouseReleased(sf::Event& event) {
 
 void Button::onMouseEntered(sf::Event& event) {
   m_backgroundShape.setFillColor(sf::Color{255, 255, 255, 191});
-  //m_labelShape.setColor(sf::Color{255, 127, 127});
+  // m_labelShape.setColor(sf::Color{255, 127, 127});
 }
 
 void Button::onMouseExited(sf::Event& event) {
   m_backgroundShape.setFillColor(sf::Color{255, 255, 255, 127});
-  //m_labelShape.setColor(sf::Color{255, 255, 255});
+  // m_labelShape.setColor(sf::Color{255, 255, 255});
 }
 
 sf::Vector2i Button::calculateMinSize() const {
@@ -102,18 +102,17 @@ void Button::layout(const sf::IntRect& rect) {
   m_backgroundShape.setPosition(sf::Vector2f{static_cast<float>(rect.left),
                                              static_cast<float>(rect.top)});
   m_backgroundShape.setSize(sf::Vector2f{static_cast<float>(rect.width),
-                                        static_cast<float>(rect.height)});
+                                         static_cast<float>(rect.height)});
 
   sf::FloatRect floatLabelSize{m_labelShape.getLocalBounds()};
 
   // Move the shape to the correct position.
-  m_labelShape.setPosition(sf::Vector2f{
-      static_cast<float>(rect.left + 10) - floatLabelSize.left,
-      static_cast<float>(rect.top + 10) - floatLabelSize.top});
+  m_labelShape.setPosition(
+      sf::Vector2f{static_cast<float>(rect.left + 10) - floatLabelSize.left,
+                   static_cast<float>(rect.top + 10) - floatLabelSize.top});
 }
 
-void Button::draw(sf::RenderTarget& target,
-                    sf::RenderStates states) const {
+void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   View::draw(target, states);
 
   target.draw(m_backgroundShape);

@@ -16,11 +16,9 @@
 
 namespace ui {
 
-ContextView::ContextView(Context* context) : StackedSizerView(context) {
-}
+ContextView::ContextView(Context* context) : StackedSizerView(context) {}
 
-ContextView::~ContextView() {
-}
+ContextView::~ContextView() {}
 
 bool ContextView::onMousePressed(sf::Event& event) {
   // If m_mousePressedHandler is not null, we are currently processing a
@@ -98,9 +96,12 @@ void ContextView::onMouseMoved(sf::Event& event) {
 
     // Now send the move event.
     m_mouseMoveHandler->onMouseMoved(event);
-  } else if (!m_mouseMoveHandler) {
+  }
+#if 0
+    else if (!m_mouseMoveHandler) {
     m_mouseMoveHandler->onMouseExited(event);
   }
+#endif  // 0
 }
 
 bool ContextView::processMousePressed(sf::Event& event, bool isDouble) {

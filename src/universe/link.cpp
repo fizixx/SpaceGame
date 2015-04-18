@@ -14,6 +14,8 @@
 
 #include "universe/link.h"
 
+#include <cmath>
+
 #include <SFML/Graphics/RenderTarget.hpp>
 
 #include "universe/objects/object.h"
@@ -24,8 +26,7 @@ Link::Link(Universe* universe, Object* source, Object* destination)
   calculateShape();
 }
 
-Link::~Link() {
-}
+Link::~Link() {}
 
 void Link::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   target.draw(m_shape);
@@ -38,7 +39,7 @@ void Link::calculateShape() {
   float yd = m_destination->getPos().y - m_source->getPos().y;
 
   // Calculate the distance between the source and destination.
-  float distance = sqrtf(xd * xd + yd * yd);
+  float distance = std::sqrtf(xd * xd + yd * yd);
 
   // Calculate the angle between the source and destination.
   float angle = std::atan2(yd, xd) * 180.f / 3.1415f;
