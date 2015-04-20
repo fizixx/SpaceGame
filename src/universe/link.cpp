@@ -16,6 +16,7 @@
 
 #include <cmath>
 
+#include <nucleus/logging.h>
 #include <SFML/Graphics/RenderTarget.hpp>
 
 #include "universe/objects/object.h"
@@ -29,11 +30,27 @@ Link::Link(Universe* universe, Object* source, Object* destination)
 Link::~Link() {
 }
 
+void Link::setSource(Object* source) {
+  m_source = source;
+  calculateShape();
+}
+
+void Link::setDestination(Object* destination) {
+  m_destination = destination;
+  calculateShape();
+}
+
 void Link::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-  target.draw(m_shape);
+  if (m_source && m_destination) {
+    target.draw(m_shape);
+  }
 }
 
 void Link::calculateShape() {
+  if (!m_source || !m_destination) {
+    return;
+  }
+
   const float kLinkWidth{15.f};
 
   float xd = m_destination->getPos().x - m_source->getPos().x;
@@ -48,5 +65,5 @@ void Link::calculateShape() {
   m_shape.setPosition(m_source->getPos());
   m_shape.setSize(sf::Vector2f{kLinkWidth, distance});
   m_shape.setOrigin(sf::Vector2f{kLinkWidth / 2.f, 0.f});
-  m_shape.rotate(angle - 90.f);
+  m_shape.setRotation(angle - 90.f);
 }

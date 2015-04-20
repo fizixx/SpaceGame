@@ -22,6 +22,7 @@
 
 class Universe;
 class Object;
+class Link;
 
 class UniverseView : public ui::View {
 public:
@@ -73,6 +74,10 @@ private:
   // The current ghost object.  We own this pointer as it's not part of the
   // universe yet.
   std::unique_ptr<Object> m_ghostObject;
+
+  // The current ghost link.  We draw this link between the closest link object
+  // and the ghost object.
+  std::unique_ptr<Link> m_ghostLink;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(UniverseView);
 };

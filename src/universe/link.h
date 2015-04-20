@@ -29,7 +29,10 @@ public:
 
   // Getters/Setters
   Object* getSource() { return m_source; }
+  void setSource(Object* source);
+
   Object* getDestination() { return m_destination; }
+  void setDestination(Object* destination);
 
   // Override: sf::Drawable
   virtual void draw(sf::RenderTarget& target,

@@ -49,6 +49,12 @@ UniverseView::~UniverseView() {
 
 void UniverseView::startPlacingObject(std::unique_ptr<Object> object) {
   m_ghostObject = std::move(object);
+
+  // Create the ghost link between the closest link object and the ghost object.
+  Object* closestLinkObject =
+      m_universe->getClosestLinkObject(m_ghostObject->getPos());
+  m_ghostLink = std::make_unique<Link>(m_universe, closestLinkObject,
+                                       m_ghostObject.get());
 }
 
 bool UniverseView::onMousePressed(sf::Event& event) {
@@ -74,13 +80,15 @@ void UniverseView::onMouseMoved(sf::Event& event) {
   m_mousePosShape.setPosition(m_mousePos);
   updateHoverObject();
 
-  // Move the ghost object if we have one.
+  // Move the ghost object to the new mouse position.
   if (m_ghostObject) {
-    LOG(Info) << m_mousePos.x << " - " << m_mousePos.y;
     m_ghostObject->moveTo(m_mousePos);
+  }
 
+  // Find a new link source and update the link.
+  if (m_ghostLink) {
     Object* closestObject = m_universe->getClosestLinkObject(m_mousePos);
-    LOG(Info) << closestObject;
+    m_ghostLink->setSource(closestObject);
   }
 }
 
@@ -149,28 +157,20 @@ void UniverseView::draw(sf::RenderTarget& target,
     target.draw(*link);
   }
 
+  // Render the ghost link with the rest of the links.
+  if (m_ghostLink) {
+    target.draw(*m_ghostLink);
+  }
+
   // Render the objects.
   for (const auto& object : m_universe->m_objects) {
     target.draw(*object);
   }
 
-  // Render the ghost object over the existing objects.
+  // Render the ghost object and link over the existing objects.
   if (m_ghostObject) {
-    LOG(Info) << m_ghostObject->getPos().x << " - " << m_ghostObject->getPos().y;
     target.draw(*m_ghostObject);
   }
-
-#if 0
-  // Render the hover shape.
-  if (m_hoverObject) {
-    target.draw(m_hoverShape);
-  }
-
-  // Render the selected shape.
-  if (m_selectedObject) {
-    target.draw(m_selectedShape);
-  }
-#endif  // 0
 
   // Render the camera target.
   target.draw(m_camera);
