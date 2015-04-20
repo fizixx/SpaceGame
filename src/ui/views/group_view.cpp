@@ -55,6 +55,10 @@ GroupView::GroupView(Context* context) : View(context) {
 }
 
 GroupView::~GroupView() {
+  // Destroy all our children.
+  for (auto& child : m_children) {
+    delete child;
+  }
 }
 
 void GroupView::addChild(View* view) {

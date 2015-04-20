@@ -43,7 +43,7 @@ public:
 
   // Add or remove links.
   void addLink(Object* source, Object* destination);
-  void removeLink(Object* any);
+  void removeLinksConnectedTo(Object* object);
 
   // Handle any input events.
   void handleInput(sf::Event& event);

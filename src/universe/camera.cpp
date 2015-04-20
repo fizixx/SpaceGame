@@ -17,11 +17,18 @@
 #include <nucleus/logging.h>
 #include <SFML/Graphics/RenderTarget.hpp>
 
+#if BUILD(DEBUG)
+#define SHOW_CAMERA_TARGET 1
+#endif
+
 Camera::Camera() {
+#if BUILD(DEBUG) && defined(SHOW_CAMERA_TARGET)
   // Adjust some values on the camera target shape.
+  m_cameraTargetShape.setRadius(10.f);
   sf::FloatRect bounds{m_cameraTargetShape.getGlobalBounds()};
   m_cameraTargetShape.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
   m_cameraTargetShape.setFillColor(sf::Color(255, 0, 0));
+#endif  // BUILD(DEBUG)
 }
 
 Camera::~Camera() {
@@ -49,7 +56,7 @@ sf::Vector2f Camera::mousePosToUniversePos(const sf::Vector2f& mousePos) const {
 
 void Camera::onMousePressed(sf::Event& event) {
   switch (event.mouseButton.button) {
-    case sf::Mouse::Left:
+    case sf::Mouse::Right:
       m_isDraggingView = true;
       m_startDragViewPos =
           sf::Vector2f{static_cast<float>(event.mouseButton.x),
@@ -68,7 +75,9 @@ void Camera::onMouseDragged(sf::Event& event) {
 
     // Update the position of the camera.
     m_cameraTarget -= delta * m_zoomLevel;
+#if BUILD(DEBUG) && defined(SHOW_CAMERA_TARGET)
     m_cameraTargetShape.setPosition(m_cameraTarget);
+#endif
 
     // Set the last view position to the current position for the next drag
     // event.
@@ -79,7 +88,7 @@ void Camera::onMouseDragged(sf::Event& event) {
 
 void Camera::onMouseReleased(sf::Event& event) {
   switch (event.mouseButton.button) {
-    case sf::Mouse::Left:
+    case sf::Mouse::Right:
       m_isDraggingView = false;
       break;
   }
@@ -99,15 +108,11 @@ void Camera::onMouseWheel(sf::Event& event) {
       sf::Vector2f{static_cast<float>(event.mouseWheel.x),
                    static_cast<float>(event.mouseWheel.y)})};
 
-#if 0
-  sf::Vector2f halfPos{
-    m_cameraTarget.x + (uniPos.x + m_cameraPos.x) / 2.f,
-    m_cameraTarget.y + (uniPos.y + m_cameraPos.y) / 2.f,
-  };
-#endif  // 0
-
   m_cameraTarget = uniPos;
+
+#if BUILD(DEBUG) && defined(SHOW_CAMERA_TARGET)
   m_cameraTargetShape.setPosition(m_cameraTarget);
+#endif
 }
 
 void Camera::tick(float adjustment) {
@@ -134,7 +139,9 @@ void Camera::layout(const sf::IntRect& rect) {
 }
 
 void Camera::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-  // target.draw(m_cameraTargetShape);
+#if BUILD(DEBUG) && defined(SHOW_CAMERA_TARGET)
+  target.draw(m_cameraTargetShape);
+#endif
 }
 
 void Camera::updateView() {

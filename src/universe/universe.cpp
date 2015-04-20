@@ -45,6 +45,15 @@ Universe::Universe(const sf::Vector2f& viewportSize) {
 }
 
 Universe::~Universe() {
+  // Delete all the links we own.
+  for (auto& link : m_links) {
+    delete link;
+  }
+
+  // Delete all the objects we own.
+  for (auto& object : m_objects) {
+    delete object;
+  }
 }
 
 void Universe::addObject(Object* object) {
@@ -63,11 +72,11 @@ void Universe::addLink(Object* source, Object* destination) {
   m_links.emplace_back(new Link{this, source, destination});
 }
 
-void Universe::removeLink(Object* any) {
-  // Find links the either the source or destination as the specified object.
-  auto it =
-      std::find_if(std::begin(m_links), std::end(m_links), [any](Link* link) {
-        return link->getSource() == any || link->getDestination() == any;
+void Universe::removeLinksConnectedTo(Object* object) {
+  // Find links that are either sources or destinations of the specified object.
+  auto it = std::find_if(
+      std::begin(m_links), std::end(m_links), [object](Link* link) {
+        return link->getSource() == object || link->getDestination() == object;
       });
 
   if (it == std::end(m_links))

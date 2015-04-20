@@ -15,6 +15,7 @@
 #ifndef UNIVERSE_CAMERA_H_
 #define UNIVERSE_CAMERA_H_
 
+#include <nucleus/config.h>
 #include <nucleus/macros.h>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/Drawable.hpp>
@@ -76,8 +77,10 @@ private:
   // The final calculated view we use to translate everything.
   sf::View m_view;
 
+#if BUILD(DEBUG)
   // A circle we use to render the camera target.
-  sf::CircleShape m_cameraTargetShape{100.f};
+  sf::CircleShape m_cameraTargetShape;
+#endif
 
   DISALLOW_COPY_AND_ASSIGN(Camera);
 };
