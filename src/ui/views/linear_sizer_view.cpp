@@ -37,7 +37,6 @@ void LinearSizerView::SetOrientation(OrientationType orientation) {
 sf::Vector2i LinearSizerView::calculateMinSize() const {
   sf::Vector2i minSize(GroupView::calculateMinSize());
 
-  int size = 0;
   sf::Vector2i contentSize;
   if (m_orientation == OrientationHorizontal) {
     for (const auto& child : m_children) {

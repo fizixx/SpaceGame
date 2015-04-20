@@ -47,7 +47,7 @@ private:
   bool m_hasCapture{false};
 
   // Keeps track of whether the mouse is down or not.
-  bool m_isMouseDown;
+  bool m_isMouseDown{false};
 
   // Keeps track of the last position we moved the mouse at.
   sf::Vector2i m_lastMouseMovePos;

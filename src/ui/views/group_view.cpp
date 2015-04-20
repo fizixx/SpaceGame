@@ -43,7 +43,7 @@ sf::IntRect GroupView::layoutControlInRect(View* view,
     AlignType verticalAlign = view->getVerticalAlign();
     if (verticalAlign == AlignBottom) {
       viewRect.top = rect.top + rect.height - viewRect.height;
-    } else if (verticalAlign = AlignCenter) {
+    } else if (verticalAlign == AlignCenter) {
       viewRect.top = rect.top + (rect.height / 2) - (viewRect.height / 2);
     }
   }
