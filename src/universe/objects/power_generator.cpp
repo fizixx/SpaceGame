@@ -16,6 +16,8 @@
 
 #include <SFML/Graphics/RenderTarget.hpp>
 
+DEFINE_OBJECT(PowerGenerator, "Power Generator");
+
 PowerGenerator::PowerGenerator(Universe* universe)
   : Object(universe), m_shape(50.f) {
   m_shape.setFillColor(sf::Color{255, 255, 0, 255});

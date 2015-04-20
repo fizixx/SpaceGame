@@ -20,6 +20,8 @@
 #include "universe/objects/object.h"
 
 class CommandCenter : public Object {
+  DECLARE_OBJECT(CommandCenter);
+
 public:
   explicit CommandCenter(Universe* universe);
   virtual ~CommandCenter() override;

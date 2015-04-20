@@ -16,6 +16,8 @@
 
 #include <SFML/Graphics/RenderTarget.hpp>
 
+DEFINE_OBJECT(CommandCenter, "Command Center");
+
 CommandCenter::CommandCenter(Universe* universe)
   : Object(universe), m_shape(100.f) {
   m_shape.setOrigin(m_shape.getGlobalBounds().width / 2.f,

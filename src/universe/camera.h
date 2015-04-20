@@ -31,7 +31,7 @@ public:
   const sf::View& getView() const { return m_view; }
 
   // Given a mouse position in the viewport, return the universe position.
-  sf::Vector2f mousePosToUniversePos(const sf::Vector2f& mousePos) const;
+  sf::Vector2f mousePosToUniversePos(const sf::Vector2i& mousePos) const;
 
   // Handle input.
   void onMousePressed(sf::Event& event);

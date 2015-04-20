@@ -14,7 +14,10 @@
 
 #include "universe/objects/object.h"
 
-#include <cmath>
+#include "utils/math.h"
+#include "utils/stream_operators.h"
+
+DEFINE_OBJECT(Object, "Object");
 
 Object::Object(Universe* universe) : m_universe(universe) {
 }
@@ -31,7 +34,5 @@ sf::FloatRect Object::getBounds() const {
 }
 
 float Object::calculateDistanceFrom(const sf::Vector2f& pos) const {
-  const float x = (pos.x - m_pos.x) * (pos.x - m_pos.x);
-  const float y = (pos.y - m_pos.y) * (pos.y - m_pos.y);
-  return std::sqrtf(x + y);
+  return distanceBetween(m_pos, pos);
 }

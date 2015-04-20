@@ -12,31 +12,12 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef UNIVERSE_OBJECTS_POWER_GENERATOR_H_
-#define UNIVERSE_OBJECTS_POWER_GENERATOR_H_
+#ifndef UTILS_MATH_H_
+#define UTILS_MATH_H_
 
-#include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/System/Vector2.hpp>
 
-#include "universe/objects/object.h"
+// Calculate the distance between two points.
+float distanceBetween(const sf::Vector2f& p1, const sf::Vector2f& p2);
 
-class PowerGenerator : public Object {
-public:
-  DECLARE_OBJECT(PowerGenerator);
-
-  explicit PowerGenerator(Universe* universe);
-  virtual ~PowerGenerator() override;
-
-  // Override: Object
-  virtual void moveTo(const sf::Vector2f& pos) override;
-  virtual sf::FloatRect getBounds() const override;
-  virtual void tick(float adjustment) override;
-  virtual void draw(sf::RenderTarget& target,
-                    sf::RenderStates states) const override;
-
-private:
-  sf::CircleShape m_shape;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(PowerGenerator);
-};
-
-#endif  // UNIVERSE_OBJECTS_POWER_GENERATOR_H_
+#endif  // UTILS_MATH_H_

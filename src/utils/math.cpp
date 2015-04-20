@@ -12,31 +12,12 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef UNIVERSE_OBJECTS_POWER_GENERATOR_H_
-#define UNIVERSE_OBJECTS_POWER_GENERATOR_H_
+#include "utils/math.h"
 
-#include <SFML/Graphics/CircleShape.hpp>
+#include <cmath>
 
-#include "universe/objects/object.h"
-
-class PowerGenerator : public Object {
-public:
-  DECLARE_OBJECT(PowerGenerator);
-
-  explicit PowerGenerator(Universe* universe);
-  virtual ~PowerGenerator() override;
-
-  // Override: Object
-  virtual void moveTo(const sf::Vector2f& pos) override;
-  virtual sf::FloatRect getBounds() const override;
-  virtual void tick(float adjustment) override;
-  virtual void draw(sf::RenderTarget& target,
-                    sf::RenderStates states) const override;
-
-private:
-  sf::CircleShape m_shape;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(PowerGenerator);
-};
-
-#endif  // UNIVERSE_OBJECTS_POWER_GENERATOR_H_
+float distanceBetween(const sf::Vector2f& p1, const sf::Vector2f& p2) {
+  float xd = p2.x - p1.x;
+  float yd = p2.x - p1.y;
+  return std::sqrtf(xd * xd + yd * yd);
+}

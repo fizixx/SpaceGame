@@ -18,7 +18,6 @@
 #include <limits>
 #include <memory>
 
-#include <nucleus/logging.h>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 

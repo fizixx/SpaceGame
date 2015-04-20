@@ -44,6 +44,10 @@ public:
                     sf::RenderStates states) const override;
 
 private:
+  // Make the needed changes to the view if the perceived mouse position
+  // changed.
+  void onMouseMovedInternal(const sf::Vector2f& mousePos);
+
   // Find the object that is currently under the mouse.
   void updateHoverObject();
 
@@ -53,8 +57,11 @@ private:
   // The camera we use to look into the universe.
   Camera m_camera;
 
-  // The current mouse position in the world.  Updated on every input event.
-  sf::Vector2f m_mousePos;
+  // The last postition where the mouse cursor was in view coordinates.
+  sf::Vector2i m_viewMousePos;
+
+  // The current mouse position in the universe.
+  sf::Vector2f m_universeMousePos;
 
   // The current object that is being hovered over.
   Object* m_hoverObject{nullptr};

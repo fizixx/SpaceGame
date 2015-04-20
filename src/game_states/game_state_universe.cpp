@@ -14,7 +14,6 @@
 
 #include "game_states/game_state_universe.h"
 
-#include <nucleus/logging.h>
 #include <SFML/Graphics/RenderTarget.hpp>
 
 #include "ui/views/button.h"
@@ -32,11 +31,6 @@ GameStateUniverse::~GameStateUniverse() {
 }
 
 void GameStateUniverse::onButtonClicked(ui::Button* sender) {
-  if (sender == m_testButton) {
-    LOG(Info) << "Test button clicked";
-    return;
-  }
-
   if (sender == m_createPowerGeneratorButton) {
     // Create the power generator.
     std::unique_ptr<Object> powerGenerator =

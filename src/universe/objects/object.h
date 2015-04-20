@@ -20,12 +20,23 @@
 
 class Universe;
 
+#define DECLARE_OBJECT(ClassName)                                              \
+  \
+public:                                                                        \
+  static const char* ClassName##__typeName;                                    \
+  virtual const char* getTypeName() const { return ClassName##__typeName; }
+
+#define DEFINE_OBJECT(ClassName, Label)                                        \
+  const char* ClassName::ClassName##__typeName = Label
+
 class Object : public sf::Drawable {
+  DECLARE_OBJECT(Object);
+
 public:
   explicit Object(Universe* universe);
   virtual ~Object();
 
-  // Getters
+  // pos
   const sf::Vector2f& getPos() const { return m_pos; }
 
   // Move the object to the specified coordinates.

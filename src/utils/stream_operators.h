@@ -12,31 +12,13 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef UNIVERSE_OBJECTS_POWER_GENERATOR_H_
-#define UNIVERSE_OBJECTS_POWER_GENERATOR_H_
+#ifndef UTILS_STREAM_OPERATORS_H_
+#define UTILS_STREAM_OPERATORS_H_
 
-#include <SFML/Graphics/CircleShape.hpp>
+#include <ostream>
 
-#include "universe/objects/object.h"
+#include <SFML/System/Vector2.hpp>
 
-class PowerGenerator : public Object {
-public:
-  DECLARE_OBJECT(PowerGenerator);
+std::ostream& operator<<(std::ostream& os, const sf::Vector2f& vector);
 
-  explicit PowerGenerator(Universe* universe);
-  virtual ~PowerGenerator() override;
-
-  // Override: Object
-  virtual void moveTo(const sf::Vector2f& pos) override;
-  virtual sf::FloatRect getBounds() const override;
-  virtual void tick(float adjustment) override;
-  virtual void draw(sf::RenderTarget& target,
-                    sf::RenderStates states) const override;
-
-private:
-  sf::CircleShape m_shape;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(PowerGenerator);
-};
-
-#endif  // UNIVERSE_OBJECTS_POWER_GENERATOR_H_
+#endif  // UTILS_STREAM_OPERATORS_H_

@@ -14,8 +14,6 @@
 
 #include "universe/universe_view.h"
 
-#include <nucleus/logging.h>
-
 #include "universe/link.h"
 #include "universe/objects/object.h"
 #include "universe/universe.h"
@@ -68,28 +66,22 @@ bool UniverseView::onMouseDragged(sf::Event& event) {
   ui::View::onMouseDragged(event);
 
   m_camera.onMouseDragged(event);
+
+  // Update the last mouse position in the view and send it to the real
+  // onMouseMoved.
+  m_viewMousePos = sf::Vector2i{event.mouseMove.x, event.mouseMove.y};
+  onMouseMovedInternal(m_camera.mousePosToUniversePos(m_viewMousePos));
+
   return true;
 }
 
 void UniverseView::onMouseMoved(sf::Event& event) {
   ui::View::onMouseMoved(event);
 
-  m_mousePos = m_camera.mousePosToUniversePos(
-      sf::Vector2f{static_cast<float>(event.mouseMove.x),
-                   static_cast<float>(event.mouseMove.y)});
-  m_mousePosShape.setPosition(m_mousePos);
-  updateHoverObject();
-
-  // Move the ghost object to the new mouse position.
-  if (m_ghostObject) {
-    m_ghostObject->moveTo(m_mousePos);
-  }
-
-  // Find a new link source and update the link.
-  if (m_ghostLink) {
-    Object* closestObject = m_universe->getClosestLinkObject(m_mousePos);
-    m_ghostLink->setSource(closestObject);
-  }
+  // Update the last mouse position in the view and send it to the real
+  // onMouseMoved.
+  m_viewMousePos = sf::Vector2i{event.mouseMove.x, event.mouseMove.y};
+  onMouseMovedInternal(m_camera.mousePosToUniversePos(m_viewMousePos));
 }
 
 void UniverseView::onMouseReleased(sf::Event& event) {
@@ -112,6 +104,11 @@ void UniverseView::onMouseWheel(sf::Event& event) {
 
 void UniverseView::tick(float adjustment) {
   m_camera.tick(adjustment);
+
+  // The camera might have updated it's position during the tick, so we check if
+  // we have a new mouse position.
+  sf::Vector2f mousePos = m_camera.mousePosToUniversePos(m_viewMousePos);
+  onMouseMovedInternal(mousePos);
 
   const float kHoverBorderSize = 2.f;
 
@@ -182,13 +179,33 @@ void UniverseView::draw(sf::RenderTarget& target,
   target.setView(origView);
 }
 
+void UniverseView::onMouseMovedInternal(const sf::Vector2f& mousePos) {
+  m_universeMousePos = mousePos;
+  m_mousePosShape.setPosition(m_universeMousePos);
+
+  // Update the hover object now that we have a new mouse position.
+  updateHoverObject();
+
+  // Move the ghost object to the new mouse position.
+  if (m_ghostObject) {
+    m_ghostObject->moveTo(m_universeMousePos);
+  }
+
+  // Find a new link source and update the link.
+  if (m_ghostLink) {
+    Object* closestObject =
+        m_universe->getClosestLinkObject(m_universeMousePos);
+    m_ghostLink->setSource(closestObject);
+  }
+}
+
 void UniverseView::updateHoverObject() {
   // We have to iterate through the list in reverse.
   for (auto it = std::rbegin(m_universe->m_objects),
             eit = std::rend(m_universe->m_objects);
        it != eit; ++it) {
     sf::FloatRect bounds{(*it)->getBounds()};
-    if (bounds.contains(m_mousePos)) {
+    if (bounds.contains(m_universeMousePos)) {
       m_hoverObject = *it;
       return;
     }

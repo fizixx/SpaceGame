@@ -16,7 +16,6 @@
 
 #include <cmath>
 
-#include <nucleus/logging.h>
 #include <SFML/Graphics/RenderTarget.hpp>
 
 #include "universe/objects/object.h"

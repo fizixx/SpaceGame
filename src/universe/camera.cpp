@@ -14,27 +14,26 @@
 
 #include "universe/camera.h"
 
-#include <nucleus/logging.h>
 #include <SFML/Graphics/RenderTarget.hpp>
 
 #if BUILD(DEBUG)
-#define SHOW_CAMERA_TARGET 1
+#define SHOW_CAMERA_TARGET 0
 #endif
 
 Camera::Camera() {
-#if BUILD(DEBUG) && defined(SHOW_CAMERA_TARGET)
+#if SHOW_CAMERA_TARGET
   // Adjust some values on the camera target shape.
   m_cameraTargetShape.setRadius(10.f);
   sf::FloatRect bounds{m_cameraTargetShape.getGlobalBounds()};
   m_cameraTargetShape.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
   m_cameraTargetShape.setFillColor(sf::Color(255, 0, 0));
-#endif  // BUILD(DEBUG)
+#endif  // SHOW_CAMERA_TARGET
 }
 
 Camera::~Camera() {
 }
 
-sf::Vector2f Camera::mousePosToUniversePos(const sf::Vector2f& mousePos) const {
+sf::Vector2f Camera::mousePosToUniversePos(const sf::Vector2i& mousePos) const {
   float width = static_cast<float>(m_viewportSize.x);
   float height = static_cast<float>(m_viewportSize.y);
   const sf::FloatRect& viewport = m_view.getViewport();
@@ -75,7 +74,7 @@ void Camera::onMouseDragged(sf::Event& event) {
 
     // Update the position of the camera.
     m_cameraTarget -= delta * m_zoomLevel;
-#if BUILD(DEBUG) && defined(SHOW_CAMERA_TARGET)
+#if SHOW_CAMERA_TARGET
     m_cameraTargetShape.setPosition(m_cameraTarget);
 #endif
 
@@ -105,12 +104,11 @@ void Camera::onMouseWheel(sf::Event& event) {
   // NOTE: We only do it half way between the current camera target and the
   // mouse position so that movements aren't so sudden.
   sf::Vector2f uniPos{mousePosToUniversePos(
-      sf::Vector2f{static_cast<float>(event.mouseWheel.x),
-                   static_cast<float>(event.mouseWheel.y)})};
+      sf::Vector2i{event.mouseWheel.x, event.mouseWheel.y})};
 
   m_cameraTarget = uniPos;
 
-#if BUILD(DEBUG) && defined(SHOW_CAMERA_TARGET)
+#if SHOW_CAMERA_TARGET
   m_cameraTargetShape.setPosition(m_cameraTarget);
 #endif
 }
@@ -139,7 +137,7 @@ void Camera::layout(const sf::IntRect& rect) {
 }
 
 void Camera::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-#if BUILD(DEBUG) && defined(SHOW_CAMERA_TARGET)
+#if SHOW_CAMERA_TARGET
   target.draw(m_cameraTargetShape);
 #endif
 }
