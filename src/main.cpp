@@ -32,7 +32,7 @@ int main() {
   // Construct the universe game state.
   std::unique_ptr<GameState> gameState =
       std::make_unique<GameStateUniverse>(windowSize);
-  
+
   using Clock = std::chrono::high_resolution_clock;
   auto lastTick = Clock::now();
 

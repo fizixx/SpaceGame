@@ -24,7 +24,8 @@ Camera::Camera() {
   m_cameraTargetShape.setFillColor(sf::Color(255, 0, 0));
 }
 
-Camera::~Camera() {}
+Camera::~Camera() {
+}
 
 sf::Vector2f Camera::mousePosToUniversePos(const sf::Vector2f& mousePos) const {
   float width = static_cast<float>(m_viewportSize.x);

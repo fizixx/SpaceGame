@@ -26,7 +26,8 @@ Link::Link(Universe* universe, Object* source, Object* destination)
   calculateShape();
 }
 
-Link::~Link() {}
+Link::~Link() {
+}
 
 void Link::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   target.draw(m_shape);

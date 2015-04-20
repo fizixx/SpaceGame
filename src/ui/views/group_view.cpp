@@ -93,7 +93,7 @@ View* GroupView::getViewAtPosition(const sf::Vector2i& pos) {
 void GroupView::tick(float adjustment) {
   View::tick(adjustment);
 
-  for (auto& child: m_children) {
+  for (auto& child : m_children) {
     child->tick(adjustment);
   }
 }

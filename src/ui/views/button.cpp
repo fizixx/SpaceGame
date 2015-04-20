@@ -22,7 +22,8 @@ namespace ui {
 
 sf::Font* kButtonFont = nullptr;
 
-Button::OnClickListener::~OnClickListener() {}
+Button::OnClickListener::~OnClickListener() {
+}
 
 Button::Button(Context* context, const std::string& label,
                OnClickListener* listener)
@@ -46,7 +47,8 @@ Button::Button(Context* context, const std::string& label,
   m_labelShape.setCharacterSize(30);
 }
 
-Button::~Button() {}
+Button::~Button() {
+}
 
 void Button::setLabel(const std::string& label) {
   m_label = label;
