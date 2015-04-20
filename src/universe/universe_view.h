@@ -17,8 +17,14 @@
 
 #include <memory>
 
+#include <nucleus/config.h>
+
 #include "ui/views/color_view.h"
 #include "universe/camera.h"
+
+#if BUILD(DEBUG)
+#define SHOW_UNIVERSE_MOUSE_POS 0
+#endif
 
 class Universe;
 class Object;
@@ -69,9 +75,6 @@ private:
   // The current object that is selected.
   Object* m_selectedObject{nullptr};
 
-  // A shape to show where the current mouse position is in the universe.
-  sf::CircleShape m_mousePosShape;
-
   // The rectangle we use to draw the hover outline.
   sf::RectangleShape m_hoverShape;
 
@@ -85,6 +88,11 @@ private:
   // The current ghost link.  We draw this link between the closest link object
   // and the ghost object.
   std::unique_ptr<Link> m_ghostLink;
+
+#if SHOW_UNIVERSE_MOUSE_POS
+  // A shape to show where the current mouse position is in the universe.
+  sf::CircleShape m_mousePosShape;
+#endif
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(UniverseView);
 };

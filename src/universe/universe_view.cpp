@@ -22,10 +22,12 @@ UniverseView::UniverseView(ui::Context* context, Universe* universe)
   : ui::View(context), m_universe(universe) {
   // Set up the mouse position shape.
 
+#if SHOW_UNIVERSE_MOUSE_POS
   m_mousePosShape.setRadius(25.f);
   m_mousePosShape.setOrigin(m_mousePosShape.getGlobalBounds().width / 2.f,
                             m_mousePosShape.getGlobalBounds().height / 2.f);
   m_mousePosShape.setFillColor(sf::Color{0, 0, 255, 255});
+#endif  // SHOW_UNIVERSE_MOUSE_POS
 
   // Set up the hover shape.
 
@@ -169,11 +171,15 @@ void UniverseView::draw(sf::RenderTarget& target,
     target.draw(*m_ghostObject);
   }
 
+  // Render all the debugging stuff.
+
   // Render the camera target.
   target.draw(m_camera);
 
+#if SHOW_UNIVERSE_MOUSE_POS
   // Draw the mouse position.
   target.draw(m_mousePosShape);
+#endif
 
   // Reset the target view.
   target.setView(origView);
@@ -181,7 +187,10 @@ void UniverseView::draw(sf::RenderTarget& target,
 
 void UniverseView::onMouseMovedInternal(const sf::Vector2f& mousePos) {
   m_universeMousePos = mousePos;
+
+#if SHOW_UNIVERSE_MOUSE_POS
   m_mousePosShape.setPosition(m_universeMousePos);
+#endif
 
   // Update the hover object now that we have a new mouse position.
   updateHoverObject();

@@ -37,6 +37,9 @@ public:
   // Given a mouse position in the viewport, return the universe position.
   sf::Vector2f mousePosToUniversePos(const sf::Vector2i& mousePos) const;
 
+  // Given a universe position, convert it to a position in the camera (view).
+  sf::Vector2i universePosToMousePos(const sf::Vector2f& universePos) const;
+
   // Handle input.
   void onMousePressed(sf::Event& event);
   void onMouseDragged(sf::Event& event);

@@ -39,14 +39,16 @@ sf::Vector2f Camera::mousePosToUniversePos(const sf::Vector2i& mousePos) const {
                           static_cast<int>(0.5f + width * viewport.width),
                           static_cast<int>(0.5f + height * viewport.height)};
 
-  sf::Vector2f normalized;
-  normalized.x =
-      -1.f + 2.f * (mousePos.x - adjViewport.left) / adjViewport.width;
-  normalized.y =
-      1.f - 2.f * (mousePos.y - adjViewport.top) / adjViewport.height;
+  sf::Vector2f normalized{
+      -1.f + 2.f * (mousePos.x - adjViewport.left) / adjViewport.width,
+      1.f - 2.f * (mousePos.y - adjViewport.top) / adjViewport.height};
 
   // Then transform by the inverse of the view matrix
   return m_view.getInverseTransform().transformPoint(normalized);
+}
+
+sf::Vector2i Camera::universePosToMousePos(const sf::Vector2f& universePos) const {
+  return sf::Vector2i(0, 0);
 }
 
 void Camera::onMousePressed(sf::Event& event) {
