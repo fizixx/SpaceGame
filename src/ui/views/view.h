@@ -12,8 +12,8 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef UI_VIEW_H_
-#define UI_VIEW_H_
+#ifndef UI_VIEWS_VIEW_H_
+#define UI_VIEWS_VIEW_H_
 
 #include <string>
 
@@ -117,9 +117,10 @@ protected:
   // Expand type of the view.
   ExpandType m_expand;
 
+private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(View);
 };
 
 }  // namespace ui
 
-#endif  // UI_VIEW_H_
+#endif  // UI_VIEWS_VIEW_H_

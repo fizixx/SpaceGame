@@ -12,7 +12,21 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "component.h"
+#ifndef UTILS_COMPONENT_H_
+#define UTILS_COMPONENT_H_
 
-Component::~Component() {
-}
+#include <SFML/Graphics/Drawable.hpp>
+#include <SFML/Window/Event.hpp>
+
+class Component : public sf::Drawable {
+public:
+  virtual ~Component();
+
+  // Handle input on the component.
+  virtual void handleInput(sf::Event& event) = 0;
+
+  // Tick the component with the supplied adjustment to make a smooth 60fps.
+  virtual void tick(float adjustment) = 0;
+};
+
+#endif  // UTILS_COMPONENT_H_

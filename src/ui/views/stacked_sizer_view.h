@@ -12,8 +12,8 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef UI_STACKED_SIZER_VIEW_H_
-#define UI_STACKED_SIZER_VIEW_H_
+#ifndef UI_VIEWS_STACKED_SIZER_VIEW_H_
+#define UI_VIEWS_STACKED_SIZER_VIEW_H_
 
 #include "ui/views/group_view.h"
 
@@ -34,4 +34,4 @@ private:
 
 }  // namespace ui
 
-#endif  // UI_STACKED_SIZER_VIEW_H_
+#endif  // UI_VIEWS_STACKED_SIZER_VIEW_H_

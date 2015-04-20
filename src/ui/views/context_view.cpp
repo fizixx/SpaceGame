@@ -98,12 +98,9 @@ void ContextView::onMouseMoved(sf::Event& event) {
 
     // Now send the move event.
     m_mouseMoveHandler->onMouseMoved(event);
-  }
-#if 0
-    else if (!m_mouseMoveHandler) {
+  } else if (m_mouseMoveHandler) {
     m_mouseMoveHandler->onMouseExited(event);
   }
-#endif  // 0
 }
 
 bool ContextView::processMousePressed(sf::Event& event, bool isDouble) {

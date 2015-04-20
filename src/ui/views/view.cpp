@@ -14,6 +14,8 @@
 
 #include "ui/views/view.h"
 
+#include <string>
+
 #include "ui/context.h"
 
 namespace ui {

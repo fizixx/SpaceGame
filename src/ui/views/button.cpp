@@ -15,6 +15,8 @@
 #include "ui/views/button.h"
 
 #include <cmath>
+#include <algorithm>
+#include <string>
 
 #include <nucleus/logging.h>
 

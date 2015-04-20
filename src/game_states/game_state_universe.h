@@ -23,7 +23,7 @@
 
 class GameStateUniverse : public GameState, public ui::Button::OnClickListener {
 public:
-  GameStateUniverse(const sf::Vector2f& viewportSize);
+  explicit GameStateUniverse(const sf::Vector2f& viewportSize);
   virtual ~GameStateUniverse() override;
 
   // Override: ui::Button::OnClickListener

@@ -12,8 +12,8 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef UI_GROUP_VIEW_H_
-#define UI_GROUP_VIEW_H_
+#ifndef UI_VIEWS_GROUP_VIEW_H_
+#define UI_VIEWS_GROUP_VIEW_H_
 
 #include <vector>
 
@@ -43,9 +43,10 @@ protected:
   // This view's child views.
   std::vector<View*> m_children;
 
+private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(GroupView);
 };
 
 }  // namespace ui
 
-#endif  // UI_GROUP_VIEW_H_
+#endif  // UI_VIEWS_GROUP_VIEW_H_

@@ -12,7 +12,7 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "camera.h"
+#include "universe/camera.h"
 
 #include <nucleus/logging.h>
 #include <SFML/Graphics/RenderTarget.hpp>

@@ -20,8 +20,8 @@
 #include <nucleus/macros.h>
 #include <SFML/Window/Event.hpp>
 
-#include "component.h"
 #include "ui/context.h"
+#include "utils/component.h"
 
 class GameState : public Component {
 public:

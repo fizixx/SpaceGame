@@ -12,8 +12,8 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef UI_COLOR_VIEW_H_
-#define UI_COLOR_VIEW_H_
+#ifndef UI_VIEWS_COLOR_VIEW_H_
+#define UI_VIEWS_COLOR_VIEW_H_
 
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -49,4 +49,4 @@ private:
 
 }  // namespace ui
 
-#endif  // UI_COLOR_VIEW_H_
+#endif  // UI_VIEWS_COLOR_VIEW_H_

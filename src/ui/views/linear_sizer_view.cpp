@@ -15,6 +15,7 @@
 #include "ui/views/linear_sizer_view.h"
 
 #include <cmath>
+#include <algorithm>
 
 namespace ui {
 

@@ -12,8 +12,8 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef UI_LINEAR_SIZER_VIEW_H_
-#define UI_LINEAR_SIZER_VIEW_H_
+#ifndef UI_VIEWS_LINEAR_SIZER_VIEW_H_
+#define UI_VIEWS_LINEAR_SIZER_VIEW_H_
 
 #include "ui/views/group_view.h"
 
@@ -26,7 +26,7 @@ public:
     OrientationVertical,
   };
 
-  LinearSizerView(Context* context);
+  explicit LinearSizerView(Context* context);
   LinearSizerView(Context* context, OrientationType orientation);
   virtual ~LinearSizerView();
 
@@ -50,4 +50,4 @@ private:
 
 }  // namespace ui
 
-#endif  // UI_LINEAR_SIZER_VIEW_H_
+#endif  // UI_VIEWS_LINEAR_SIZER_VIEW_H_

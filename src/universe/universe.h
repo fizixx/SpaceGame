@@ -12,10 +12,10 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef UNIVERSE_H_
-#define UNIVERSE_H_
+#ifndef UNIVERSE_UNIVERSE_H_
+#define UNIVERSE_UNIVERSE_H_
 
-#include <memory>
+#include <vector>
 
 #include <nucleus/macros.h>
 #include <SFML/Graphics/CircleShape.hpp>
@@ -67,4 +67,4 @@ private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(Universe);
 };
 
-#endif  // UNIVERSE_H_
+#endif  // UNIVERSE_UNIVERSE_H_

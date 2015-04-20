@@ -14,6 +14,8 @@
 
 #include "ui/views/stacked_sizer_view.h"
 
+#include <algorithm>
+
 namespace ui {
 
 StackedSizerView::StackedSizerView(Context* context) : GroupView(context) {

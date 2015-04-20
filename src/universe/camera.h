@@ -12,8 +12,8 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef CAMERA_H_
-#define CAMERA_H_
+#ifndef UNIVERSE_CAMERA_H_
+#define UNIVERSE_CAMERA_H_
 
 #include <nucleus/macros.h>
 #include <SFML/Graphics/CircleShape.hpp>
@@ -82,4 +82,4 @@ private:
   DISALLOW_COPY_AND_ASSIGN(Camera);
 };
 
-#endif  // CAMERA_H_
+#endif  // UNIVERSE_CAMERA_H_

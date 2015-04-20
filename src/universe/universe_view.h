@@ -23,7 +23,7 @@ class Object;
 
 class UniverseView : public ui::View {
 public:
-  UniverseView(ui::Context* context, Universe* universe = nullptr);
+  explicit UniverseView(ui::Context* context, Universe* universe = nullptr);
   virtual ~UniverseView() override;
 
   // Override: ui::View

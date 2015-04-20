@@ -15,6 +15,8 @@
 #ifndef UI_VIEWS_BUTTON_H_
 #define UI_VIEWS_BUTTON_H_
 
+#include <string>
+
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
 

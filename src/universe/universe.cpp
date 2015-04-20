@@ -15,6 +15,7 @@
 #include "universe/universe.h"
 
 #include <algorithm>
+#include <memory>
 
 #include <nucleus/logging.h>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -65,7 +66,7 @@ void Universe::addLink(Object* source, Object* destination) {
 void Universe::removeLink(Object* any) {
   // Find links the either the source or destination as the specified object.
   auto it =
-      std::find_if(std::begin(m_links), std::end(m_links), [&](Link* link) {
+      std::find_if(std::begin(m_links), std::end(m_links), [any](Link* link) {
         return link->getSource() == any || link->getDestination() == any;
       });
 

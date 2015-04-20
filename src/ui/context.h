@@ -18,7 +18,7 @@
 #include <map>
 
 #include "ui/views/context_view.h"
-#include "component.h"
+#include "utils/component.h"
 
 namespace ui {
 
@@ -44,6 +44,7 @@ protected:
   // The root view of our hierarchy.
   mutable ContextView m_contextView;
 
+private:
   DISALLOW_COPY_AND_ASSIGN(Context);
 };
 
