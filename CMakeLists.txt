@@ -3,7 +3,7 @@ project("SpaceGame")
 
 # General settings
 
-set("CMAKE_RUNTIME_OUTPUT_DIRECTORY" "${PROJECT_BINARY_DIR}/out")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/out")
 
 # Compiler settings
 
@@ -11,8 +11,11 @@ if(NOT WIN32)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y")
 endif()
 
-include("cmake/sfml.cmake")
+# nucleus
 include("cmake/nucleus.cmake")
+
+# SFML
+include("cmake/sfml.cmake")
 
 # SpaceGame
 
