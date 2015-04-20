@@ -59,7 +59,7 @@ void UniverseView::startPlacingObject(std::unique_ptr<Object> object) {
 
 void UniverseView::stopPlacingObject(bool place) {
   if (place) {
-    m_universe->addObject(m_ghostObject.release());
+    m_universe->addObject(std::move(m_ghostObject));
     m_universe->addLink(m_ghostLink->getSource(), m_ghostLink->getDestination());
   } else {
     m_ghostObject.reset();

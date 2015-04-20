@@ -72,7 +72,12 @@ public:
 
   // Virtual Interface
 
+  // Get the view/child view at this position.
   virtual View* getViewAtPosition(const sf::Vector2i& pos);
+
+  // Return true if you want to receive input events on this view.  If not,
+  // events will be processed by this view's parents.
+  virtual bool handlesInput() const { return false; }
 
   virtual void tick(float adjustment);
   virtual sf::Vector2i calculateMinSize() const;

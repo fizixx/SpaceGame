@@ -28,17 +28,16 @@
 Universe::Universe(const sf::Vector2f& viewportSize) {
   // Create a dummy universe.
 
-  auto commandCenter = std::make_unique<CommandCenter>(this);
+  auto commandCenter = createObject<CommandCenter>();
   commandCenter->moveTo(sf::Vector2f{0.f, 0.f});
-  addObject(commandCenter.release());
 
-  auto powerGenerator1 = std::make_unique<PowerGenerator>(this);
-  powerGenerator1->moveTo(sf::Vector2f{500.f, 250.f});
-  addObject(powerGenerator1.release());
+  PowerGenerator* powerGenerator;
+  
+  powerGenerator = createObject<PowerGenerator>();
+  powerGenerator->moveTo(sf::Vector2f{500.f, 250.f});
 
-  auto powerGenerator2 = std::make_unique<PowerGenerator>(this);
-  powerGenerator2->moveTo(sf::Vector2f{-450.f, 50.f});
-  addObject(powerGenerator2.release());
+  powerGenerator = createObject<PowerGenerator>();
+  powerGenerator->moveTo(sf::Vector2f{-450.f, 50.f});
 
   addLink(m_objects[0], m_objects[1]);
   addLink(m_objects[0], m_objects[2]);
@@ -56,8 +55,8 @@ Universe::~Universe() {
   }
 }
 
-void Universe::addObject(Object* object) {
-  m_objects.push_back(object);
+void Universe::addObject(std::unique_ptr<Object> object) {
+  m_objects.push_back(object.release());
 }
 
 void Universe::removeObject(Object* object) {

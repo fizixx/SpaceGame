@@ -88,8 +88,13 @@ View* GroupView::getViewAtPosition(const sf::Vector2i& pos) {
     return foundView;
   }
 
-  if (!m_rect.contains(pos))
+  if (!m_rect.contains(pos)) {
     return nullptr;
+  }
+
+  if (!handlesInput()) {
+    return nullptr;
+  }
 
   return this;
 }

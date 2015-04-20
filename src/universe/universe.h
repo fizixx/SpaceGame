@@ -15,6 +15,7 @@
 #ifndef UNIVERSE_UNIVERSE_H_
 #define UNIVERSE_UNIVERSE_H_
 
+#include <memory>
 #include <vector>
 
 #include <nucleus/macros.h>
@@ -38,8 +39,17 @@ public:
   ~Universe();
 
   // Add or remove objects from the universe.
-  void addObject(Object* object);
+  void addObject(std::unique_ptr<Object> object);
   void removeObject(Object* object);
+
+  // Create an object in the universe.
+  template <typename ObjectType>
+  ObjectType* createObject() {
+    // Insert the new object into the universe.
+    ObjectType* obj = new ObjectType{this};
+    m_objects.emplace_back(obj);
+    return obj;
+  }
 
   // Add or remove links.
   void addLink(Object* source, Object* destination);

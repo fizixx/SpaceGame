@@ -41,6 +41,7 @@ public:
   void setLabel(const std::string& label);
 
   // Override: View
+  virtual bool handlesInput() const { return true; }
   virtual bool onMousePressed(sf::Event& event) override;
   virtual void onMouseReleased(sf::Event& event) override;
   virtual void onMouseEntered(sf::Event& event) override;

@@ -55,12 +55,6 @@ void GameStateUniverse::createUserInterface(ui::Context* context,
   buttonContainer->setExpand(ui::View::ExpandVertical);
   buttonContainer->setHorizontalAlign(ui::View::AlignLeft);
 
-  // Create a test button.
-  m_testButton = new ui::Button(context, "Test Button", this);
-  m_testButton->setName("testButton");
-  m_testButton->setMinSize(sf::Vector2i{300, 0});
-  buttonContainer->addChild(m_testButton);
-
   m_createPowerGeneratorButton =
       new ui::Button(context, "Power Generator", this);
   m_createPowerGeneratorButton->setName("createPowerGenerator");
