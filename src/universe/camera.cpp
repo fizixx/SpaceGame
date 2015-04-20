@@ -16,10 +16,6 @@
 
 #include <SFML/Graphics/RenderTarget.hpp>
 
-#if BUILD(DEBUG)
-#define SHOW_CAMERA_TARGET 0
-#endif
-
 Camera::Camera() {
 #if SHOW_CAMERA_TARGET
   // Adjust some values on the camera target shape.

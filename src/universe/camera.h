@@ -22,6 +22,10 @@
 #include <SFML/Graphics/View.hpp>
 #include <SFML/Window/Event.hpp>
 
+#if BUILD(DEBUG)
+#define SHOW_CAMERA_TARGET 0
+#endif
+
 class Camera : public sf::Drawable {
 public:
   Camera();
@@ -77,7 +81,7 @@ private:
   // The final calculated view we use to translate everything.
   sf::View m_view;
 
-#if BUILD(DEBUG)
+#if SHOW_CAMERA_TARGET
   // A circle we use to render the camera target.
   sf::CircleShape m_cameraTargetShape;
 #endif
