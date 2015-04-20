@@ -21,6 +21,8 @@
 #include "universe/universe.h"
 #include "ui/views/button.h"
 
+class UniverseView;
+
 class GameStateUniverse : public GameState, public ui::Button::OnClickListener {
 public:
   explicit GameStateUniverse(const sf::Vector2f& viewportSize);
@@ -37,8 +39,8 @@ private:
   std::unique_ptr<Universe> m_universe;
 
   // Mapped UI controls.
+  UniverseView* m_universeView{nullptr};
   ui::Button* m_testButton{nullptr};
-
   ui::Button* m_createPowerGeneratorButton{nullptr};
 
   DISALLOW_COPY_AND_ASSIGN(GameStateUniverse);

@@ -14,6 +14,8 @@
 
 #include "universe/objects/object.h"
 
+#include <cmath>
+
 Object::Object(Universe* universe) : m_universe(universe) {
 }
 
@@ -26,4 +28,10 @@ void Object::moveTo(const sf::Vector2f& pos) {
 
 sf::FloatRect Object::getBounds() const {
   return sf::FloatRect{};
+}
+
+float Object::calculateDistanceFrom(const sf::Vector2f& pos) const {
+  const float x = (pos.x - m_pos.x) * (pos.x - m_pos.x);
+  const float y = (pos.y - m_pos.y) * (pos.y - m_pos.y);
+  return std::sqrtf(x + y);
 }

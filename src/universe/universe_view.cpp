@@ -14,6 +14,8 @@
 
 #include "universe/universe_view.h"
 
+#include <nucleus/logging.h>
+
 #include "universe/link.h"
 #include "universe/objects/object.h"
 #include "universe/universe.h"
@@ -45,6 +47,10 @@ UniverseView::UniverseView(ui::Context* context, Universe* universe)
 UniverseView::~UniverseView() {
 }
 
+void UniverseView::startPlacingObject(std::unique_ptr<Object> object) {
+  m_ghostObject = std::move(object);
+}
+
 bool UniverseView::onMousePressed(sf::Event& event) {
   ui::View::onMousePressed(event);
 
@@ -67,6 +73,15 @@ void UniverseView::onMouseMoved(sf::Event& event) {
                    static_cast<float>(event.mouseMove.y)});
   m_mousePosShape.setPosition(m_mousePos);
   updateHoverObject();
+
+  // Move the ghost object if we have one.
+  if (m_ghostObject) {
+    LOG(Info) << m_mousePos.x << " - " << m_mousePos.y;
+    m_ghostObject->moveTo(m_mousePos);
+
+    Object* closestObject = m_universe->getClosestLinkObject(m_mousePos);
+    LOG(Info) << closestObject;
+  }
 }
 
 void UniverseView::onMouseReleased(sf::Event& event) {
@@ -139,6 +154,12 @@ void UniverseView::draw(sf::RenderTarget& target,
     target.draw(*object);
   }
 
+  // Render the ghost object over the existing objects.
+  if (m_ghostObject) {
+    LOG(Info) << m_ghostObject->getPos().x << " - " << m_ghostObject->getPos().y;
+    target.draw(*m_ghostObject);
+  }
+
 #if 0
   // Render the hover shape.
   if (m_hoverObject) {
@@ -155,7 +176,7 @@ void UniverseView::draw(sf::RenderTarget& target,
   target.draw(m_camera);
 
   // Draw the mouse position.
-  // target.draw(m_mousePosShape);
+  target.draw(m_mousePosShape);
 
   // Reset the target view.
   target.setView(origView);

@@ -45,6 +45,10 @@ public:
   void addLink(Object* source, Object* destination);
   void removeLinksConnectedTo(Object* object);
 
+  // Given a position, find the closest object that can be linked to.  Returns
+  // null if no point could be found.
+  Object* getClosestLinkObject(const sf::Vector2f& pos) const;
+
 private:
   friend class UniverseView;
 

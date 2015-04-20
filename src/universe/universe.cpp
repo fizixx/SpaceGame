@@ -15,6 +15,7 @@
 #include "universe/universe.h"
 
 #include <algorithm>
+#include <limits>
 #include <memory>
 
 #include <nucleus/logging.h>
@@ -83,4 +84,21 @@ void Universe::removeLinksConnectedTo(Object* object) {
     return;
 
   m_links.erase(it);
+}
+
+Object* Universe::getClosestLinkObject(const sf::Vector2f& pos) const {
+  // Go through each object and calculate the distance to the pos, overriding
+  // the best one as we go.
+  float bestDistance = std::numeric_limits<float>::max();
+  Object* bestObject = nullptr;
+
+  for (const auto& object : m_objects) {
+    float distance = object->calculateDistanceFrom(pos);
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      bestObject = object;
+    }
+  }
+
+  return bestObject;
 }

@@ -29,7 +29,7 @@ PowerGenerator::~PowerGenerator() {
 void PowerGenerator::moveTo(const sf::Vector2f& pos) {
   Object::moveTo(pos);
 
-  m_shape.move(pos);
+  m_shape.setPosition(pos);
 }
 
 sf::FloatRect PowerGenerator::getBounds() const {

@@ -34,6 +34,9 @@ public:
   // Return the bounds of the object.
   virtual sf::FloatRect getBounds() const;
 
+  // Calculate the distance from pos to this object.
+  float calculateDistanceFrom(const sf::Vector2f& pos) const;
+
   // Tick the object.
   virtual void tick(float adjustment) = 0;
 

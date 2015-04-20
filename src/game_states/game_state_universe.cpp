@@ -19,6 +19,7 @@
 
 #include "ui/views/button.h"
 #include "ui/views/linear_sizer_view.h"
+#include "universe/objects/power_generator.h"
 #include "universe/universe_view.h"
 
 GameStateUniverse::GameStateUniverse(const sf::Vector2f& viewportSize)
@@ -33,16 +34,25 @@ GameStateUniverse::~GameStateUniverse() {
 void GameStateUniverse::onButtonClicked(ui::Button* sender) {
   if (sender == m_testButton) {
     LOG(Info) << "Test button clicked";
+    return;
+  }
+
+  if (sender == m_createPowerGeneratorButton) {
+    // Create the power generator.
+    std::unique_ptr<Object> powerGenerator =
+        std::make_unique<PowerGenerator>(m_universe.get());
+    m_universeView->startPlacingObject(std::move(powerGenerator));
+    return;
   }
 }
 
 void GameStateUniverse::createUserInterface(ui::Context* context,
                                             ui::GroupView* parent) {
   // Add the universe view.
-  auto universeView = std::make_unique<UniverseView>(context, m_universe.get());
-  universeView->setName("universe");
-  universeView->setExpand(ui::View::ExpandBoth);
-  parent->addChild(universeView.release());
+  m_universeView = new UniverseView(context, m_universe.get());
+  m_universeView->setName("universe");
+  m_universeView->setExpand(ui::View::ExpandBoth);
+  parent->addChild(m_universeView);
 
   // Create a container for all the buttons.
   ui::LinearSizerView* buttonContainer = new ui::LinearSizerView(

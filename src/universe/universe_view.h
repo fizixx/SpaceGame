@@ -15,6 +15,8 @@
 #ifndef UNIVERSE_UNIVERSE_VIEW_H_
 #define UNIVERSE_UNIVERSE_VIEW_H_
 
+#include <memory>
+
 #include "ui/views/color_view.h"
 #include "universe/camera.h"
 
@@ -25,6 +27,9 @@ class UniverseView : public ui::View {
 public:
   explicit UniverseView(ui::Context* context, Universe* universe = nullptr);
   virtual ~UniverseView() override;
+
+  // Start placing the given object.
+  void startPlacingObject(std::unique_ptr<Object> object);
 
   // Override: ui::View
   virtual bool onMousePressed(sf::Event& event) override;
@@ -64,6 +69,10 @@ private:
 
   // The rectangle we use to draw the selected outline.
   sf::RectangleShape m_selectedShape;
+
+  // The current ghost object.  We own this pointer as it's not part of the
+  // universe yet.
+  std::unique_ptr<Object> m_ghostObject;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(UniverseView);
 };
