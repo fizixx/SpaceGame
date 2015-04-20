@@ -31,7 +31,7 @@
 class Link;
 class Object;
 
-class Universe : public sf::Drawable {
+class Universe {
 public:
   // Construct the universe with the specified viewport size.
   explicit Universe(const sf::Vector2f& viewportSize);
@@ -44,16 +44,6 @@ public:
   // Add or remove links.
   void addLink(Object* source, Object* destination);
   void removeLinksConnectedTo(Object* object);
-
-  // Handle any input events.
-  void handleInput(sf::Event& event);
-
-  // Tick the universe.
-  void tick(float adjustment);
-
-  // Override: sf::Drawable
-  virtual void draw(sf::RenderTarget& target,
-                    sf::RenderStates states) const override;
 
 private:
   friend class UniverseView;

@@ -11,6 +11,10 @@ if(NOT WIN32)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y")
 endif()
 
+if(MSVC)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
+endif()
+
 # nucleus
 include("cmake/nucleus.cmake")
 

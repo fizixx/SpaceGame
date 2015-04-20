@@ -84,12 +84,3 @@ void Universe::removeLinksConnectedTo(Object* object) {
 
   m_links.erase(it);
 }
-
-void Universe::handleInput(sf::Event& event) {
-}
-
-void Universe::tick(float adjustment) {
-}
-
-void Universe::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-}
