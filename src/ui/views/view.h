@@ -64,7 +64,7 @@ public:
 
   // verticalalign
   AlignType getVerticalAlign() const { return m_verticalAlign; }
-  void setVerticalAling(AlignType align);
+  void setVerticalAlign(AlignType align);
 
   // expand
   ExpandType getExpand() const { return m_expand; }

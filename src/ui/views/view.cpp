@@ -40,7 +40,7 @@ void View::setHorizontalAlign(AlignType align) {
   m_horizontalAlign = align;
 }
 
-void View::setVerticalAling(AlignType align) {
+void View::setVerticalAlign(AlignType align) {
   m_verticalAlign = align;
 }
 

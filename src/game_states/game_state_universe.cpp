@@ -52,7 +52,7 @@ void GameStateUniverse::createUserInterface(ui::Context* context,
   ui::LinearSizerView* buttonContainer = new ui::LinearSizerView(
       context, ui::LinearSizerView::OrientationVertical);
   buttonContainer->setName("buttonContainer");
-  buttonContainer->setExpand(ui::View::ExpandVertical);
+  buttonContainer->setVerticalAlign(ui::View::AlignTop);
   buttonContainer->setHorizontalAlign(ui::View::AlignLeft);
 
   m_createPowerGeneratorButton =
