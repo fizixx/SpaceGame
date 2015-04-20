@@ -38,6 +38,10 @@ public:
   // Start placing the given object.
   void startPlacingObject(std::unique_ptr<Object> object);
 
+  // Stop placing an object (if we have one).  place specifies whether the
+  // existing ghost object should be inserted into the universe or not.
+  void stopPlacingObject(bool place);
+
   // Override: ui::View
   virtual bool onMousePressed(sf::Event& event) override;
   virtual bool onMouseDragged(sf::Event& event) override;

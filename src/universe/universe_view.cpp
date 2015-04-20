@@ -57,10 +57,21 @@ void UniverseView::startPlacingObject(std::unique_ptr<Object> object) {
                                        m_ghostObject.get());
 }
 
+void UniverseView::stopPlacingObject(bool place) {
+  if (place) {
+    m_universe->addObject(m_ghostObject.release());
+    m_universe->addLink(m_ghostLink->getSource(), m_ghostLink->getDestination());
+  } else {
+    m_ghostObject.reset();
+  }
+  m_ghostLink.reset();
+}
+
 bool UniverseView::onMousePressed(sf::Event& event) {
   ui::View::onMousePressed(event);
 
   m_camera.onMousePressed(event);
+
   return true;
 }
 
@@ -89,13 +100,17 @@ void UniverseView::onMouseMoved(sf::Event& event) {
 void UniverseView::onMouseReleased(sf::Event& event) {
   ui::View::onMouseReleased(event);
 
-  m_camera.onMouseReleased(event);
+  if (m_ghostObject) {
+    // Place the object if we press the left button, otherwise cancel the
+    // placement.
+    stopPlacingObject(event.mouseButton.button == sf::Mouse::Left);
 
-  // If we clicked, then set the selected object as the current hover
-  // object.
-  if (event.mouseButton.button == sf::Mouse::Left && m_hoverObject) {
-    m_selectedObject = m_hoverObject;
+    // Don't pass the event on to the camera.
+    return;
   }
+
+  // If we didn't handle the event, then we can pass it on to the camera.
+  m_camera.onMouseReleased(event);
 }
 
 void UniverseView::onMouseWheel(sf::Event& event) {
