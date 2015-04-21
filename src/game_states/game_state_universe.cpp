@@ -21,10 +21,11 @@
 #include "universe/objects/power_generator.h"
 #include "universe/universe_view.h"
 
-GameStateUniverse::GameStateUniverse(const sf::Vector2f& viewportSize)
-  : m_universe(std::make_unique<Universe>(viewportSize)) {
+GameStateUniverse::GameStateUniverse(ResourceManager* resourceManager,
+                                     ui::Context* context)
+  : GameState(context), m_universe(std::make_unique<Universe>(resourceManager)) {
   // Add the user interface to the UI tree.
-  createUserInterface(m_uiContext.get(), m_uiContext->getRoot());
+  createUserInterface(m_uiContext, m_uiContext->getRoot());
 }
 
 GameStateUniverse::~GameStateUniverse() {

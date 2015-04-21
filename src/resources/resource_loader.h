@@ -12,34 +12,28 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef GAME_STATES_GAME_STATE_H_
-#define GAME_STATES_GAME_STATE_H_
+#ifndef RESOURCES_RESOURCE_LOADER_H_
+#define RESOURCES_RESOURCE_LOADER_H_
 
+#include <functional>
 #include <memory>
 
-#include <nucleus/macros.h>
-#include <SFML/Window/Event.hpp>
-
-#include "ui/context.h"
-#include "utils/component.h"
-
-class GameState : public Component {
+template <typename ResourceType>
+// ResourceType: The resource we are loading.
+class ResourceLoader {
 public:
-  explicit GameState(ui::Context* context);
-  virtual ~GameState() override;
+  using LoaderFunc = std::function<std::unique_ptr<ResourceType>()>;
 
-  // Override: Component
-  virtual void handleInput(sf::Event& event) override;
-  virtual void tick(float adjustment) override;
-  virtual void draw(sf::RenderTarget& target,
-                    sf::RenderStates states) const override;
+  ResourceLoader(const LoaderFunc& func, const std::string& id)
+    : m_func(func), m_id(id) {}
 
-protected:
-  // Every game state has a UI component.
-  ui::Context* m_uiContext;
+  std::unique_ptr<ResourceType> load() const { return m_func(); }
+
+  const std::string& getId() { return m_id; }
 
 private:
-  DISALLOW_COPY_AND_ASSIGN(GameState);
+  LoaderFunc m_func;
+  std::string m_id;
 };
 
-#endif  // GAME_STATES_GAME_STATE_H_
+#endif  // RESOURCES_RESOURCE_LOADER_H_

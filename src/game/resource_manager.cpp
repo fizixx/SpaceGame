@@ -12,34 +12,28 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef GAME_STATES_GAME_STATE_H_
-#define GAME_STATES_GAME_STATE_H_
+#include "game/resource_manager.h"
 
-#include <memory>
+#include <nucleus/logging.h>
 
-#include <nucleus/macros.h>
-#include <SFML/Window/Event.hpp>
+#include "resources/sfml_loaders.h"
 
-#include "ui/context.h"
-#include "utils/component.h"
+ResourceManager::ResourceManager() {
+}
 
-class GameState : public Component {
-public:
-  explicit GameState(ui::Context* context);
-  virtual ~GameState() override;
+ResourceManager::~ResourceManager() {
+}
 
-  // Override: Component
-  virtual void handleInput(sf::Event& event) override;
-  virtual void tick(float adjustment) override;
-  virtual void draw(sf::RenderTarget& target,
-                    sf::RenderStates states) const override;
+bool ResourceManager::loadAll(const std::string& root) {
+  if (!m_fontStore.load(Font::Default,
+                        loaders::fromFile<sf::Font>(root + "fonts\\arial.ttf"))) {
+    LOG(Error) << "Could not load default font.";
+    return false;
+  }
 
-protected:
-  // Every game state has a UI component.
-  ui::Context* m_uiContext;
+  return true;
+}
 
-private:
-  DISALLOW_COPY_AND_ASSIGN(GameState);
-};
-
-#endif  // GAME_STATES_GAME_STATE_H_
+sf::Font* ResourceManager::getFont(Font font) {
+  return m_fontStore.get(font);
+}

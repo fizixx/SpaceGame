@@ -25,7 +25,8 @@
 #include "universe/objects/command_center.h"
 #include "universe/objects/power_generator.h"
 
-Universe::Universe(const sf::Vector2f& viewportSize) {
+Universe::Universe(ResourceManager* resourceManager)
+  : m_resourceManager(resourceManager) {
   // Create a dummy universe.
 
   auto commandCenter = createObject<CommandCenter>();

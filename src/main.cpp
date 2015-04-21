@@ -18,6 +18,8 @@
 #include <SFML/Window/Event.hpp>
 #include <nucleus/logging.h>
 
+#include "game/resource_manager.h"
+#include "game/ui_context.h"
 #include "game_states/game_state_universe.h"
 
 int main() {
@@ -26,12 +28,18 @@ int main() {
   sf::RenderWindow window{sf::VideoMode{1600, 900, 32}, "SpaceGame"};
   window.setVerticalSyncEnabled(true);
 
-  sf::Vector2f windowSize{static_cast<float>(window.getSize().x),
-                          static_cast<float>(window.getSize().y)};
+  // Initialize the resource manager.
+  ResourceManager resourceManager;
+  if (!resourceManager.loadAll("C:\\Workspace\\SpaceGame\\res\\")) {
+    return 1;
+  }
+
+  // Create a user interface context for the universe game state.
+  auto context = std::make_unique<UiContext>(&resourceManager);
 
   // Construct the universe game state.
   std::unique_ptr<GameState> gameState =
-      std::make_unique<GameStateUniverse>(windowSize);
+      std::make_unique<GameStateUniverse>(&resourceManager, context.get());
 
   using Clock = std::chrono::high_resolution_clock;
   auto lastTick = Clock::now();

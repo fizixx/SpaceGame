@@ -15,8 +15,11 @@
 #ifndef UI_CONTEXT_H_
 #define UI_CONTEXT_H_
 
-#include <map>
+#include <string>
 
+#include <SFML/Graphics/Font.hpp>
+
+#include "resources/resource_store.h"
 #include "ui/views/context_view.h"
 #include "utils/component.h"
 
@@ -31,6 +34,9 @@ public:
 
   // Get the root view of the context.
   ContextView* getRoot() { return &m_contextView; }
+
+  // Resources
+  virtual sf::Font* getFont(const std::string& name) = 0;
 
   // Override: Component
   virtual void handleInput(sf::Event& event) override;

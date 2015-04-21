@@ -20,9 +20,9 @@
 
 #include <nucleus/logging.h>
 
-namespace ui {
+#include "ui/context.h"
 
-sf::Font* kButtonFont = nullptr;
+namespace ui {
 
 Button::OnClickListener::~OnClickListener() {
 }
@@ -30,12 +30,7 @@ Button::OnClickListener::~OnClickListener() {
 Button::Button(Context* context, const std::string& label,
                OnClickListener* listener)
   : View(context), m_label(label), m_listener(listener) {
-  if (!kButtonFont) {
-    kButtonFont = new sf::Font;
-    if (!kButtonFont->loadFromFile("C:\\Windows\\Fonts\\arial.ttf")) {
-      LOG(Error) << "Could not load font.";
-    }
-  }
+  sf::Font* buttonFont = context->getFont("default");
 
   // Set up the background shape.
   m_backgroundShape.setFillColor(sf::Color{255, 255, 255, 127});
@@ -43,10 +38,12 @@ Button::Button(Context* context, const std::string& label,
   m_backgroundShape.setOutlineThickness(1);
 
   // Set up the label.
-  m_labelShape.setString(m_label);
-  m_labelShape.setFont(*kButtonFont);
-  m_labelShape.setColor(sf::Color{127, 255, 127});
-  m_labelShape.setCharacterSize(30);
+  if (buttonFont) {
+    m_labelShape.setString(m_label);
+    m_labelShape.setFont(*buttonFont);
+    m_labelShape.setColor(sf::Color{127, 255, 127});
+    m_labelShape.setCharacterSize(30);
+  }
 }
 
 Button::~Button() {
@@ -72,12 +69,10 @@ void Button::onMouseReleased(sf::Event& event) {
 
 void Button::onMouseEntered(sf::Event& event) {
   m_backgroundShape.setFillColor(sf::Color{255, 255, 255, 191});
-  // m_labelShape.setColor(sf::Color{255, 127, 127});
 }
 
 void Button::onMouseExited(sf::Event& event) {
   m_backgroundShape.setFillColor(sf::Color{255, 255, 255, 127});
-  // m_labelShape.setColor(sf::Color{255, 255, 255});
 }
 
 sf::Vector2i Button::calculateMinSize() const {

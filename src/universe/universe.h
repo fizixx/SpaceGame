@@ -19,14 +19,8 @@
 #include <vector>
 
 #include <nucleus/macros.h>
-#include <SFML/Graphics/CircleShape.hpp>
-#include <SFML/Graphics/Drawable.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
-#include <SFML/Graphics/Texture.hpp>
-#include <SFML/Graphics/VertexArray.hpp>
-#include <SFML/Graphics/View.hpp>
-#include <SFML/Window/Event.hpp>
 
+#include "game/resource_manager.h"
 #include "universe/camera.h"
 
 class Link;
@@ -35,8 +29,11 @@ class Object;
 class Universe {
 public:
   // Construct the universe with the specified viewport size.
-  explicit Universe(const sf::Vector2f& viewportSize);
+  explicit Universe(ResourceManager* resourceManager);
   ~Universe();
+
+  // Return the resource manager attached to this universe.
+  ResourceManager* getResourceManager() const { return m_resourceManager; }
 
   // Add or remove objects from the universe.
   void addObject(std::unique_ptr<Object> object);
@@ -62,13 +59,16 @@ public:
 private:
   friend class UniverseView;
 
+  // The resource manager we load everything from.
+  ResourceManager* m_resourceManager{nullptr};
+
   // The entire list of links that exist in the universe.
   std::vector<Link*> m_links;
 
   // The entire list of objects that exist in the universe.
   std::vector<Object*> m_objects;
 
-  DISALLOW_IMPLICIT_CONSTRUCTORS(Universe);
+  DISALLOW_COPY_AND_ASSIGN(Universe);
 };
 
 #endif  // UNIVERSE_UNIVERSE_H_

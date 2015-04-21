@@ -14,6 +14,8 @@
 
 #include "ui/context.h"
 
+#include "resources/sfml_loaders.h"
+
 namespace ui {
 
 Context::Context() : m_contextView(this) {

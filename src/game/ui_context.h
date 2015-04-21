@@ -12,34 +12,27 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef GAME_STATES_GAME_STATE_H_
-#define GAME_STATES_GAME_STATE_H_
-
-#include <memory>
-
-#include <nucleus/macros.h>
-#include <SFML/Window/Event.hpp>
+#ifndef GAME_UI_CONTEXT_H_
+#define GAME_UI_CONTEXT_H_
 
 #include "ui/context.h"
-#include "utils/component.h"
+#include "game/resource_manager.h"
 
-class GameState : public Component {
+class ResourceManager;
+
+class UiContext : public ui::Context {
 public:
-  explicit GameState(ui::Context* context);
-  virtual ~GameState() override;
+  explicit UiContext(ResourceManager* resourceManager);
+  ~UiContext();
 
-  // Override: Component
-  virtual void handleInput(sf::Event& event) override;
-  virtual void tick(float adjustment) override;
-  virtual void draw(sf::RenderTarget& target,
-                    sf::RenderStates states) const override;
-
-protected:
-  // Every game state has a UI component.
-  ui::Context* m_uiContext;
+  // Override: ui::Context
+  sf::Font* getFont(const std::string& name) override;
 
 private:
-  DISALLOW_COPY_AND_ASSIGN(GameState);
+  // The resource manager we use to serve resources to the UI.
+  ResourceManager* m_resourceManager;
+
+  DISALLOW_COPY_AND_ASSIGN(UiContext);
 };
 
-#endif  // GAME_STATES_GAME_STATE_H_
+#endif  // UTILS_UI_CONTEXT_H_

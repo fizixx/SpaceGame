@@ -12,34 +12,33 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef GAME_STATES_GAME_STATE_H_
-#define GAME_STATES_GAME_STATE_H_
-
-#include <memory>
+#ifndef GAME_RESOURCE_MANAGER_H_
+#define GAME_RESOURCE_MANAGER_H_
 
 #include <nucleus/macros.h>
-#include <SFML/Window/Event.hpp>
+#include <SFML/Graphics/Font.hpp>
 
-#include "ui/context.h"
-#include "utils/component.h"
+#include "resources/resource_store.h"
 
-class GameState : public Component {
+class ResourceManager {
 public:
-  explicit GameState(ui::Context* context);
-  virtual ~GameState() override;
+  enum class Font {
+    Default,
+  };
 
-  // Override: Component
-  virtual void handleInput(sf::Event& event) override;
-  virtual void tick(float adjustment) override;
-  virtual void draw(sf::RenderTarget& target,
-                    sf::RenderStates states) const override;
+  ResourceManager();
+  ~ResourceManager();
 
-protected:
-  // Every game state has a UI component.
-  ui::Context* m_uiContext;
+  // Load all resources.
+  bool loadAll(const std::string& root);
+
+  // Return the requested font.
+  sf::Font* getFont(Font font);
 
 private:
-  DISALLOW_COPY_AND_ASSIGN(GameState);
+  ResourceStore<sf::Font, Font> m_fontStore;
+
+  DISALLOW_COPY_AND_ASSIGN(ResourceManager);
 };
 
-#endif  // GAME_STATES_GAME_STATE_H_
+#endif  // GAME_RESOURCE_MANAGER_H_
