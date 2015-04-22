@@ -17,31 +17,32 @@
 
 #include <memory>
 
+#include <elastic/views/button.h>
+
 #include "game_states/game_state.h"
 #include "universe/universe.h"
-#include "ui/views/button.h"
 
 class UniverseView;
 
-class GameStateUniverse : public GameState, public ui::Button::OnClickListener {
+class GameStateUniverse : public GameState, public el::Button::OnClickListener {
 public:
   explicit GameStateUniverse(ResourceManager* resourceManager,
-                             ui::Context* context);
+                             el::Context* context);
   virtual ~GameStateUniverse() override;
 
   // Override: ui::Button::OnClickListener
-  virtual void onButtonClicked(ui::Button* sender) override;
+  virtual void onButtonClicked(el::Button* sender) override;
 
 private:
   // Create the user interface and add it to the parent ui specified.
-  void createUserInterface(ui::Context* context, ui::GroupView* parent);
+  void createUserInterface(el::Context* context, el::GroupView* parent);
 
   // The universe for this game state.
   std::unique_ptr<Universe> m_universe;
 
   // Mapped UI controls.
   UniverseView* m_universeView{nullptr};
-  ui::Button* m_createPowerGeneratorButton{nullptr};
+  el::Button* m_createPowerGeneratorButton{nullptr};
 
   DISALLOW_COPY_AND_ASSIGN(GameStateUniverse);
 };

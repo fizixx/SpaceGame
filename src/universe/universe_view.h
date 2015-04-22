@@ -17,9 +17,9 @@
 
 #include <memory>
 
+#include <elastic/views/color_view.h>
 #include <nucleus/config.h>
 
-#include "ui/views/color_view.h"
 #include "universe/camera.h"
 
 #if BUILD(DEBUG)
@@ -30,9 +30,9 @@ class Universe;
 class Object;
 class Link;
 
-class UniverseView : public ui::View {
+class UniverseView : public el::View {
 public:
-  explicit UniverseView(ui::Context* context, Universe* universe = nullptr);
+  explicit UniverseView(el::Context* context, Universe* universe = nullptr);
   virtual ~UniverseView() override;
 
   // Start placing the given object.

@@ -17,15 +17,15 @@
 
 #include <memory>
 
+#include <elastic/context.h>
 #include <nucleus/macros.h>
 #include <SFML/Window/Event.hpp>
 
-#include "ui/context.h"
 #include "utils/component.h"
 
 class GameState : public Component {
 public:
-  explicit GameState(ui::Context* context);
+  explicit GameState(el::Context* context);
   virtual ~GameState() override;
 
   // Override: Component
@@ -36,7 +36,7 @@ public:
 
 protected:
   // Every game state has a UI component.
-  ui::Context* m_uiContext;
+  el::Context* m_uiContext;
 
 private:
   DISALLOW_COPY_AND_ASSIGN(GameState);

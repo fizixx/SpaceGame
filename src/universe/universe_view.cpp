@@ -18,8 +18,8 @@
 #include "universe/objects/object.h"
 #include "universe/universe.h"
 
-UniverseView::UniverseView(ui::Context* context, Universe* universe)
-  : ui::View(context), m_universe(universe) {
+UniverseView::UniverseView(el::Context* context, Universe* universe)
+  : el::View(context), m_universe(universe) {
   // Set up the mouse position shape.
 
 #if SHOW_UNIVERSE_MOUSE_POS
@@ -68,7 +68,7 @@ void UniverseView::stopPlacingObject(bool place) {
 }
 
 bool UniverseView::onMousePressed(sf::Event& event) {
-  ui::View::onMousePressed(event);
+  el::View::onMousePressed(event);
 
   m_camera.onMousePressed(event);
 
@@ -76,7 +76,7 @@ bool UniverseView::onMousePressed(sf::Event& event) {
 }
 
 bool UniverseView::onMouseDragged(sf::Event& event) {
-  ui::View::onMouseDragged(event);
+  el::View::onMouseDragged(event);
 
   m_camera.onMouseDragged(event);
 
@@ -89,7 +89,7 @@ bool UniverseView::onMouseDragged(sf::Event& event) {
 }
 
 void UniverseView::onMouseMoved(sf::Event& event) {
-  ui::View::onMouseMoved(event);
+  el::View::onMouseMoved(event);
 
   // Update the last mouse position in the view and send it to the real
   // onMouseMoved.
@@ -98,7 +98,7 @@ void UniverseView::onMouseMoved(sf::Event& event) {
 }
 
 void UniverseView::onMouseReleased(sf::Event& event) {
-  ui::View::onMouseReleased(event);
+  el::View::onMouseReleased(event);
 
   if (m_ghostObject) {
     // Place the object if we press the left button, otherwise cancel the
@@ -114,7 +114,7 @@ void UniverseView::onMouseReleased(sf::Event& event) {
 }
 
 void UniverseView::onMouseWheel(sf::Event& event) {
-  ui::View::onMouseWheel(event);
+  el::View::onMouseWheel(event);
 
   m_camera.onMouseWheel(event);
 }

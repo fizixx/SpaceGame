@@ -14,16 +14,17 @@
 
 #include "game_states/game_state_universe.h"
 
+#include <elastic/views/button.h>
+#include <elastic/views/linear_sizer_view.h>
 #include <SFML/Graphics/RenderTarget.hpp>
 
-#include "ui/views/button.h"
-#include "ui/views/linear_sizer_view.h"
 #include "universe/objects/power_generator.h"
 #include "universe/universe_view.h"
 
 GameStateUniverse::GameStateUniverse(ResourceManager* resourceManager,
-                                     ui::Context* context)
-  : GameState(context), m_universe(std::make_unique<Universe>(resourceManager)) {
+                                     el::Context* context)
+  : GameState(context),
+    m_universe(std::make_unique<Universe>(resourceManager)) {
   // Add the user interface to the UI tree.
   createUserInterface(m_uiContext, m_uiContext->getRoot());
 }
@@ -31,7 +32,7 @@ GameStateUniverse::GameStateUniverse(ResourceManager* resourceManager,
 GameStateUniverse::~GameStateUniverse() {
 }
 
-void GameStateUniverse::onButtonClicked(ui::Button* sender) {
+void GameStateUniverse::onButtonClicked(el::Button* sender) {
   if (sender == m_createPowerGeneratorButton) {
     // Create the power generator.
     std::unique_ptr<Object> powerGenerator =
@@ -41,23 +42,23 @@ void GameStateUniverse::onButtonClicked(ui::Button* sender) {
   }
 }
 
-void GameStateUniverse::createUserInterface(ui::Context* context,
-                                            ui::GroupView* parent) {
+void GameStateUniverse::createUserInterface(el::Context* context,
+                                            el::GroupView* parent) {
   // Add the universe view.
   m_universeView = new UniverseView(context, m_universe.get());
   m_universeView->setName("universe");
-  m_universeView->setExpand(ui::View::ExpandBoth);
+  m_universeView->setExpand(el::View::ExpandBoth);
   parent->addChild(m_universeView);
 
   // Create a container for all the buttons.
-  ui::LinearSizerView* buttonContainer = new ui::LinearSizerView(
-      context, ui::LinearSizerView::OrientationVertical);
+  el::LinearSizerView* buttonContainer = new el::LinearSizerView(
+      context, el::LinearSizerView::OrientationVertical);
   buttonContainer->setName("buttonContainer");
-  buttonContainer->setVerticalAlign(ui::View::AlignTop);
-  buttonContainer->setHorizontalAlign(ui::View::AlignLeft);
+  buttonContainer->setVerticalAlign(el::View::AlignTop);
+  buttonContainer->setHorizontalAlign(el::View::AlignLeft);
 
   m_createPowerGeneratorButton =
-      new ui::Button(context, "Power Generator", this);
+      new el::Button(context, "Power Generator", this);
   m_createPowerGeneratorButton->setName("createPowerGenerator");
   m_createPowerGeneratorButton->setMinSize(sf::Vector2i{300, 0});
   buttonContainer->addChild(m_createPowerGeneratorButton);

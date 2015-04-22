@@ -14,7 +14,7 @@
 
 #include "game_states/game_state.h"
 
-GameState::GameState(ui::Context* context) : m_uiContext(context) {
+GameState::GameState(el::Context* context) : m_uiContext(context) {
 }
 
 GameState::~GameState() {

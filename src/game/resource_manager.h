@@ -15,10 +15,9 @@
 #ifndef GAME_RESOURCE_MANAGER_H_
 #define GAME_RESOURCE_MANAGER_H_
 
+#include <elastic/resources/resource_store.h>
 #include <nucleus/macros.h>
 #include <SFML/Graphics/Font.hpp>
-
-#include "resources/resource_store.h"
 
 class ResourceManager {
 public:
@@ -36,7 +35,7 @@ public:
   sf::Font* getFont(Font font);
 
 private:
-  ResourceStore<sf::Font, Font> m_fontStore;
+  el::ResourceStore<sf::Font, Font> m_fontStore;
 
   DISALLOW_COPY_AND_ASSIGN(ResourceManager);
 };

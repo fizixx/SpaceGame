@@ -15,12 +15,13 @@
 #ifndef GAME_UI_CONTEXT_H_
 #define GAME_UI_CONTEXT_H_
 
-#include "ui/context.h"
+#include <elastic/context.h>
+
 #include "game/resource_manager.h"
 
 class ResourceManager;
 
-class UiContext : public ui::Context {
+class UiContext : public el::Context {
 public:
   explicit UiContext(ResourceManager* resourceManager);
   ~UiContext();
