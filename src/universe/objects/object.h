@@ -25,17 +25,10 @@ class Universe;
 #define DECLARE_OBJECT(ClassName)                                              \
   \
 public:                                                                        \
-  static const int32_t powerCost;                                              \
-  static const int32_t mineralCost;                                            \
-  virtual int32_t getPowerCost() { return ClassName::powerCost; }              \
-  virtual int32_t getMineralCost() { return ClassName::mineralCost; }          \
   static const char* typeName;                                                 \
   virtual const char* getTypeName() const { return ClassName::typeName; }
 
-#define DEFINE_OBJECT(ClassName, Label, PowerCost, MineralCost)                \
-  const int32_t ClassName::powerCost = PowerCost;                              \
-  const int32_t ClassName::mineralCost = MineralCost;                          \
-  const char* ClassName::typeName = Label
+#define DEFINE_OBJECT(ClassName, Label) const char* ClassName::typeName = Label
 
 class Object : public sf::Drawable {
   DECLARE_OBJECT(Object);
@@ -47,17 +40,17 @@ public:
   // pos
   const sf::Vector2f& getPos() const { return m_pos; }
 
+  // Calculate the distance from pos to this object.
+  float calculateDistanceFrom(const sf::Vector2f& pos) const;
+
   // Move the object to the specified coordinates.
   virtual void moveTo(const sf::Vector2f& pos);
 
   // Return the bounds of the object.
-  virtual sf::FloatRect getBounds() const;
-
-  // Calculate the distance from pos to this object.
-  float calculateDistanceFrom(const sf::Vector2f& pos) const;
+  virtual sf::FloatRect getBounds() const = 0;
 
   // Tick the object.
-  virtual void tick(float adjustment);
+  virtual void tick(float adjustment) = 0;
 
 protected:
   // The universe we belong to.

@@ -22,8 +22,8 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 
 #include "universe/link.h"
-#include "universe/objects/command_center.h"
-#include "universe/objects/power_generator.h"
+#include "universe/objects/structures/command_center.h"
+#include "universe/objects/structures/power_generator.h"
 
 Universe::Universe(ResourceManager* resourceManager)
   : m_resourceManager(resourceManager) {

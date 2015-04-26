@@ -12,35 +12,37 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "universe/objects/power_generator.h"
+#include "universe/objects/structures/command_center.h"
 
 #include <SFML/Graphics/RenderTarget.hpp>
 
 #include "universe/universe.h"
 
-DEFINE_OBJECT(PowerGenerator, "Power Generator", 500, 1000);
+DEFINE_STRUCTURE(CommandCenter, "Command Center", 2000, 0);
 
-PowerGenerator::PowerGenerator(Universe* universe)
-  : Object(universe), m_shape(50.f) {
-  m_shape.setFillColor(sf::Color{255, 255, 0, 255});
+CommandCenter::CommandCenter(Universe* universe)
+  : Structure(universe), m_shape(100.f) {
   m_shape.setOrigin(m_shape.getGlobalBounds().width / 2.f,
                     m_shape.getGlobalBounds().height / 2.f);
 }
 
-PowerGenerator::~PowerGenerator() {
+CommandCenter::~CommandCenter() {
 }
 
-void PowerGenerator::moveTo(const sf::Vector2f& pos) {
-  Object::moveTo(pos);
-
-  m_shape.setPosition(pos);
+void CommandCenter::moveTo(const sf::Vector2f& pos) {
+  Structure::moveTo(pos);
+  m_shape.move(pos);
 }
 
-sf::FloatRect PowerGenerator::getBounds() const {
+sf::FloatRect CommandCenter::getBounds() const {
   return m_shape.getGlobalBounds();
 }
 
-void PowerGenerator::draw(sf::RenderTarget& target,
-                          sf::RenderStates states) const {
+void CommandCenter::tick(float adjustment) {
+  m_universe->adjustPower(1000);
+}
+
+void CommandCenter::draw(sf::RenderTarget& target,
+                         sf::RenderStates states) const {
   target.draw(m_shape);
 }

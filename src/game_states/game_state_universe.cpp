@@ -18,8 +18,8 @@
 #include <elastic/views/linear_sizer_view.h>
 #include <SFML/Graphics/RenderTarget.hpp>
 
-#include "universe/objects/power_generator.h"
-#include "universe/objects/miner.h"
+#include "universe/objects/structures/power_generator.h"
+#include "universe/objects/structures/miner.h"
 #include "universe/universe_view.h"
 
 namespace {

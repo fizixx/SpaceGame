@@ -12,33 +12,18 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "universe/objects/miner.h"
-
-#include <SFML/Graphics/RenderTarget.hpp>
+#include "universe/objects/structures/structure.h"
 
 #include "universe/universe.h"
 
-DEFINE_OBJECT(Miner, "Miner", -750, 1500);
+DEFINE_STRUCTURE(Structure, "Structure", 0, 0);
 
-Miner::Miner(Universe* universe) : Object(universe), m_shape(75.f) {
-  m_shape.setFillColor(sf::Color{0, 255, 255, 255});
-  m_shape.setOrigin(m_shape.getGlobalBounds().width / 2.f,
-                    m_shape.getGlobalBounds().height / 2.f);
+Structure::Structure(Universe* universe) : Object(universe) {
 }
 
-Miner::~Miner() {
+Structure::~Structure() {
 }
 
-void Miner::moveTo(const sf::Vector2f& pos) {
-  Object::moveTo(pos);
-
-  m_shape.setPosition(pos);
-}
-
-sf::FloatRect Miner::getBounds() const {
-  return m_shape.getGlobalBounds();
-}
-
-void Miner::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-  target.draw(m_shape);
+void Structure::tick(float adjustment) {
+  m_universe->adjustPower(getPowerCost());
 }

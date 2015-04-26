@@ -12,31 +12,31 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef UNIVERSE_OBJECTS_COMMAND_CENTER_H_
-#define UNIVERSE_OBJECTS_COMMAND_CENTER_H_
+#ifndef UNIVERSE_OBJECTS_STRUCTURES_MINER_H_
+#define UNIVERSE_OBJECTS_STRUCTURES_MINER_H_
 
 #include <SFML/Graphics/CircleShape.hpp>
 
-#include "universe/objects/object.h"
+#include "universe/objects/structures/structure.h"
 
-class CommandCenter : public Object {
-  DECLARE_OBJECT(CommandCenter);
+class Miner : public Structure {
+  DECLARE_STRUCTURE(Miner);
 
 public:
-  explicit CommandCenter(Universe* universe);
-  virtual ~CommandCenter() override;
+  explicit Miner(Universe* universe);
+  virtual ~Miner() override;
 
   // Override: Object
   virtual void moveTo(const sf::Vector2f& pos) override;
   virtual sf::FloatRect getBounds() const override;
-  virtual void tick(float adjustment) override;
   virtual void draw(sf::RenderTarget& target,
                     sf::RenderStates states) const override;
 
 private:
+  // The shape we use to render the power generator.
   sf::CircleShape m_shape;
 
-  DISALLOW_IMPLICIT_CONSTRUCTORS(CommandCenter);
+  DISALLOW_IMPLICIT_CONSTRUCTORS(Miner);
 };
 
-#endif  // UNIVERSE_OBJECTS_COMMAND_CENTER_H_
+#endif  // UNIVERSE_OBJECTS_STRUCTURES_H_

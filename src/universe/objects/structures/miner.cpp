@@ -12,38 +12,33 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "universe/objects/command_center.h"
+#include "universe/objects/structures/miner.h"
 
 #include <SFML/Graphics/RenderTarget.hpp>
 
 #include "universe/universe.h"
 
-DEFINE_OBJECT(CommandCenter, "Command Center", 2000, 0);
+DEFINE_STRUCTURE(Miner, "Miner", -750, 1500);
 
-CommandCenter::CommandCenter(Universe* universe)
-  : Object(universe), m_shape(100.f) {
+Miner::Miner(Universe* universe) : Structure(universe), m_shape(75.f) {
+  m_shape.setFillColor(sf::Color{0, 255, 255, 255});
   m_shape.setOrigin(m_shape.getGlobalBounds().width / 2.f,
                     m_shape.getGlobalBounds().height / 2.f);
 }
 
-CommandCenter::~CommandCenter() {
+Miner::~Miner() {
 }
 
-void CommandCenter::moveTo(const sf::Vector2f& pos) {
-  Object::moveTo(pos);
+void Miner::moveTo(const sf::Vector2f& pos) {
+  Structure::moveTo(pos);
 
-  m_shape.move(pos);
+  m_shape.setPosition(pos);
 }
 
-sf::FloatRect CommandCenter::getBounds() const {
+sf::FloatRect Miner::getBounds() const {
   return m_shape.getGlobalBounds();
 }
 
-void CommandCenter::tick(float adjustment) {
-  m_universe->adjustPower(1000);
-}
-
-void CommandCenter::draw(sf::RenderTarget& target,
-                         sf::RenderStates states) const {
+void Miner::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   target.draw(m_shape);
 }

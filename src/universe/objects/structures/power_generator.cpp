@@ -12,24 +12,35 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "universe/objects/object.h"
+#include "universe/objects/structures/power_generator.h"
+
+#include <SFML/Graphics/RenderTarget.hpp>
 
 #include "universe/universe.h"
-#include "utils/math.h"
-#include "utils/stream_operators.h"
 
-DEFINE_OBJECT(Object, "Object", 0, 0);
+DEFINE_STRUCTURE(PowerGenerator, "Power Generator", 500, 1000);
 
-Object::Object(Universe* universe) : m_universe(universe) {
+PowerGenerator::PowerGenerator(Universe* universe)
+  : Structure(universe), m_shape(50.f) {
+  m_shape.setFillColor(sf::Color{255, 255, 0, 255});
+  m_shape.setOrigin(m_shape.getGlobalBounds().width / 2.f,
+                    m_shape.getGlobalBounds().height / 2.f);
 }
 
-Object::~Object() {
+PowerGenerator::~PowerGenerator() {
 }
 
-void Object::moveTo(const sf::Vector2f& pos) {
-  m_pos = pos;
+void PowerGenerator::moveTo(const sf::Vector2f& pos) {
+  Object::moveTo(pos);
+
+  m_shape.setPosition(pos);
 }
 
-float Object::calculateDistanceFrom(const sf::Vector2f& pos) const {
-  return distanceBetween(m_pos, pos);
+sf::FloatRect PowerGenerator::getBounds() const {
+  return m_shape.getGlobalBounds();
+}
+
+void PowerGenerator::draw(sf::RenderTarget& target,
+                          sf::RenderStates states) const {
+  target.draw(m_shape);
 }

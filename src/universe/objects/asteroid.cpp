@@ -18,7 +18,7 @@
 
 #include "universe/universe.h"
 
-DEFINE_OBJECT(Asteroid, "Power Generator", 0, 0);
+DEFINE_OBJECT(Asteroid, "Power Generator");
 
 Asteroid::Asteroid(Universe* universe)
   : Object(universe), m_shape(50.f) {
