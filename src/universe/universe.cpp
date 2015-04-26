@@ -112,3 +112,14 @@ Object* Universe::findObjectAt(const sf::Vector2f& pos) {
   // Nothing found.
   return nullptr;
 }
+
+void Universe::boostPower(int32_t amount) {
+  m_totalPower += amount;
+}
+
+void Universe::tick(float adjustment) {
+  // Update each object.
+  for (auto& object : m_objects) {
+    object->tick(adjustment);
+  }
+}

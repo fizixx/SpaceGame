@@ -32,8 +32,11 @@ public:
                              el::Context* context);
   virtual ~GameStateUniverse() override;
 
+  // Override: GameState
+  void tick(float adjustment) override;
+
   // Override: ui::Button::OnClickListener
-  virtual void onButtonClicked(el::ButtonView* sender) override;
+  void onButtonClicked(el::ButtonView* sender) override;
 
 private:
   // Create the user interface and add it to the parent ui specified.
@@ -45,6 +48,7 @@ private:
   // Mapped UI controls.
   UniverseView* m_universeView{nullptr};
   el::ButtonView* m_createPowerGeneratorButton{nullptr};
+  el::TextView* m_totalPowerText{nullptr};
 
   DISALLOW_COPY_AND_ASSIGN(GameStateUniverse);
 };

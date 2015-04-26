@@ -34,7 +34,11 @@ public:
                     sf::RenderStates states) const override;
 
 private:
+  // The shape we use to render the power generator.
   sf::CircleShape m_shape;
+
+  // The amount of time passed since the last boost.
+  float m_timeSinceLastBoost{0.f};
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(PowerGenerator);
 };

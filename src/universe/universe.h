@@ -60,6 +60,13 @@ public:
   // z-order into account for objects that might be overlapping.
   Object* findObjectAt(const sf::Vector2f& pos);
 
+  // Power
+  int32_t getPower() const { return m_totalPower; }
+  void boostPower(int32_t amount);
+
+  // Update the entire universe.  This should run at 60fps.
+  void tick(float adjustment);
+
 private:
   friend class UniverseView;
 
@@ -71,6 +78,9 @@ private:
 
   // The entire list of objects that exist in the universe.
   std::vector<Object*> m_objects;
+
+  // The total amount of power in the universe.
+  int32_t m_totalPower{0};
 
   DISALLOW_COPY_AND_ASSIGN(Universe);
 };

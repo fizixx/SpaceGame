@@ -29,10 +29,9 @@ public:
   virtual ~GameState() override;
 
   // Override: Component
-  virtual void handleInput(sf::Event& event) override;
-  virtual void tick(float adjustment) override;
-  virtual void draw(sf::RenderTarget& target,
-                    sf::RenderStates states) const override;
+  void handleInput(sf::Event& event) override;
+  void tick(float adjustment) override;
+  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 protected:
   // Every game state has a UI component.

@@ -32,6 +32,20 @@ GameStateUniverse::GameStateUniverse(ResourceManager* resourceManager,
 GameStateUniverse::~GameStateUniverse() {
 }
 
+void GameStateUniverse::tick(float adjustment) {
+  GameState::tick(adjustment);
+
+  // Forward the tick to the universe as well.
+  m_universe->tick(adjustment);
+
+  // Update the total power label.
+  {
+    std::string label{"Total Power: "};
+    label += std::to_string(m_universe->getPower());
+    m_totalPowerText->setLabel(label);
+  }
+}
+
 void GameStateUniverse::onButtonClicked(el::ButtonView* sender) {
   if (sender == m_createPowerGeneratorButton) {
     // Create the power generator.
@@ -56,6 +70,11 @@ void GameStateUniverse::createUserInterface(el::Context* context,
       context, el::LinearSizerView::OrientationVertical};
   mainSizer->setExpand(el::View::ExpandBoth);
 
+  m_totalPowerText = new el::TextView(context, "Total Power:");
+  m_totalPowerText->setName("totalPowerText");
+  m_totalPowerText->setHorizontalAlign(el::View::AlignCenter);
+  mainSizer->addChild(m_totalPowerText);
+
   // Create a container for all the buttons.
   el::LinearSizerView* buttonContainer = new el::LinearSizerView(
       context, el::LinearSizerView::OrientationVertical);
@@ -69,12 +88,6 @@ void GameStateUniverse::createUserInterface(el::Context* context,
   m_createPowerGeneratorButton->setName("createPowerGenerator");
   m_createPowerGeneratorButton->setMinSize(sf::Vector2i{300, 0});
   buttonContainer->addChild(m_createPowerGeneratorButton);
-
-  el::TextView* gameTitleText = new el::TextView(context, "Space Game");
-  gameTitleText->setName("gameTitleText");
-  gameTitleText->setHorizontalAlign(el::View::AlignCenter);
-
-  mainSizer->addChild(gameTitleText);
   mainSizer->addChild(buttonContainer);
 
   parent->addChild(mainSizer);
