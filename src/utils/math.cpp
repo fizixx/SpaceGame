@@ -18,6 +18,6 @@
 
 float distanceBetween(const sf::Vector2f& p1, const sf::Vector2f& p2) {
   float xd = p2.x - p1.x;
-  float yd = p2.x - p1.y;
+  float yd = p2.y - p1.y;
   return std::sqrtf(xd * xd + yd * yd);
 }
