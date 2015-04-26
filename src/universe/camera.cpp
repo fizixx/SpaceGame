@@ -30,16 +30,17 @@ Camera::~Camera() {
 }
 
 sf::Vector2f Camera::mousePosToUniversePos(const sf::Vector2i& mousePos) const {
-  float width = static_cast<float>(m_viewportSize.x);
-  float height = static_cast<float>(m_viewportSize.y);
+  const float width = static_cast<float>(m_viewportSize.x);
+  const float height = static_cast<float>(m_viewportSize.y);
   const sf::FloatRect& viewport = m_view.getViewport();
 
-  sf::IntRect adjViewport{static_cast<int>(0.5f + width * viewport.left),
-                          static_cast<int>(0.5f + height * viewport.top),
-                          static_cast<int>(0.5f + width * viewport.width),
-                          static_cast<int>(0.5f + height * viewport.height)};
+  const sf::IntRect adjViewport{
+      static_cast<int>(0.5f + width * viewport.left),
+      static_cast<int>(0.5f + height * viewport.top),
+      static_cast<int>(0.5f + width * viewport.width),
+      static_cast<int>(0.5f + height * viewport.height)};
 
-  sf::Vector2f normalized{
+  const sf::Vector2f normalized{
       -1.f + 2.f * (mousePos.x - adjViewport.left) / adjViewport.width,
       1.f - 2.f * (mousePos.y - adjViewport.top) / adjViewport.height};
 
@@ -47,8 +48,29 @@ sf::Vector2f Camera::mousePosToUniversePos(const sf::Vector2i& mousePos) const {
   return m_view.getInverseTransform().transformPoint(normalized);
 }
 
-sf::Vector2i Camera::universePosToMousePos(const sf::Vector2f& universePos) const {
-  return sf::Vector2i(0, 0);
+sf::Vector2i Camera::universePosToMousePos(
+    const sf::Vector2f& universePos) const {
+  const float width = static_cast<float>(m_viewportSize.x);
+  const float height = static_cast<float>(m_viewportSize.y);
+
+  // Transform the point by the vie matrix.
+  const sf::Vector2f normalized =
+      m_view.getTransform().transformPoint(universePos);
+
+  // Convert the point to viewport coordinates.
+  const sf::FloatRect& viewport = m_view.getViewport();
+  const sf::IntRect adjViewport{static_cast<int>(width * viewport.left),
+                                static_cast<int>(height * viewport.top),
+                                static_cast<int>(width * viewport.width),
+                                static_cast<int>(height * viewport.height)};
+
+  const sf::Vector2i result{
+      static_cast<int>((normalized.x + 1.f) / 2.f * adjViewport.width +
+                       adjViewport.left),
+      static_cast<int>((-normalized.y + 1.f) / 2.f * adjViewport.height +
+                       adjViewport.top)};
+
+  return result;
 }
 
 void Camera::onMousePressed(sf::Event& event) {
