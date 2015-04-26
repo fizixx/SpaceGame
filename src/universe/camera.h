@@ -44,7 +44,7 @@ public:
 
   // Handle input.
   void onMousePressed(sf::Event& event);
-  void onMouseDragged(sf::Event& event);
+  void onMouseMoved(sf::Event& event);
   void onMouseReleased(sf::Event& event);
   void onMouseWheel(sf::Event& event);
 

@@ -70,7 +70,9 @@ bool UniverseView::onMousePressed(sf::Event& event) {
 bool UniverseView::onMouseDragged(sf::Event& event) {
   el::View::onMouseDragged(event);
 
-  m_camera.onMouseDragged(event);
+  if (!m_hudIsHandlingMouseInput) {
+    m_camera.onMouseMoved(event);
+  }
 
   // Update the last mouse position in the view and send it to the real
   // onMouseMoved.
