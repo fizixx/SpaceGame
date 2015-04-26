@@ -87,7 +87,7 @@ private:
   int32_t m_totalPower{0};
 
   // The total amount of minerals in the universe.
-  int32_t m_totalMinerals{0};
+  int32_t m_totalMinerals{5000};
 
   DISALLOW_COPY_AND_ASSIGN(Universe);
 };

@@ -12,33 +12,31 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+#ifndef UNIVERSE_OBJECTS_MINER_H_
+#define UNIVERSE_OBJECTS_MINER_H_
+
+#include <SFML/Graphics/CircleShape.hpp>
+
 #include "universe/objects/object.h"
 
-#include "universe/universe.h"
-#include "utils/math.h"
-#include "utils/stream_operators.h"
+class Miner : public Object {
+public:
+  DECLARE_OBJECT(Miner);
 
-DEFINE_OBJECT(Object, "Object", 0, 0);
+  explicit Miner(Universe* universe);
+  virtual ~Miner() override;
 
-Object::Object(Universe* universe) : m_universe(universe) {
-}
+  // Override: Object
+  virtual void moveTo(const sf::Vector2f& pos) override;
+  virtual sf::FloatRect getBounds() const override;
+  virtual void draw(sf::RenderTarget& target,
+                    sf::RenderStates states) const override;
 
-Object::~Object() {
-}
+private:
+  // The shape we use to render the power generator.
+  sf::CircleShape m_shape;
 
-void Object::moveTo(const sf::Vector2f& pos) {
-  m_pos = pos;
-}
+  DISALLOW_IMPLICIT_CONSTRUCTORS(Miner);
+};
 
-sf::FloatRect Object::getBounds() const {
-  return sf::FloatRect{};
-}
-
-float Object::calculateDistanceFrom(const sf::Vector2f& pos) const {
-  return distanceBetween(m_pos, pos);
-}
-
-void Object::tick(float adjustment) {
-  // Adjust the power calculation.
-  m_universe->adjustPower(getPowerCost());
-}
+#endif  // UNIVERSE_OBJECTS_POWER_GENERATOR_H_

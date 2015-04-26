@@ -16,7 +16,9 @@
 
 #include <SFML/Graphics/RenderTarget.hpp>
 
-DEFINE_OBJECT(CommandCenter, "Command Center");
+#include "universe/universe.h"
+
+DEFINE_OBJECT(CommandCenter, "Command Center", 2000, 0);
 
 CommandCenter::CommandCenter(Universe* universe)
   : Object(universe), m_shape(100.f) {
@@ -38,6 +40,7 @@ sf::FloatRect CommandCenter::getBounds() const {
 }
 
 void CommandCenter::tick(float adjustment) {
+  m_universe->adjustPower(1000);
 }
 
 void CommandCenter::draw(sf::RenderTarget& target,

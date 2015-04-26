@@ -19,7 +19,22 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 
 #include "universe/objects/power_generator.h"
+#include "universe/objects/miner.h"
 #include "universe/universe_view.h"
+
+namespace {
+
+template <typename ObjectType>
+std::string buttonLabelForObject() {
+  std::string label{ObjectType::typeName};
+  label += " (";
+  label += std::to_string(ObjectType::mineralCost);
+  label += ")";
+
+  return std::move(label);
+}
+
+}  // namespace
 
 GameStateUniverse::GameStateUniverse(ResourceManager* resourceManager,
                                      el::Context* context)
@@ -39,19 +54,25 @@ void GameStateUniverse::tick(float adjustment) {
   m_universe->tick(adjustment);
 
   // Update the total power label.
-  {
-    std::string label{"Total Power: "};
-    label += std::to_string(m_universe->getPower());
-    m_totalPowerText->setLabel(label);
-  }
+  m_totalPowerText->setLabel(std::to_string(m_universe->getPower()));
+
+  // Update the total minerals label.
+  m_totalMineralsText->setLabel(std::to_string(m_universe->getMinerals()));
 }
 
 void GameStateUniverse::onButtonClicked(el::ButtonView* sender) {
   if (sender == m_createPowerGeneratorButton) {
     // Create the power generator.
-    std::unique_ptr<Object> powerGenerator =
-        std::make_unique<PowerGenerator>(m_universe.get());
-    m_universeView->startPlacingObject(std::move(powerGenerator));
+    m_universeView->startPlacingObject(
+        std::make_unique<PowerGenerator>(m_universe.get()));
+    return;
+  }
+
+  if (sender == m_createMinerButton) {
+    // Create the Miner.
+    auto miner = std::make_unique<Miner>(m_universe.get());
+    m_universeView->startPlacingObject(
+        std::make_unique<Miner>(m_universe.get()));
     return;
   }
 }
@@ -70,10 +91,28 @@ void GameStateUniverse::createUserInterface(el::Context* context,
       context, el::LinearSizerView::OrientationVertical};
   mainSizer->setExpand(el::View::ExpandBoth);
 
-  m_totalPowerText = new el::TextView(context, "Total Power:");
+  // Create the info bar.
+  auto infoBar = new el::LinearSizerView{
+      context, el::LinearSizerView::OrientationHorizontal};
+  infoBar->setExpand(el::View::ExpandHorizontal);
+
+  m_totalPowerText = new el::TextView(context);
   m_totalPowerText->setName("totalPowerText");
-  m_totalPowerText->setHorizontalAlign(el::View::AlignCenter);
-  mainSizer->addChild(m_totalPowerText);
+  m_totalPowerText->setHorizontalAlign(el::View::AlignRight);
+  m_totalPowerText->setProportion(1);
+  infoBar->addChild(m_totalPowerText);
+
+  auto spacer1 = new el::View(context);
+  spacer1->setMinSize(sf::Vector2i{50, 0});
+  infoBar->addChild(spacer1);
+
+  m_totalMineralsText = new el::TextView(context);
+  m_totalMineralsText->setName("totalMineralsText");
+  m_totalMineralsText->setHorizontalAlign(el::View::AlignLeft);
+  m_totalMineralsText->setProportion(1);
+  infoBar->addChild(m_totalMineralsText);
+
+  mainSizer->addChild(infoBar);
 
   // Create a container for all the buttons.
   el::LinearSizerView* buttonContainer = new el::LinearSizerView(
@@ -84,10 +123,17 @@ void GameStateUniverse::createUserInterface(el::Context* context,
   buttonContainer->setProportion(1);
 
   m_createPowerGeneratorButton =
-      new el::ButtonView(context, "Power Generator", this);
+      new el::ButtonView(context, buttonLabelForObject<PowerGenerator>(), this);
   m_createPowerGeneratorButton->setName("createPowerGenerator");
   m_createPowerGeneratorButton->setMinSize(sf::Vector2i{300, 0});
   buttonContainer->addChild(m_createPowerGeneratorButton);
+
+  m_createMinerButton =
+      new el::ButtonView(context, buttonLabelForObject<Miner>(), this);
+  m_createMinerButton->setName("createMinerButton");
+  m_createMinerButton->setMinSize(sf::Vector2i{300, 0});
+  buttonContainer->addChild(m_createMinerButton);
+
   mainSizer->addChild(buttonContainer);
 
   parent->addChild(mainSizer);

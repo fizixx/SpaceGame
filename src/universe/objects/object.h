@@ -15,6 +15,8 @@
 #ifndef UNIVERSE_OBJECTS_OBJECT_H_
 #define UNIVERSE_OBJECTS_OBJECT_H_
 
+#include <cstdint>
+
 #include <nucleus/macros.h>
 #include <SFML/Graphics/Drawable.hpp>
 
@@ -23,11 +25,17 @@ class Universe;
 #define DECLARE_OBJECT(ClassName)                                              \
   \
 public:                                                                        \
-  static const char* ClassName##__typeName;                                    \
-  virtual const char* getTypeName() const { return ClassName##__typeName; }
+  static const int32_t powerCost;                                              \
+  static const int32_t mineralCost;                                            \
+  virtual int32_t getPowerCost() { return ClassName::powerCost; }              \
+  virtual int32_t getMineralCost() { return ClassName::mineralCost; }          \
+  static const char* typeName;                                                 \
+  virtual const char* getTypeName() const { return ClassName::typeName; }
 
-#define DEFINE_OBJECT(ClassName, Label)                                        \
-  const char* ClassName::ClassName##__typeName = Label
+#define DEFINE_OBJECT(ClassName, Label, PowerCost, MineralCost)                \
+  const int32_t ClassName::powerCost = PowerCost;                              \
+  const int32_t ClassName::mineralCost = MineralCost;                          \
+  const char* ClassName::typeName = Label
 
 class Object : public sf::Drawable {
   DECLARE_OBJECT(Object);
@@ -49,7 +57,7 @@ public:
   float calculateDistanceFrom(const sf::Vector2f& pos) const;
 
   // Tick the object.
-  virtual void tick(float adjustment) = 0;
+  virtual void tick(float adjustment);
 
 protected:
   // The universe we belong to.

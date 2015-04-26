@@ -48,7 +48,9 @@ private:
   // Mapped UI controls.
   UniverseView* m_universeView{nullptr};
   el::ButtonView* m_createPowerGeneratorButton{nullptr};
+  el::ButtonView* m_createMinerButton{nullptr};
   el::TextView* m_totalPowerText{nullptr};
+  el::TextView* m_totalMineralsText{nullptr};
 
   DISALLOW_COPY_AND_ASSIGN(GameStateUniverse);
 };

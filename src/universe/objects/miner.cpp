@@ -12,35 +12,33 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "universe/objects/power_generator.h"
+#include "universe/objects/miner.h"
 
 #include <SFML/Graphics/RenderTarget.hpp>
 
 #include "universe/universe.h"
 
-DEFINE_OBJECT(PowerGenerator, "Power Generator", 500, 1000);
+DEFINE_OBJECT(Miner, "Miner", -750, 1500);
 
-PowerGenerator::PowerGenerator(Universe* universe)
-  : Object(universe), m_shape(50.f) {
-  m_shape.setFillColor(sf::Color{255, 255, 0, 255});
+Miner::Miner(Universe* universe) : Object(universe), m_shape(75.f) {
+  m_shape.setFillColor(sf::Color{0, 255, 255, 255});
   m_shape.setOrigin(m_shape.getGlobalBounds().width / 2.f,
                     m_shape.getGlobalBounds().height / 2.f);
 }
 
-PowerGenerator::~PowerGenerator() {
+Miner::~Miner() {
 }
 
-void PowerGenerator::moveTo(const sf::Vector2f& pos) {
+void Miner::moveTo(const sf::Vector2f& pos) {
   Object::moveTo(pos);
 
   m_shape.setPosition(pos);
 }
 
-sf::FloatRect PowerGenerator::getBounds() const {
+sf::FloatRect Miner::getBounds() const {
   return m_shape.getGlobalBounds();
 }
 
-void PowerGenerator::draw(sf::RenderTarget& target,
-                          sf::RenderStates states) const {
+void Miner::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   target.draw(m_shape);
 }
