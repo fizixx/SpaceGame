@@ -75,7 +75,7 @@ sf::Vector2i Camera::universePosToMousePos(
 
 void Camera::onMousePressed(sf::Event& event) {
   switch (event.mouseButton.button) {
-    case sf::Mouse::Right:
+    case sf::Mouse::Left:
       m_isDraggingView = true;
       m_startDragViewPos =
           sf::Vector2f{static_cast<float>(event.mouseButton.x),
@@ -107,7 +107,7 @@ void Camera::onMouseDragged(sf::Event& event) {
 
 void Camera::onMouseReleased(sf::Event& event) {
   switch (event.mouseButton.button) {
-    case sf::Mouse::Right:
+    case sf::Mouse::Left:
       m_isDraggingView = false;
       break;
   }
