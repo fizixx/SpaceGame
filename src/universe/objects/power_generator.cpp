@@ -20,12 +20,6 @@
 
 DEFINE_OBJECT(PowerGenerator, "Power Generator");
 
-namespace {
-
-const float kBoostFrequency = 5.f;
-
-}  // namespace
-
 PowerGenerator::PowerGenerator(Universe* universe)
   : Object(universe), m_shape(50.f) {
   m_shape.setFillColor(sf::Color{255, 255, 0, 255});
@@ -47,14 +41,7 @@ sf::FloatRect PowerGenerator::getBounds() const {
 }
 
 void PowerGenerator::tick(float adjustment) {
-  // Add the time to the counter.
-  m_timeSinceLastBoost += 60.f / 1000.f * adjustment;
-
-  // If it's time to boost, boost.
-  if (m_timeSinceLastBoost > kBoostFrequency) {
-    m_timeSinceLastBoost -= kBoostFrequency;
-    m_universe->boostPower(10);
-  }
+  m_universe->adjustPower(500);
 }
 
 void PowerGenerator::draw(sf::RenderTarget& target,

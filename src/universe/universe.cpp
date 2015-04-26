@@ -113,11 +113,18 @@ Object* Universe::findObjectAt(const sf::Vector2f& pos) {
   return nullptr;
 }
 
-void Universe::boostPower(int32_t amount) {
+void Universe::adjustPower(int32_t amount) {
   m_totalPower += amount;
 }
 
+void Universe::adjustMinerals(int32_t amount) {
+  m_totalMinerals += amount;
+}
+
 void Universe::tick(float adjustment) {
+  // We start with 0 power so that we can calculate the total.
+  m_totalPower = 0;
+
   // Update each object.
   for (auto& object : m_objects) {
     object->tick(adjustment);

@@ -62,7 +62,11 @@ public:
 
   // Power
   int32_t getPower() const { return m_totalPower; }
-  void boostPower(int32_t amount);
+  void adjustPower(int32_t amount);
+
+  // Minerals
+  int32_t getMinerals() const { return m_totalMinerals; }
+  void adjustMinerals(int32_t amount);
 
   // Update the entire universe.  This should run at 60fps.
   void tick(float adjustment);
@@ -81,6 +85,9 @@ private:
 
   // The total amount of power in the universe.
   int32_t m_totalPower{0};
+
+  // The total amount of minerals in the universe.
+  int32_t m_totalMinerals{0};
 
   DISALLOW_COPY_AND_ASSIGN(Universe);
 };
