@@ -91,6 +91,9 @@ private:
   sf::CircleShape m_mousePosShape;
 #endif
 
+  // True if the hud is currently handling mouse input.
+  bool m_hudIsHandlingMouseInput{false};
+
   DISALLOW_IMPLICIT_CONSTRUCTORS(UniverseView);
 };
 

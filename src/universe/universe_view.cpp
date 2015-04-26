@@ -57,7 +57,12 @@ void UniverseView::stopPlacingObject(bool place) {
 bool UniverseView::onMousePressed(sf::Event& event) {
   el::View::onMousePressed(event);
 
-  m_camera.onMousePressed(event);
+  m_hudIsHandlingMouseInput = m_hud.onMousePressed(event);
+
+  // If the hud isn't handling mouse presses, then we pass it on to the camera.
+  if (!m_hudIsHandlingMouseInput) {
+    m_camera.onMousePressed(event);
+  }
 
   return true;
 }
@@ -96,8 +101,13 @@ void UniverseView::onMouseReleased(sf::Event& event) {
     return;
   }
 
-  // If we didn't handle the event, then we can pass it on to the camera.
-  m_camera.onMouseReleased(event);
+  // If we didn't handle the event, then we check if the hud asked to receive
+  // the mouse release.  Otherwise we pass the event to the camera.
+  if (m_hudIsHandlingMouseInput) {
+    m_hud.onMouseReleased(event);
+  } else {
+    m_camera.onMouseReleased(event);
+  }
 }
 
 void UniverseView::onMouseWheel(sf::Event& event) {

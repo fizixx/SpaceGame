@@ -24,41 +24,75 @@ Hud::Hud(UniverseView* universeView)
   m_hoverShape.setFillColor(sf::Color{0, 0, 0, 0});
   m_hoverShape.setOutlineThickness(2);
   m_hoverShape.setOutlineColor(sf::Color{0, 255, 0, 255});
+
+  // Set up the selected shape.
+  m_selectedShape.setFillColor(sf::Color{0, 0, 0, 0});
+  m_selectedShape.setOutlineThickness(2);
+  m_selectedShape.setOutlineColor(sf::Color{255, 0, 0, 255});
 }
 
 Hud::~Hud() {
 }
 
 void Hud::updateUniverseMousePos(const sf::Vector2f& universeMousePos) {
-  const Camera& camera = m_universeView->getCamera();
+  // Update our internal location of the mouse position.
+  m_universeMousePos = universeMousePos;
 
   // Find the hover object.
   m_hoverObject = m_universe->findObjectAt(universeMousePos);
-  if (m_hoverObject) {
-    adjustShapeOverObject(m_hoverObject, &m_hoverShape,
-                          m_universeView->getCamera(), 4);
+}
+
+bool Hud::onMousePressed(sf::Event& event) {
+  // Get the object under the mouse.
+  m_mouseDownObject = m_universe->findObjectAt(m_universeMousePos);
+
+  // If we clicked on a valid item, then we want to receive onMouseReleased
+  // events.
+  return !!m_mouseDownObject;
+}
+
+void Hud::onMouseReleased(sf::Event& event) {
+  // Get the object under the mouse.
+  Object* objectUnderMouse = m_universe->findObjectAt(m_universeMousePos);
+
+  // If the object is the same object that we mouse down'd on, then we select
+  // the object.
+  if (objectUnderMouse == m_mouseDownObject) {
+    m_selectedObject = m_mouseDownObject;
   }
+
+  // We reset the mouse down object no matter what.
+  m_mouseDownObject = nullptr;
 }
 
 void Hud::tick(float adjustment) {
+  // Update the hover shape.
+  if (m_hoverObject) {
+    adjustShapeOverObject(m_hoverObject, &m_hoverShape, 4);
+  }
+
+  // Update the selected shape.
+  if (m_selectedObject) {
+    adjustShapeOverObject(m_selectedObject, &m_selectedShape, 4);
+  }
 }
 
 void Hud::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-  // Draw the shape over the hover object.
-  if (m_hoverObject) {
+  // Draw the shape over the hover object if the hover object is not the same
+  // object as the selected object.
+  if (m_hoverObject && m_hoverObject != m_selectedObject) {
     target.draw(m_hoverShape, states);
   }
-#if 0
-  // Get the selected object from the view.
-  Object* selectedObject = m_universeView->getSelectedObject();
-  if (selectedObject) {
-    drawSelectedObject(target, states, selectedObject);
+
+  if (m_selectedObject) {
+    target.draw(m_selectedShape, states);
   }
-#endif  // 0
 }
 
 void Hud::adjustShapeOverObject(Object* object, sf::RectangleShape* shape,
-                                const Camera& camera, int borderSize) {
+                                int borderSize) {
+  const Camera& camera = m_universeView->getCamera();
+
   // Get the bounds of the object.
   sf::FloatRect bounds{object->getBounds()};
 
