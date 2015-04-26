@@ -25,7 +25,9 @@
 int main() {
   LOG(Info) << "Starting SpaceGame";
 
-  sf::RenderWindow window{sf::VideoMode{1600, 900, 32}, "SpaceGame"};
+  sf::ContextSettings settings{32, 0, 4};
+  sf::RenderWindow window{sf::VideoMode{1600, 900, 32}, "SpaceGame",
+                          sf::Style::Default, settings};
   window.setVerticalSyncEnabled(true);
 
   // Initialize the resource manager.

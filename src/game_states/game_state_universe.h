@@ -17,21 +17,23 @@
 
 #include <memory>
 
-#include <elastic/views/button.h>
+#include <elastic/views/button_view.h>
+#include <elastic/views/text_view.h>
 
 #include "game_states/game_state.h"
 #include "universe/universe.h"
 
 class UniverseView;
 
-class GameStateUniverse : public GameState, public el::Button::OnClickListener {
+class GameStateUniverse : public GameState,
+                          public el::ButtonView::OnClickListener {
 public:
   explicit GameStateUniverse(ResourceManager* resourceManager,
                              el::Context* context);
   virtual ~GameStateUniverse() override;
 
   // Override: ui::Button::OnClickListener
-  virtual void onButtonClicked(el::Button* sender) override;
+  virtual void onButtonClicked(el::ButtonView* sender) override;
 
 private:
   // Create the user interface and add it to the parent ui specified.
@@ -42,7 +44,7 @@ private:
 
   // Mapped UI controls.
   UniverseView* m_universeView{nullptr};
-  el::Button* m_createPowerGeneratorButton{nullptr};
+  el::ButtonView* m_createPowerGeneratorButton{nullptr};
 
   DISALLOW_COPY_AND_ASSIGN(GameStateUniverse);
 };

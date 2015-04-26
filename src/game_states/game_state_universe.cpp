@@ -14,7 +14,7 @@
 
 #include "game_states/game_state_universe.h"
 
-#include <elastic/views/button.h>
+#include <elastic/views/button_view.h>
 #include <elastic/views/linear_sizer_view.h>
 #include <SFML/Graphics/RenderTarget.hpp>
 
@@ -32,7 +32,7 @@ GameStateUniverse::GameStateUniverse(ResourceManager* resourceManager,
 GameStateUniverse::~GameStateUniverse() {
 }
 
-void GameStateUniverse::onButtonClicked(el::Button* sender) {
+void GameStateUniverse::onButtonClicked(el::ButtonView* sender) {
   if (sender == m_createPowerGeneratorButton) {
     // Create the power generator.
     std::unique_ptr<Object> powerGenerator =
@@ -50,18 +50,32 @@ void GameStateUniverse::createUserInterface(el::Context* context,
   m_universeView->setExpand(el::View::ExpandBoth);
   parent->addChild(m_universeView);
 
+  // Create a vertical linear sizer to hold the game title and the button
+  // container.
+  el::LinearSizerView* mainSizer = new el::LinearSizerView{
+      context, el::LinearSizerView::OrientationVertical};
+  mainSizer->setExpand(el::View::ExpandBoth);
+
   // Create a container for all the buttons.
   el::LinearSizerView* buttonContainer = new el::LinearSizerView(
       context, el::LinearSizerView::OrientationVertical);
   buttonContainer->setName("buttonContainer");
   buttonContainer->setVerticalAlign(el::View::AlignTop);
   buttonContainer->setHorizontalAlign(el::View::AlignLeft);
+  buttonContainer->setProportion(1);
 
   m_createPowerGeneratorButton =
-      new el::Button(context, "Power Generator", this);
+      new el::ButtonView(context, "Power Generator", this);
   m_createPowerGeneratorButton->setName("createPowerGenerator");
   m_createPowerGeneratorButton->setMinSize(sf::Vector2i{300, 0});
   buttonContainer->addChild(m_createPowerGeneratorButton);
 
-  parent->addChild(buttonContainer);
+  el::TextView* gameTitleText = new el::TextView(context, "Space Game");
+  gameTitleText->setName("gameTitleText");
+  gameTitleText->setHorizontalAlign(el::View::AlignCenter);
+
+  mainSizer->addChild(gameTitleText);
+  mainSizer->addChild(buttonContainer);
+
+  parent->addChild(mainSizer);
 }
