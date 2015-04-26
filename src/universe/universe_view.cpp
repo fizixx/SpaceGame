@@ -19,7 +19,7 @@
 #include "universe/universe.h"
 
 UniverseView::UniverseView(el::Context* context, Universe* universe)
-  : el::View(context), m_universe(universe) {
+  : el::View(context), m_universe(universe), m_hud{this} {
   // Set up the mouse position shape.
 
 #if SHOW_UNIVERSE_MOUSE_POS
@@ -121,6 +121,7 @@ void UniverseView::onMouseWheel(sf::Event& event) {
 
 void UniverseView::tick(float adjustment) {
   m_camera.tick(adjustment);
+  m_hud.tick(adjustment);
 
   // The camera might have updated it's position during the tick, so we check if
   // we have a new mouse position.
@@ -198,6 +199,9 @@ void UniverseView::draw(sf::RenderTarget& target,
 
   // Reset the target view.
   target.setView(origView);
+
+  // Render the hud after we reset the view.
+  target.draw(m_hud, states);
 }
 
 void UniverseView::onMouseMovedInternal(const sf::Vector2f& mousePos) {

@@ -22,11 +22,13 @@
 #include <SFML/Graphics/View.hpp>
 #include <SFML/Window/Event.hpp>
 
+#include "utils/component.h"
+
 #if BUILD(DEBUG)
 #define SHOW_CAMERA_TARGET 0
 #endif
 
-class Camera : public sf::Drawable {
+class Camera : public Component {
 public:
   Camera();
   ~Camera();
@@ -46,14 +48,12 @@ public:
   void onMouseReleased(sf::Event& event);
   void onMouseWheel(sf::Event& event);
 
-  // Tick the universe.
-  void tick(float adjustment);
-
   // Set the camera dimensions.
   void layout(const sf::IntRect& rect);
 
   // Override: sf::Drawable
-  virtual void draw(sf::RenderTarget& target,
+  void tick(float adjustment) override;
+  void draw(sf::RenderTarget& target,
                     sf::RenderStates states) const override;
 
 private:

@@ -133,6 +133,13 @@ void Camera::onMouseWheel(sf::Event& event) {
 #endif
 }
 
+void Camera::layout(const sf::IntRect& rect) {
+  m_viewportSize.x = static_cast<float>(rect.width);
+  m_viewportSize.y = static_cast<float>(rect.height);
+
+  updateView();
+}
+
 void Camera::tick(float adjustment) {
   // Adjust the current camera position towards the camera target position.
   m_cameraPos.x =
@@ -146,13 +153,6 @@ void Camera::tick(float adjustment) {
 
   // If we changed the zoom level of the camera position, we have to update the
   // view.
-  updateView();
-}
-
-void Camera::layout(const sf::IntRect& rect) {
-  m_viewportSize.x = static_cast<float>(rect.width);
-  m_viewportSize.y = static_cast<float>(rect.height);
-
   updateView();
 }
 

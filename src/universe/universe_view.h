@@ -21,6 +21,7 @@
 #include <nucleus/config.h>
 
 #include "universe/camera.h"
+#include "universe/hud.h"
 
 #if BUILD(DEBUG)
 #define SHOW_UNIVERSE_MOUSE_POS 0
@@ -34,6 +35,12 @@ class UniverseView : public el::View {
 public:
   explicit UniverseView(el::Context* context, Universe* universe = nullptr);
   virtual ~UniverseView() override;
+
+  // Return the camera we use in this view.
+  const Camera& getCamera() const { return m_camera; }
+
+  // Return the currently selected object.  Returns null if nothing is selected.
+  Object* getSelectedObject() const { return m_selectedObject; }
 
   // Start placing the given object.
   void startPlacingObject(std::unique_ptr<Object> object);
@@ -67,6 +74,9 @@ private:
 
   // The camera we use to look into the universe.
   Camera m_camera;
+
+  // The HUD we render over the view.
+  Hud m_hud;
 
   // The last postition where the mouse cursor was in view coordinates.
   sf::Vector2i m_viewMousePos;

@@ -23,7 +23,7 @@
 
 #include "utils/component.h"
 
-class GameState : public Component {
+class GameState : public InputComponent {
 public:
   explicit GameState(el::Context* context);
   virtual ~GameState() override;

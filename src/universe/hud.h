@@ -12,26 +12,34 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef UTILS_COMPONENT_H_
-#define UTILS_COMPONENT_H_
+#ifndef UNIVERSE_HUD_H_
+#define UNIVERSE_HUD_H_
 
-#include <SFML/Graphics/Drawable.hpp>
-#include <SFML/Window/Event.hpp>
+#include <nucleus/macros.h>
 
-class Component : public sf::Drawable {
+#include "utils/component.h"
+
+class Object;
+class UniverseView;
+
+class Hud : public Component {
 public:
-  virtual ~Component();
+  explicit Hud(UniverseView* universeView);
+  ~Hud();
 
-  // Tick the component with the supplied adjustment to make a smooth 60fps.
-  virtual void tick(float adjustment) = 0;
+  // Override: Component
+  void tick(float adjustment) override;
+  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+private:
+  // Do rendering for a selected object.
+  void drawSelectedObject(sf::RenderTarget& target, sf::RenderStates states,
+                          Object* object) const;
+
+  // The universe we're operating on.
+  UniverseView* m_universeView;
+
+  DISALLOW_COPY_AND_ASSIGN(Hud);
 };
 
-class InputComponent : public Component {
-public:
-  ~InputComponent() override;
-
-  // Handle input on the component.
-  virtual void handleInput(sf::Event& event) = 0;
-};
-
-#endif  // UTILS_COMPONENT_H_
+#endif  // UNIVERSE_HUD_H_

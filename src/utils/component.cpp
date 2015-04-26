@@ -16,3 +16,6 @@
 
 Component::~Component() {
 }
+
+InputComponent::~InputComponent() {
+}
