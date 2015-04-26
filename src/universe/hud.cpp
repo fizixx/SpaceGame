@@ -15,44 +15,62 @@
 #include "universe/hud.h"
 
 #include "universe/objects/object.h"
+#include "universe/universe.h"
 #include "universe/universe_view.h"
 
-Hud::Hud(UniverseView* universeView) : m_universeView(universeView) {
+Hud::Hud(UniverseView* universeView)
+  : m_universeView(universeView), m_universe(universeView->getUniverse()) {
+  // Set up the hover shape.
+  m_hoverShape.setFillColor(sf::Color{0, 0, 0, 0});
+  m_hoverShape.setOutlineThickness(2);
+  m_hoverShape.setOutlineColor(sf::Color{0, 255, 0, 255});
 }
 
 Hud::~Hud() {
+}
+
+void Hud::updateUniverseMousePos(const sf::Vector2f& universeMousePos) {
+  const Camera& camera = m_universeView->getCamera();
+
+  // Find the hover object.
+  m_hoverObject = m_universe->findObjectAt(universeMousePos);
+  if (m_hoverObject) {
+    adjustShapeOverObject(m_hoverObject, &m_hoverShape,
+                          m_universeView->getCamera(), 4);
+  }
 }
 
 void Hud::tick(float adjustment) {
 }
 
 void Hud::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+  // Draw the shape over the hover object.
+  if (m_hoverObject) {
+    target.draw(m_hoverShape, states);
+  }
+#if 0
   // Get the selected object from the view.
   Object* selectedObject = m_universeView->getSelectedObject();
   if (selectedObject) {
     drawSelectedObject(target, states, selectedObject);
   }
+#endif  // 0
 }
 
-void Hud::drawSelectedObject(sf::RenderTarget& target, sf::RenderStates states,
-                             Object* object) const {
-  const Camera& camera = m_universeView->getCamera();
-
+void Hud::adjustShapeOverObject(Object* object, sf::RectangleShape* shape,
+                                const Camera& camera, int borderSize) {
   // Get the bounds of the object.
-  sf::FloatRect bounds = object->getBounds();
+  sf::FloatRect bounds{object->getBounds()};
 
-  const sf::Vector2i topLeft =
-      camera.universePosToMousePos(sf::Vector2f{bounds.left, bounds.top});
-  const sf::Vector2i bottomRight = camera.universePosToMousePos(
-      sf::Vector2f{bounds.left + bounds.width, bounds.top + bounds.height});
+  // Convert the bounds to hud coordinates.
+  sf::Vector2f topLeft{
+      camera.universePosToMousePos(sf::Vector2f{bounds.left, bounds.top})};
+  sf::Vector2f bottomRight{camera.universePosToMousePos(
+      sf::Vector2f{bounds.left + bounds.width, bounds.top + bounds.height})};
 
-  sf::RectangleShape shape{
-      sf::Vector2f{static_cast<float>(bottomRight.x - topLeft.x + 8),
-                   static_cast<float>(bottomRight.y - topLeft.y + 8)}};
-  shape.setPosition(sf::Vector2f{static_cast<float>(topLeft.x) - 4,
-                                 static_cast<float>(topLeft.y) - 4});
-  shape.setOutlineThickness(2);
-  shape.setFillColor(sf::Color{0, 0, 0, 0});
-
-  target.draw(shape, states);
+  shape->setSize(sf::Vector2f{
+      static_cast<float>(bottomRight.x - topLeft.x + borderSize * 2),
+      static_cast<float>(bottomRight.y - topLeft.y + borderSize * 2)});
+  shape->setPosition(sf::Vector2f{static_cast<float>(topLeft.x) - borderSize,
+                                  static_cast<float>(topLeft.y) - borderSize});
 }

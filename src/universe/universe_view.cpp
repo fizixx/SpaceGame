@@ -20,7 +20,7 @@
 
 UniverseView::UniverseView(el::Context* context, Universe* universe)
   : el::View(context), m_universe(universe), m_hud{this} {
-  // Set up the mouse position shape.
+// Set up the mouse position shape.
 
 #if SHOW_UNIVERSE_MOUSE_POS
   m_mousePosShape.setRadius(25.f);
@@ -28,20 +28,6 @@ UniverseView::UniverseView(el::Context* context, Universe* universe)
                             m_mousePosShape.getGlobalBounds().height / 2.f);
   m_mousePosShape.setFillColor(sf::Color{0, 0, 255, 255});
 #endif  // SHOW_UNIVERSE_MOUSE_POS
-
-  // Set up the hover shape.
-
-  // No fill color.
-  m_hoverShape.setFillColor(sf::Color{0, 0, 0, 0});
-  m_hoverShape.setOutlineThickness(3.f);
-  m_hoverShape.setOutlineColor(sf::Color{0, 255, 0, 255});
-
-  // Set up the selected shape.
-
-  // No fill color.
-  m_selectedShape.setFillColor(sf::Color{0, 0, 0, 0});
-  m_selectedShape.setOutlineThickness(3.f);
-  m_selectedShape.setOutlineColor(sf::Color{0, 255, 255, 255});
 }
 
 UniverseView::~UniverseView() {
@@ -60,7 +46,8 @@ void UniverseView::startPlacingObject(std::unique_ptr<Object> object) {
 void UniverseView::stopPlacingObject(bool place) {
   if (place) {
     m_universe->addObject(std::move(m_ghostObject));
-    m_universe->addLink(m_ghostLink->getSource(), m_ghostLink->getDestination());
+    m_universe->addLink(m_ghostLink->getSource(),
+                        m_ghostLink->getDestination());
   } else {
     m_ghostObject.reset();
   }
@@ -127,30 +114,6 @@ void UniverseView::tick(float adjustment) {
   // we have a new mouse position.
   sf::Vector2f mousePos = m_camera.mousePosToUniversePos(m_viewMousePos);
   onMouseMovedInternal(mousePos);
-
-  const float kHoverBorderSize = 2.f;
-
-  // Update the position of the hover shape.
-  if (m_hoverObject) {
-    sf::FloatRect bounds = m_hoverObject->getBounds();
-    bounds.left -= kHoverBorderSize;
-    bounds.top -= kHoverBorderSize;
-    bounds.width += kHoverBorderSize * 2.f;
-    bounds.height += kHoverBorderSize * 2.f;
-    m_hoverShape.setPosition(bounds.left, bounds.top);
-    m_hoverShape.setSize(sf::Vector2f{bounds.width, bounds.height});
-  }
-
-  // Update the position of the selected shape.
-  if (m_selectedObject) {
-    sf::FloatRect bounds = m_selectedObject->getBounds();
-    bounds.left -= kHoverBorderSize;
-    bounds.top -= kHoverBorderSize;
-    bounds.width += kHoverBorderSize * 2.f;
-    bounds.height += kHoverBorderSize * 2.f;
-    m_selectedShape.setPosition(bounds.left, bounds.top);
-    m_selectedShape.setSize(sf::Vector2f{bounds.width, bounds.height});
-  }
 }
 
 void UniverseView::layout(const sf::IntRect& rect) {
@@ -204,40 +167,22 @@ void UniverseView::draw(sf::RenderTarget& target,
   target.draw(m_hud, states);
 }
 
-void UniverseView::onMouseMovedInternal(const sf::Vector2f& mousePos) {
-  m_universeMousePos = mousePos;
+void UniverseView::onMouseMovedInternal(const sf::Vector2f& universeMousePos) {
+  // Tell the HUD that we changed the universe mouse position.
+  m_hud.updateUniverseMousePos(universeMousePos);
 
 #if SHOW_UNIVERSE_MOUSE_POS
-  m_mousePosShape.setPosition(m_universeMousePos);
+  m_mousePosShape.setPosition(universeMousePos);
 #endif
-
-  // Update the hover object now that we have a new mouse position.
-  updateHoverObject();
 
   // Move the ghost object to the new mouse position.
   if (m_ghostObject) {
-    m_ghostObject->moveTo(m_universeMousePos);
+    m_ghostObject->moveTo(universeMousePos);
   }
 
   // Find a new link source and update the link.
   if (m_ghostLink) {
-    Object* closestObject =
-        m_universe->getClosestLinkObject(m_universeMousePos);
+    Object* closestObject = m_universe->getClosestLinkObject(universeMousePos);
     m_ghostLink->setSource(closestObject);
   }
-}
-
-void UniverseView::updateHoverObject() {
-  // We have to iterate through the list in reverse.
-  for (auto it = std::rbegin(m_universe->m_objects),
-            eit = std::rend(m_universe->m_objects);
-       it != eit; ++it) {
-    sf::FloatRect bounds{(*it)->getBounds()};
-    if (bounds.contains(m_universeMousePos)) {
-      m_hoverObject = *it;
-      return;
-    }
-  }
-
-  m_hoverObject = nullptr;
 }

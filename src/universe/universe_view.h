@@ -36,11 +36,11 @@ public:
   explicit UniverseView(el::Context* context, Universe* universe = nullptr);
   virtual ~UniverseView() override;
 
+  // Return the universe we are observing.
+  Universe* getUniverse() const { return m_universe; }
+
   // Return the camera we use in this view.
   const Camera& getCamera() const { return m_camera; }
-
-  // Return the currently selected object.  Returns null if nothing is selected.
-  Object* getSelectedObject() const { return m_selectedObject; }
 
   // Start placing the given object.
   void startPlacingObject(std::unique_ptr<Object> object);
@@ -64,10 +64,7 @@ public:
 private:
   // Make the needed changes to the view if the perceived mouse position
   // changed.
-  void onMouseMovedInternal(const sf::Vector2f& mousePos);
-
-  // Find the object that is currently under the mouse.
-  void updateHoverObject();
+  void onMouseMovedInternal(const sf::Vector2f& universeMousePos);
 
   // The universe we are looking at.
   Universe* m_universe;
@@ -80,21 +77,6 @@ private:
 
   // The last postition where the mouse cursor was in view coordinates.
   sf::Vector2i m_viewMousePos;
-
-  // The current mouse position in the universe.
-  sf::Vector2f m_universeMousePos;
-
-  // The current object that is being hovered over.
-  Object* m_hoverObject{nullptr};
-
-  // The current object that is selected.
-  Object* m_selectedObject{nullptr};
-
-  // The rectangle we use to draw the hover outline.
-  sf::RectangleShape m_hoverShape;
-
-  // The rectangle we use to draw the selected outline.
-  sf::RectangleShape m_selectedShape;
 
   // The current ghost object.  We own this pointer as it's not part of the
   // universe yet.

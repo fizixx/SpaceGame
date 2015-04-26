@@ -33,7 +33,7 @@ Universe::Universe(ResourceManager* resourceManager)
   commandCenter->moveTo(sf::Vector2f{0.f, 0.f});
 
   PowerGenerator* powerGenerator;
-  
+
   powerGenerator = createObject<PowerGenerator>();
   powerGenerator->moveTo(sf::Vector2f{500.f, 250.f});
 
@@ -100,4 +100,15 @@ Object* Universe::getClosestLinkObject(const sf::Vector2f& pos) const {
   }
 
   return bestObject;
+}
+
+Object* Universe::findObjectAt(const sf::Vector2f& pos) {
+  for (size_t i = m_objects.size() - 1; i != 0; --i) {
+    if (m_objects[i]->getBounds().contains(pos)) {
+      return m_objects[i];
+    }
+  }
+
+  // Nothing found.
+  return nullptr;
 }
