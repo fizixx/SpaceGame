@@ -30,12 +30,23 @@ public:                                                                        \
 
 #define DEFINE_OBJECT(ClassName, Label) const char* ClassName::typeName = Label
 
+enum class ObjectType {
+  None,
+  CommandCenter,
+  PowerGenerator,
+  Miner,
+  Asteroid,
+};
+
 class Object : public sf::Drawable {
   DECLARE_OBJECT(Object);
 
 public:
-  explicit Object(Universe* universe);
+  explicit Object(Universe* universe, ObjectType type);
   virtual ~Object();
+
+  // objectType
+  ObjectType getType() const { return m_objectType; }
 
   // pos
   const sf::Vector2f& getPos() const { return m_pos; }
@@ -54,7 +65,10 @@ public:
 
 protected:
   // The universe we belong to.
-  Universe* m_universe{nullptr};
+  Universe* m_universe;
+
+  // The type of object.
+  ObjectType m_objectType;
 
   // The position of the object in universe coordinates.
   sf::Vector2f m_pos;

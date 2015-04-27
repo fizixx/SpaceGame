@@ -12,6 +12,7 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+#include <cstdlib>
 #include <chrono>
 
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -24,6 +25,9 @@
 
 int main() {
   LOG(Info) << "Starting SpaceGame";
+
+  // Seed the random number generator.
+  std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
   sf::ContextSettings settings{32, 0, 4};
   sf::RenderWindow window{sf::VideoMode{1600, 900, 32}, "SpaceGame",

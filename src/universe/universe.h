@@ -40,10 +40,10 @@ public:
   void removeObject(Object* object);
 
   // Create an object in the universe.
-  template <typename ObjectType>
-  ObjectType* createObject() {
+  template <typename ObjectType, typename... Args>
+  ObjectType* createObject(Args... args) {
     // Insert the new object into the universe.
-    ObjectType* obj = new ObjectType{this};
+    ObjectType* obj = new ObjectType{this, args...};
     m_objects.emplace_back(obj);
     return obj;
   }
@@ -73,6 +73,10 @@ public:
 
 private:
   friend class UniverseView;
+
+  // Create count number of asteroids within the given radius around the given
+  // origin.
+  void createAsteroids(const sf::Vector2f& origin, float radius, size_t count);
 
   // The resource manager we load everything from.
   ResourceManager* m_resourceManager{nullptr};

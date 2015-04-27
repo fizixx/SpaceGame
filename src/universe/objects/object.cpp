@@ -18,9 +18,10 @@
 #include "utils/math.h"
 #include "utils/stream_operators.h"
 
-DEFINE_OBJECT(Object, "Object", 0, 0);
+DEFINE_OBJECT(Object, "Object");
 
-Object::Object(Universe* universe) : m_universe(universe) {
+Object::Object(Universe* universe, ObjectType objectType)
+  : m_universe(universe), m_objectType(objectType) {
 }
 
 Object::~Object() {

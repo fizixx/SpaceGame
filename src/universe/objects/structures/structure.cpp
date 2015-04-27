@@ -18,7 +18,8 @@
 
 DEFINE_STRUCTURE(Structure, "Structure", 0, 0);
 
-Structure::Structure(Universe* universe) : Object(universe) {
+Structure::Structure(Universe* universe, ObjectType objectType)
+  : Object(universe, objectType) {
 }
 
 Structure::~Structure() {

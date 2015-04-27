@@ -14,6 +14,7 @@
 
 #include "universe/universe.h"
 
+#include <cstdlib>
 #include <algorithm>
 #include <limits>
 #include <memory>
@@ -22,6 +23,7 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 
 #include "universe/link.h"
+#include "universe/objects/asteroid.h"
 #include "universe/objects/structures/command_center.h"
 #include "universe/objects/structures/power_generator.h"
 
@@ -42,6 +44,8 @@ Universe::Universe(ResourceManager* resourceManager)
 
   addLink(m_objects[0], m_objects[1]);
   addLink(m_objects[0], m_objects[2]);
+
+  createAsteroids(sf::Vector2f{0.f, 0.f}, 5000.f, 100);
 }
 
 Universe::~Universe() {
@@ -128,5 +132,27 @@ void Universe::tick(float adjustment) {
   // Update each object.
   for (auto& object : m_objects) {
     object->tick(adjustment);
+  }
+}
+
+void Universe::createAsteroids(const sf::Vector2f& origin, float radius,
+                               size_t count) {
+  const float kPi = 3.1415f;
+
+  for (size_t i = 0; i < count; ++i) {
+    float a = static_cast<float>(std::rand() % 10000) / 10000.f;
+    float b = static_cast<float>(std::rand() % 10000) / 10000.f;
+    if (b > a) {
+      std::swap(a, b);
+    }
+
+    sf::Vector2f pos{b * radius * std::cos(2 * kPi * a / b),
+                     b * radius * std::sin(2 * kPi * a / b)};
+
+    // Get a random starting amount.
+    int32_t mineralCount = (std::rand() % 4500) + 500;
+
+    auto asteroid = createObject<Asteroid>(mineralCount);
+    asteroid->moveTo(pos);
   }
 }

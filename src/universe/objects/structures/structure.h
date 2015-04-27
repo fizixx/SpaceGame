@@ -35,7 +35,7 @@ class Structure : public Object {
   DECLARE_STRUCTURE(Structure);
 
 public:
-  explicit Structure(Universe* universe);
+  Structure(Universe* universe, ObjectType objectType);
   ~Structure() override;
 
   // Override: Object

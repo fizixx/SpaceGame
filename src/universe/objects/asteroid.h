@@ -23,16 +23,25 @@ class Asteroid : public Object {
 public:
   DECLARE_OBJECT(Asteroid);
 
-  explicit Asteroid(Universe* universe);
-  virtual ~Asteroid() override;
+  Asteroid(Universe* universe, int32_t startingMinerals);
+  ~Asteroid() override;
+
+  int32_t getMineralCount() const { return m_minerals; }
+  void setMiniralCount(int32_t mineralCount);
 
   // Override: Object
-  virtual void moveTo(const sf::Vector2f& pos) override;
-  virtual sf::FloatRect getBounds() const override;
-  virtual void draw(sf::RenderTarget& target,
-                    sf::RenderStates states) const override;
+  void moveTo(const sf::Vector2f& pos) override;
+  sf::FloatRect getBounds() const override;
+  void tick(float adjustment) override;
+  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
+  // Get the radius of the shape we are rendering based on the mineral amount.
+  float getRadiusForMinerals(int32_t minerals);
+
+  // The amount of minerals we have.
+  int32_t m_minerals;
+
   // The shape we use to render the power generator.
   sf::CircleShape m_shape;
 
