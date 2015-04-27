@@ -73,78 +73,22 @@ sf::Vector2i Camera::universePosToMousePos(
   return result;
 }
 
-void Camera::onMousePressed(sf::Event& event) {
-  if (event.mouseButton.button == sf::Mouse::Left) {
-    m_startDragViewPos = sf::Vector2f{static_cast<float>(event.mouseButton.x),
-                                      static_cast<float>(event.mouseButton.y)};
-  }
+void Camera::adjustPosition(const sf::Vector2i& delta) {
+  m_cameraTarget -=
+      sf::Vector2f{static_cast<float>(delta.x), static_cast<float>(delta.y)} *
+      m_zoomLevel;
 }
 
-void Camera::onMouseMoved(sf::Event& event) {
-  if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-    // Adjust the camera if we are dragging the view around.
-    if (!m_isDraggingView) {
-      const float kDragThreshold = 5.f;
+void Camera::adjustZoom(int32_t delta) {
+  m_targetZoomLevel -= static_cast<float>(delta) / 2.5f;
 
-      // Check if we dragged past the threshold.
-      sf::Vector2f delta{
-          static_cast<float>(event.mouseMove.x) - m_startDragViewPos.x,
-          static_cast<float>(event.mouseMove.y) - m_startDragViewPos.y};
-      if (std::abs(delta.x) > kDragThreshold ||
-          std::abs(delta.y) > kDragThreshold) {
-        m_isDraggingView = true;
-      }
-    } else {
-      // Get the amount that the mouse moved from the last position.
-      sf::Vector2f delta = sf::Vector2f(static_cast<float>(event.mouseMove.x),
-                                        static_cast<float>(event.mouseMove.y)) -
-                           m_startDragViewPos;
-
-      // Update the position of the camera.
-      m_cameraTarget -= delta * m_zoomLevel;
-#if SHOW_CAMERA_TARGET
-      m_cameraTargetShape.setPosition(m_cameraTarget);
-#endif
-
-      // Set the last view position to the current position for the next drag
-      // event.
-      m_startDragViewPos = sf::Vector2f(static_cast<float>(event.mouseMove.x),
-                                        static_cast<float>(event.mouseMove.y));
-    }
-  }
-}
-
-void Camera::onMouseReleased(sf::Event& event) {
-  if (event.mouseButton.button == sf::Mouse::Left) {
-    // If we get a release event, but m_isDraggingView is not true, that means
-    // we pressed, but didn't move the mouse enough to start dragging.  This
-    // means we just clicked the camera.
-    if (!m_isDraggingView) {
-      // TODO: Unselect everything in the HUD.  But how do we get to the hud
-      // from here?
-    }
-    m_isDraggingView = false;
-  }
-}
-
-void Camera::onMouseWheel(sf::Event& event) {
-  m_targetZoomLevel -= static_cast<float>(event.mouseWheel.delta);
-  if (m_targetZoomLevel < 1.f)
+  if (m_targetZoomLevel < 1.f) {
     m_targetZoomLevel = 1.f;
-  if (m_targetZoomLevel > 5.f)
-    m_targetZoomLevel = 5.f;
+  }
 
-  // We also move the camera target to where we scrolled the mouse wheel.
-  // NOTE: We only do it half way between the current camera target and the
-  // mouse position so that movements aren't so sudden.
-  sf::Vector2f uniPos{mousePosToUniversePos(
-      sf::Vector2i{event.mouseWheel.x, event.mouseWheel.y})};
-
-  m_cameraTarget = uniPos;
-
-#if SHOW_CAMERA_TARGET
-  m_cameraTargetShape.setPosition(m_cameraTarget);
-#endif
+  if (m_targetZoomLevel > 10.f) {
+    m_targetZoomLevel = 10.f;
+  }
 }
 
 void Camera::layout(const sf::IntRect& rect) {

@@ -33,13 +33,11 @@ public:
   // Called from the UniverseView whenever the mouse position has changed.
   void updateUniverseMousePos(const sf::Vector2f& universeMousePos);
 
-  // Handle mouse presses.  If we return true, it means we clicked on something
-  // special and would like to receive an onMouseReleased.
-  bool onMousePressed(sf::Event& event);
+  // Set the object that the mouse is currently hovering over.
+  void setHoverObject(Object* object);
 
-  // Handle a mouse release.  If we did not return true from the onMousePressed,
-  // then we won't receive this.
-  void onMouseReleased(sf::Event& event);
+  // Set the currently selected object.
+  void setSelectedObject(Object* object);
 
   // Override: Component
   void tick(float adjustment) override;

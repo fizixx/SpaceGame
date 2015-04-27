@@ -83,7 +83,8 @@ private:
 
   // Create count number of asteroids within the given radius around the given
   // origin.
-  void createAsteroids(const sf::Vector2f& origin, float radius, size_t count);
+  void createAsteroids(const sf::Vector2f& origin, float minRadius,
+                       float maxRadius, size_t count);
 
   // The resource manager we load everything from.
   ResourceManager* m_resourceManager{nullptr};

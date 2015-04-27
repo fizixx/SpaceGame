@@ -42,27 +42,12 @@ void Hud::updateUniverseMousePos(const sf::Vector2f& universeMousePos) {
   m_hoverObject = m_universe->findObjectAt(universeMousePos);
 }
 
-bool Hud::onMousePressed(sf::Event& event) {
-  // Get the object under the mouse.
-  m_mouseDownObject = m_universe->findObjectAt(m_universeMousePos);
-
-  // If we clicked on a valid item, then we want to receive onMouseReleased
-  // events.
-  return !!m_mouseDownObject;
+void Hud::setHoverObject(Object* object) {
+  m_hoverObject = object;
 }
 
-void Hud::onMouseReleased(sf::Event& event) {
-  // Get the object under the mouse.
-  Object* objectUnderMouse = m_universe->findObjectAt(m_universeMousePos);
-
-  // If the object is the same object that we mouse down'd on, then we select
-  // the object.
-  if (objectUnderMouse == m_mouseDownObject) {
-    m_selectedObject = m_mouseDownObject;
-  }
-
-  // We reset the mouse down object no matter what.
-  m_mouseDownObject = nullptr;
+void Hud::setSelectedObject(Object* object) {
+  m_selectedObject = object;
 }
 
 void Hud::tick(float adjustment) {

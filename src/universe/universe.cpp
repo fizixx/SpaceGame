@@ -45,7 +45,7 @@ Universe::Universe(ResourceManager* resourceManager)
   addLink(m_objects[0], m_objects[1]);
   addLink(m_objects[0], m_objects[2]);
 
-  createAsteroids(sf::Vector2f{0.f, 0.f}, 5000.f, 100);
+  createAsteroids(sf::Vector2f{0.f, 0.f}, 500.f, 5000.f, 100);
 }
 
 Universe::~Universe() {
@@ -158,23 +158,25 @@ void Universe::tick(float adjustment) {
   }
 }
 
-void Universe::createAsteroids(const sf::Vector2f& origin, float radius,
-                               size_t count) {
+void Universe::createAsteroids(const sf::Vector2f& origin, float minRadius,
+                               float maxRadius, size_t count) {
   const float kPi = 3.1415f;
 
   for (size_t i = 0; i < count; ++i) {
-    float a = static_cast<float>(std::rand() % 10000) / 10000.f;
-    float b = static_cast<float>(std::rand() % 10000) / 10000.f;
-    if (b > a) {
-      std::swap(a, b);
-    }
+    // Get a random direction between 0 and 360.
+    float randDirection = static_cast<float>(std::rand() % 36000) / 100.f;
 
-    sf::Vector2f pos{b * radius * std::cos(2 * kPi * a / b),
-                     b * radius * std::sin(2 * kPi * a / b)};
+    // Get a random radius between 100 and the max radius.
+    float randRadius =
+        minRadius + static_cast<float>(
+                        std::rand() % (static_cast<int32_t>(
+                                          std::roundl(maxRadius) - minRadius)));
 
     // Get a random starting amount.
-    int32_t mineralCount = (std::rand() % 4500) + 500;
+    int32_t mineralCount = (std::rand() % 100) + 500;
 
+    sf::Vector2f pos{origin.x + randRadius * std::cosf(randDirection),
+                     origin.y + randRadius * std::sinf(randDirection)};
     auto asteroid = createObject<Asteroid>(mineralCount);
     asteroid->moveTo(pos);
   }

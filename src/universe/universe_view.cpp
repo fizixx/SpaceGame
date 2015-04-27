@@ -57,27 +57,68 @@ void UniverseView::stopPlacingObject(bool place) {
 bool UniverseView::onMousePressed(sf::Event& event) {
   el::View::onMousePressed(event);
 
-  m_hudIsHandlingMouseInput = m_hud.onMousePressed(event);
-
-  // If the hud isn't handling mouse presses, then we pass it on to the camera.
-  if (!m_hudIsHandlingMouseInput) {
-    m_camera.onMousePressed(event);
+  // We only handle left mouse presses for now.
+  if (event.mouseButton.button != sf::Mouse::Left) {
+    return false;
   }
 
+  // Store the position where we pressed the mouse the first time.
+  m_mouseStartDragPos.x = event.mouseButton.x;
+  m_mouseStartDragPos.y = event.mouseButton.y;
+
+  // Convert the mouse position to a universe position.
+  sf::Vector2f universePos{m_camera.mousePosToUniversePos(m_mouseStartDragPos)};
+
+  // See if the mouse is currently over an object.
+  m_mousePressedObject = m_universe->findObjectAt(universePos);
+  if (m_mousePressedObject) {
+    m_mouseHandler = MouseHandler::Object;
+    return true;
+  }
+
+  // If we didn't press on an object, then we pressed on the background which
+  // means we're not controlling the camera.
+  m_mouseHandler = MouseHandler::Camera;
   return true;
 }
 
 bool UniverseView::onMouseDragged(sf::Event& event) {
   el::View::onMouseDragged(event);
 
-  if (!m_hudIsHandlingMouseInput) {
-    m_camera.onMouseMoved(event);
+  // Get the universe position.
+  sf::Vector2f universeMousePos{m_camera.mousePosToUniversePos(
+      sf::Vector2i{event.mouseMove.x, event.mouseMove.y})};
+
+#if SHOW_UNIVERSE_MOUSE_POS
+  m_mousePosShape.setPosition(universeMousePos);
+#endif
+
+  // If we are controlling the camera, then adjust the camera when we dragged
+  // somewhere.
+  if (m_mouseHandler == MouseHandler::Camera) {
+    // Get the delta position.
+    sf::Vector2i currentMousePos{event.mouseMove.x, event.mouseMove.y};
+    sf::Vector2i delta = currentMousePos - m_mouseStartDragPos;
+
+    // If we haven't moved past the threshold yet, check to see if we haven't
+    // this time.
+    if (!m_cameraMovedPastThreshold) {
+      if (std::abs(delta.x) > 5 || std::abs(delta.y) > 5) {
+        m_cameraMovedPastThreshold = true;
+      }
+    } else {
+      // We have moved past the threshold, so we can update the camera position.
+
+      // Adjust the camera.
+      m_camera.adjustPosition(delta);
+
+      // Reset the starting mouse drag position.
+      m_mouseStartDragPos = currentMousePos;
+    }
   }
 
-  // Update the last mouse position in the view and send it to the real
-  // onMouseMoved.
-  m_viewMousePos = sf::Vector2i{event.mouseMove.x, event.mouseMove.y};
-  onMouseMovedInternal(m_camera.mousePosToUniversePos(m_viewMousePos));
+  // When the mouse is dragged, we update any possible ghost objects.
+  updateGhostPosition(universeMousePos);
 
   return true;
 }
@@ -85,47 +126,70 @@ bool UniverseView::onMouseDragged(sf::Event& event) {
 void UniverseView::onMouseMoved(sf::Event& event) {
   el::View::onMouseMoved(event);
 
-  // Update the last mouse position in the view and send it to the real
-  // onMouseMoved.
-  m_viewMousePos = sf::Vector2i{event.mouseMove.x, event.mouseMove.y};
-  onMouseMovedInternal(m_camera.mousePosToUniversePos(m_viewMousePos));
+  // Get the universe position.
+  sf::Vector2f universeMousePos{m_camera.mousePosToUniversePos(
+      sf::Vector2i{event.mouseMove.x, event.mouseMove.y})};
+
+  // The hud wants to know if we moved the mouse.
+  m_hud.updateUniverseMousePos(universeMousePos);
+
+#if SHOW_UNIVERSE_MOUSE_POS
+  m_mousePosShape.setPosition(universeMousePos);
+#endif
+
+  // Update any ghost objects that we might have.
+  updateGhostPosition(universeMousePos);
 }
 
 void UniverseView::onMouseReleased(sf::Event& event) {
   el::View::onMouseReleased(event);
 
-  if (m_ghostObject) {
-    // Place the object if we press the left button, otherwise cancel the
-    // placement.
-    stopPlacingObject(event.mouseButton.button == sf::Mouse::Left);
+  // If we pressed the mouse on an object, then we check to see if we are still
+  // over the same object, and if it is, select that object.
+  if (m_mouseHandler == MouseHandler::Object) {
+    // Get the universe position.
+    sf::Vector2f universePos{m_camera.mousePosToUniversePos(
+        sf::Vector2i{event.mouseButton.x, event.mouseButton.y})};
 
-    // Don't pass the event on to the camera.
-    return;
+    if (m_mousePressedObject == m_universe->findObjectAt(universePos)) {
+      m_hud.setSelectedObject(m_mousePressedObject);
+      m_mousePressedObject = nullptr;
+    }
+  } else if (m_mouseHandler == MouseHandler::Camera) {
+    // If we released the mouse, but we didn't drag past the camera move
+    // threshold, then it counts as a cancel selection or placing the ghost
+    // object if we have one.
+    if (!m_cameraMovedPastThreshold) {
+      if (m_ghostObject) {
+        // If we have a ghost object at this point, then rather than cancelling
+        // the selection, we place the ghost object.
+        stopPlacingObject(true);
+      } else {
+        m_hud.setSelectedObject(nullptr);
+      }
+    }
+    m_cameraMovedPastThreshold = false;
   }
 
-  // If we didn't handle the event, then we check if the hud asked to receive
-  // the mouse release.  Otherwise we pass the event to the camera.
-  if (m_hudIsHandlingMouseInput) {
-    m_hud.onMouseReleased(event);
-  } else {
-    m_camera.onMouseReleased(event);
-  }
+  m_mouseHandler = MouseHandler::None;
 }
 
 void UniverseView::onMouseWheel(sf::Event& event) {
   el::View::onMouseWheel(event);
 
-  m_camera.onMouseWheel(event);
+  // Adjust the camera zoom level.
+  m_camera.adjustZoom(event.mouseWheel.delta);
 }
 
 void UniverseView::tick(float adjustment) {
   m_camera.tick(adjustment);
   m_hud.tick(adjustment);
 
-  // The camera might have updated it's position during the tick, so we check if
-  // we have a new mouse position.
-  sf::Vector2f mousePos = m_camera.mousePosToUniversePos(m_viewMousePos);
-  onMouseMovedInternal(mousePos);
+// Update the location of the mouse within the universe.
+#if SHOW_UNIVERSE_MOUSE_POS
+  sf::Vector2f universeMousePos{m_camera.mousePosToUniversePos(m_viewMousePos)};
+  m_mousePosShape.setPosition(universeMousePos);
+#endif
 }
 
 void UniverseView::layout(const sf::IntRect& rect) {
@@ -179,14 +243,7 @@ void UniverseView::draw(sf::RenderTarget& target,
   target.draw(m_hud, states);
 }
 
-void UniverseView::onMouseMovedInternal(const sf::Vector2f& universeMousePos) {
-  // Tell the HUD that we changed the universe mouse position.
-  m_hud.updateUniverseMousePos(universeMousePos);
-
-#if SHOW_UNIVERSE_MOUSE_POS
-  m_mousePosShape.setPosition(universeMousePos);
-#endif
-
+void UniverseView::updateGhostPosition(const sf::Vector2f& universeMousePos) {
   // Move the ghost object to the new mouse position.
   if (m_ghostObject) {
     m_ghostObject->moveTo(universeMousePos);

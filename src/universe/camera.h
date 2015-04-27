@@ -15,6 +15,8 @@
 #ifndef UNIVERSE_CAMERA_H_
 #define UNIVERSE_CAMERA_H_
 
+#include <cstdint>
+
 #include <nucleus/config.h>
 #include <nucleus/macros.h>
 #include <SFML/Graphics/CircleShape.hpp>
@@ -42,11 +44,11 @@ public:
   // Given a universe position, convert it to a position in the camera (view).
   sf::Vector2i universePosToMousePos(const sf::Vector2f& universePos) const;
 
-  // Handle input.
-  void onMousePressed(sf::Event& event);
-  void onMouseMoved(sf::Event& event);
-  void onMouseReleased(sf::Event& event);
-  void onMouseWheel(sf::Event& event);
+  // Adjust the camera position by the delta given.
+  void adjustPosition(const sf::Vector2i& delta);
+
+  // Adjust the camera zoom level.
+  void adjustZoom(int32_t delta);
 
   // Set the camera dimensions.
   void layout(const sf::IntRect& rect);

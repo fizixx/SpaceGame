@@ -24,7 +24,7 @@
 #include "universe/hud.h"
 
 #if BUILD(DEBUG)
-#define SHOW_UNIVERSE_MOUSE_POS 0
+#define SHOW_UNIVERSE_MOUSE_POS 1
 #endif
 
 class Universe;
@@ -62,9 +62,16 @@ public:
                     sf::RenderStates states) const override;
 
 private:
+  enum class MouseHandler {
+    None,
+    Camera,
+    Hud,
+    Object,
+  };
+
   // Make the needed changes to the view if the perceived mouse position
   // changed.
-  void onMouseMovedInternal(const sf::Vector2f& universeMousePos);
+  void updateGhostPosition(const sf::Vector2f& universeMousePos);
 
   // The universe we are looking at.
   Universe* m_universe;
@@ -74,6 +81,18 @@ private:
 
   // The HUD we render over the view.
   Hud m_hud;
+
+  // Keep track of who has the mouse control after an onMousePressed event.
+  MouseHandler m_mouseHandler{MouseHandler::None};
+
+  // The position in view coordinates where we started to drag.
+  sf::Vector2i m_mouseStartDragPos;
+
+  // The object that we pressed the mouse on.
+  Object* m_mousePressedObject{nullptr};
+
+  // Whether moving the camera has moved past the threshold.
+  bool m_cameraMovedPastThreshold{false};
 
   // The last postition where the mouse cursor was in view coordinates.
   sf::Vector2i m_viewMousePos;
@@ -90,9 +109,6 @@ private:
   // A shape to show where the current mouse position is in the universe.
   sf::CircleShape m_mousePosShape;
 #endif
-
-  // True if the hud is currently handling mouse input.
-  bool m_hudIsHandlingMouseInput{false};
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(UniverseView);
 };
