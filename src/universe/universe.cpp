@@ -103,7 +103,7 @@ Object* Universe::getClosestLinkObject(const sf::Vector2f& pos) const {
 }
 
 Object* Universe::findObjectAt(const sf::Vector2f& pos) {
-  for (size_t i = m_objects.size() - 1; i != 0; --i) {
+  for (size_t i = m_objects.size() - 1; i != -1; --i) {
     if (m_objects[i]->getBounds().contains(pos)) {
       return m_objects[i];
     }
