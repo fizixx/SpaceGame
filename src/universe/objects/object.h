@@ -54,6 +54,9 @@ public:
   // Calculate the distance from pos to this object.
   float calculateDistanceFrom(const sf::Vector2f& pos) const;
 
+  // Return true if we can link to this object.  Default is false.
+  virtual bool canLink() const;
+
   // Move the object to the specified coordinates.
   virtual void moveTo(const sf::Vector2f& pos);
 

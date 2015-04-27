@@ -15,6 +15,8 @@
 #ifndef UNIVERSE_OBJECTS_ASTEROID_H_
 #define UNIVERSE_OBJECTS_ASTEROID_H_
 
+#include <vector>
+
 #include <SFML/Graphics/CircleShape.hpp>
 
 #include "universe/objects/object.h"

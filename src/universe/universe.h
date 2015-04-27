@@ -22,6 +22,7 @@
 
 #include "game/resource_manager.h"
 #include "universe/camera.h"
+#include "universe/objects/object.h"
 
 class Link;
 class Object;
@@ -58,7 +59,13 @@ public:
 
   // Find the object that is at the specified location.  This function takes
   // z-order into account for objects that might be overlapping.
-  Object* findObjectAt(const sf::Vector2f& pos);
+  Object* findObjectAt(const sf::Vector2f& pos) const;
+
+  // Find a list of objects with in a radius to the origin with the specified
+  // type.
+  std::vector<Object*> findObjectsInRadius(ObjectType objectType,
+                                           const sf::Vector2f& origin,
+                                           float radius) const;
 
   // Power
   int32_t getPower() const { return m_totalPower; }

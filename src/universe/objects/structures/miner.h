@@ -15,9 +15,14 @@
 #ifndef UNIVERSE_OBJECTS_STRUCTURES_MINER_H_
 #define UNIVERSE_OBJECTS_STRUCTURES_MINER_H_
 
+#include <memory>
+
 #include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 
 #include "universe/objects/structures/structure.h"
+
+class Asteroid;
 
 class Miner : public Structure {
   DECLARE_STRUCTURE(Miner);
@@ -33,6 +38,37 @@ public:
                     sf::RenderStates states) const override;
 
 private:
+  // A class representing a laser to an asteroid.
+  class Laser : public sf::Drawable {
+  public:
+    Laser(Universe* universe, Miner* miner, Asteroid* asteroid);
+    ~Laser();
+
+    // Override: sf::Drawable
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+  private:
+    // The universe we belong in.
+    Universe* m_universe;
+
+    // The miner we are lasing from.
+    Miner* m_miner;
+
+    // The asteroid we are mining.
+    Asteroid* m_asteroid;
+
+    // The shape we use to render the laser.
+    sf::RectangleShape m_shape;
+
+    DISALLOW_IMPLICIT_CONSTRUCTORS(Laser);
+  };
+
+  // Recreate all the lasers pointing to valid minable asteroids.
+  void recreateLasers();
+
+  // Lasers to asteroids.
+  std::vector<std::unique_ptr<Laser>> m_lasers;
+
   // The shape we use to render the power generator.
   sf::CircleShape m_shape;
 

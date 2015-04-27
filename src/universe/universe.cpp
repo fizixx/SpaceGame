@@ -96,6 +96,10 @@ Object* Universe::getClosestLinkObject(const sf::Vector2f& pos) const {
   Object* bestObject = nullptr;
 
   for (const auto& object : m_objects) {
+    if (!object->canLink()) {
+      continue;
+    }
+
     float distance = object->calculateDistanceFrom(pos);
     if (distance < bestDistance) {
       bestDistance = distance;
@@ -106,7 +110,7 @@ Object* Universe::getClosestLinkObject(const sf::Vector2f& pos) const {
   return bestObject;
 }
 
-Object* Universe::findObjectAt(const sf::Vector2f& pos) {
+Object* Universe::findObjectAt(const sf::Vector2f& pos) const {
   for (size_t i = m_objects.size() - 1; i != -1; --i) {
     if (m_objects[i]->getBounds().contains(pos)) {
       return m_objects[i];
@@ -115,6 +119,25 @@ Object* Universe::findObjectAt(const sf::Vector2f& pos) {
 
   // Nothing found.
   return nullptr;
+}
+
+std::vector<Object*> Universe::findObjectsInRadius(ObjectType objectType,
+                                                   const sf::Vector2f& origin,
+                                                   float radius) const {
+  std::vector<Object*> results;
+
+  for (const auto& object : m_objects) {
+    if (objectType != object->getType()) {
+      continue;
+    }
+
+    float distance = object->calculateDistanceFrom(origin);
+    if (distance <= radius) {
+      results.push_back(object);
+    }
+  }
+
+  return std::move(results);
 }
 
 void Universe::adjustPower(int32_t amount) {

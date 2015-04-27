@@ -27,6 +27,10 @@ Object::Object(Universe* universe, ObjectType objectType)
 Object::~Object() {
 }
 
+bool Object::canLink() const {
+  return false;
+}
+
 void Object::moveTo(const sf::Vector2f& pos) {
   m_pos = pos;
 }
