@@ -17,7 +17,33 @@
 
 #include <SFML/System/Vector2.hpp>
 
+extern const float kPi;
+
+// Convert radians to degrees.
+inline float radToDeg(float rad) {
+  return rad * 180.f / kPi;
+}
+
+// Convert degrees to radians.
+inline float degToRad(float deg) {
+  return deg * kPi / 180.f;
+}
+
+// Wrap the given value around the min and max.
+template <typename T>
+inline T wrap(T value, T min, T max) {
+  if (value < min) {
+    value += (max - min);
+  } else if (value > max) {
+    value -= (max - min);
+  }
+  return value;
+}
+
 // Calculate the distance between two points.
 float distanceBetween(const sf::Vector2f& p1, const sf::Vector2f& p2);
+
+// Calculate the direction between two points.
+float directionBetween(const sf::Vector2f& p1, const sf::Vector2f& p2);
 
 #endif  // UTILS_MATH_H_

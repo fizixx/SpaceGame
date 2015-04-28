@@ -36,6 +36,7 @@ enum class ObjectType {
   PowerGenerator,
   Miner,
   Asteroid,
+  EnemyShip,
 };
 
 class Object : public sf::Drawable {

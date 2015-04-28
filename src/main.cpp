@@ -33,6 +33,7 @@ int main() {
   sf::RenderWindow window{sf::VideoMode{1600, 900, 32}, "SpaceGame",
                           sf::Style::Default, settings};
   window.setVerticalSyncEnabled(true);
+  window.setKeyRepeatEnabled(false);
 
   // Initialize the resource manager.
   ResourceManager resourceManager;

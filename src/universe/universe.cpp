@@ -140,6 +140,26 @@ std::vector<Object*> Universe::findObjectsInRadius(ObjectType objectType,
   return std::move(results);
 }
 
+Object* Universe::findClosestObjectOfType(const sf::Vector2f& pos,
+                                          ObjectType objectType) {
+  float bestDistance{std::numeric_limits<float>::max()};
+  Object* bestObject{nullptr};
+
+  for (const auto& object : m_objects) {
+    if (object->getType() != objectType) {
+      continue;
+    }
+
+    float distance = object->calculateDistanceFrom(pos);
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      bestObject = object;
+    }
+  }
+
+  return bestObject;
+}
+
 void Universe::adjustPower(int32_t amount) {
   m_totalPower += amount;
 }

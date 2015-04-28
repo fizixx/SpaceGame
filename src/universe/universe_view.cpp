@@ -16,6 +16,7 @@
 
 #include "universe/link.h"
 #include "universe/objects/object.h"
+#include "universe/objects/units/enemy_ship.h"
 #include "universe/universe.h"
 
 UniverseView::UniverseView(el::Context* context, Universe* universe)
@@ -85,9 +86,11 @@ bool UniverseView::onMousePressed(sf::Event& event) {
 bool UniverseView::onMouseDragged(sf::Event& event) {
   el::View::onMouseDragged(event);
 
+  // Update the last mouse position.
+  m_viewMousePos = sf::Vector2i{event.mouseMove.x, event.mouseMove.y};
+
   // Get the universe position.
-  sf::Vector2f universeMousePos{m_camera.mousePosToUniversePos(
-      sf::Vector2i{event.mouseMove.x, event.mouseMove.y})};
+  sf::Vector2f universeMousePos{m_camera.mousePosToUniversePos(m_viewMousePos)};
 
 #if SHOW_UNIVERSE_MOUSE_POS
   m_mousePosShape.setPosition(universeMousePos);
@@ -126,9 +129,11 @@ bool UniverseView::onMouseDragged(sf::Event& event) {
 void UniverseView::onMouseMoved(sf::Event& event) {
   el::View::onMouseMoved(event);
 
+  // Update the last mouse position.
+  m_viewMousePos = sf::Vector2i{event.mouseMove.x, event.mouseMove.y};
+
   // Get the universe position.
-  sf::Vector2f universeMousePos{m_camera.mousePosToUniversePos(
-      sf::Vector2i{event.mouseMove.x, event.mouseMove.y})};
+  sf::Vector2f universeMousePos{m_camera.mousePosToUniversePos(m_viewMousePos)};
 
   // The hud wants to know if we moved the mouse.
   m_hud.updateUniverseMousePos(universeMousePos);
@@ -179,6 +184,15 @@ void UniverseView::onMouseWheel(sf::Event& event) {
 
   // Adjust the camera zoom level.
   m_camera.adjustZoom(event.mouseWheel.delta);
+}
+
+void UniverseView::onKeyPressed(sf::Event& event) {
+}
+
+void UniverseView::onKeyReleased(sf::Event& event) {
+  if (event.key.code == sf::Keyboard::E) {
+    placeEnemyShip(m_camera.mousePosToUniversePos(m_viewMousePos));
+  }
 }
 
 void UniverseView::tick(float adjustment) {
@@ -254,4 +268,8 @@ void UniverseView::updateGhostPosition(const sf::Vector2f& universeMousePos) {
     Object* closestObject = m_universe->getClosestLinkObject(universeMousePos);
     m_ghostLink->setSource(closestObject);
   }
+}
+
+void UniverseView::placeEnemyShip(const sf::Vector2f& pos) {
+  m_universe->createObject<EnemyShip>()->moveTo(pos);
 }

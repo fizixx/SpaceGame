@@ -137,4 +137,7 @@ void GameStateUniverse::createUserInterface(el::Context* context,
   mainSizer->addChild(buttonContainer);
 
   parent->addChild(mainSizer);
+
+  // Set the universe view as the view that receives keyboard focus.
+  m_uiContext->setFocusView(m_universeView);
 }

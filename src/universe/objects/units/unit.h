@@ -12,21 +12,18 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "utils/math.h"
+#ifndef UNIVERSE_OBJECTS_UNITS_UNIT_H_
+#define UNIVERSE_OBJECTS_UNITS_UNIT_H_
 
-#include <cmath>
+#include "universe/objects/object.h"
 
-const float kPi = 3.1415f;
+class Unit : public Object {
+public:
+  Unit(Universe* universe, ObjectType objectType);
+  ~Unit() override;
 
-float distanceBetween(const sf::Vector2f& p1, const sf::Vector2f& p2) {
-  float xd = p2.x - p1.x;
-  float yd = p2.y - p1.y;
-  return std::sqrtf(xd * xd + yd * yd);
-}
+private:
+  DISALLOW_IMPLICIT_CONSTRUCTORS(Unit);
+};
 
-float directionBetween(const sf::Vector2f& p1, const sf::Vector2f& p2) {
-  float dx = p2.x - p1.x;
-  float dy = p2.y - p1.y;
-  float direction = radToDeg(std::atan2(dy, dx));
-  return direction;
-}
+#endif  // UNIVERSE_OBJECTS_UNITS_UNIT_H_

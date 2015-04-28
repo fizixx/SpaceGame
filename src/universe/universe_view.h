@@ -50,16 +50,17 @@ public:
   void stopPlacingObject(bool place);
 
   // Override: ui::View
-  virtual bool handlesInput() const { return true; }
-  virtual bool onMousePressed(sf::Event& event) override;
-  virtual bool onMouseDragged(sf::Event& event) override;
-  virtual void onMouseMoved(sf::Event& event) override;
-  virtual void onMouseReleased(sf::Event& event) override;
-  virtual void onMouseWheel(sf::Event& event) override;
-  virtual void tick(float adjustment) override;
-  virtual void layout(const sf::IntRect& rect) override;
-  virtual void draw(sf::RenderTarget& target,
-                    sf::RenderStates states) const override;
+  bool handlesInput() const { return true; }
+  bool onMousePressed(sf::Event& event) override;
+  bool onMouseDragged(sf::Event& event) override;
+  void onMouseMoved(sf::Event& event) override;
+  void onMouseReleased(sf::Event& event) override;
+  void onMouseWheel(sf::Event& event) override;
+  void onKeyPressed(sf::Event& event) override;
+  void onKeyReleased(sf::Event& event) override;
+  void tick(float adjustment) override;
+  void layout(const sf::IntRect& rect) override;
+  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
   enum class MouseHandler {
@@ -72,6 +73,9 @@ private:
   // Make the needed changes to the view if the perceived mouse position
   // changed.
   void updateGhostPosition(const sf::Vector2f& universeMousePos);
+
+  // Place an enemy ship at the given universe location.
+  void placeEnemyShip(const sf::Vector2f& pos);
 
   // The universe we are looking at.
   Universe* m_universe;
