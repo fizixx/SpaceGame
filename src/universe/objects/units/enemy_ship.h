@@ -17,6 +17,9 @@
 
 #include "universe/objects/units/unit.h"
 
+#include <nucleus/config.h>
+
+#include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
 
 class EnemyShip : public Unit {
@@ -56,6 +59,13 @@ private:
 
   // The current target that we are travelling towards.
   sf::Vector2f m_travelTargetPos;
+
+#if BUILD(DEBUG)
+  // Info text that we print out with the ship.
+  sf::Text m_infoText;
+#endif  // BUILD(DEBUG)
+
+  int stepper{0};
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(EnemyShip);
 };
