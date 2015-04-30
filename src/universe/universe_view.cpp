@@ -17,6 +17,7 @@
 #include "universe/link.h"
 #include "universe/objects/object.h"
 #include "universe/objects/projectiles/bullet.h"
+#include "universe/objects/structures/turret.h"
 #include "universe/objects/units/enemy_ship.h"
 #include "universe/universe.h"
 
@@ -195,6 +196,8 @@ void UniverseView::onKeyReleased(sf::Event& event) {
     placeEnemyShip(m_camera.mousePosToUniversePos(m_viewMousePos));
   } else if (event.key.code == sf::Keyboard::B) {
     placeBullet(m_camera.mousePosToUniversePos(m_viewMousePos), 0.f, 1.f);
+  } else if (event.key.code == sf::Keyboard::T) {
+    startPlacingObject(std::make_unique<Turret>(m_universe));
   }
 }
 

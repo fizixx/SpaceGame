@@ -242,7 +242,14 @@ Object* EnemyShip::selectBestTarget() {
     return bestTarget;
   }
 
-  // If we can't find a miner to kill, start killing the command center.
+  // If we can't find a resource gathering structure, start targeting defences.
+
+  bestTarget = m_universe->findClosestObjectOfType(m_pos, ObjectType::Turret);
+  if (bestTarget) {
+    return bestTarget;
+  }
+
+  // As a last resort, attach the command center.
   return m_universe->findClosestObjectOfType(m_pos, ObjectType::CommandCenter);
 }
 

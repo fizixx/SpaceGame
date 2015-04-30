@@ -68,8 +68,9 @@ public:
                                            float radius) const;
 
   // Find the closest object to the given position of the specified type.
-  Object* findClosestObjectOfType(const sf::Vector2f& pos,
-                                  ObjectType objectType);
+  Object* findClosestObjectOfType(
+      const sf::Vector2f& pos, ObjectType objectType,
+      float maxRange = std::numeric_limits<float>::max());
 
   // Power
   int32_t getPower() const { return m_totalPower; }

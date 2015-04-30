@@ -18,8 +18,9 @@
 #include <elastic/views/linear_sizer_view.h>
 #include <SFML/Graphics/RenderTarget.hpp>
 
-#include "universe/objects/structures/power_generator.h"
 #include "universe/objects/structures/miner.h"
+#include "universe/objects/structures/power_generator.h"
+#include "universe/objects/structures/turret.h"
 #include "universe/universe_view.h"
 
 namespace {
@@ -70,9 +71,15 @@ void GameStateUniverse::onButtonClicked(el::ButtonView* sender) {
 
   if (sender == m_createMinerButton) {
     // Create the Miner.
-    auto miner = std::make_unique<Miner>(m_universe.get());
     m_universeView->startPlacingObject(
         std::make_unique<Miner>(m_universe.get()));
+    return;
+  }
+
+  if (sender == m_createTurretButton) {
+    // Create the Turret.
+    m_universeView->startPlacingObject(
+        std::make_unique<Turret>(m_universe.get()));
     return;
   }
 }
@@ -133,6 +140,12 @@ void GameStateUniverse::createUserInterface(el::Context* context,
   m_createMinerButton->setName("createMinerButton");
   m_createMinerButton->setMinSize(sf::Vector2i{300, 0});
   buttonContainer->addChild(m_createMinerButton);
+
+  m_createTurretButton =
+      new el::ButtonView(context, buttonLabelForObject<Turret>(), this);
+  m_createTurretButton->setName("createTurretButton");
+  m_createTurretButton->setMinSize(sf::Vector2i{300, 0});
+  buttonContainer->addChild(m_createTurretButton);
 
   mainSizer->addChild(buttonContainer);
 

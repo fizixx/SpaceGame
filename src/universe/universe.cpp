@@ -47,9 +47,7 @@ Universe::Universe(ResourceManager* resourceManager)
   addLink(m_objects[0], m_objects[1]);
   addLink(m_objects[0], m_objects[2]);
 
-#if 0
   createAsteroids(sf::Vector2f{0.f, 0.f}, 500.f, 5000.f, 100);
-#endif  // 0
 }
 
 Universe::~Universe() {
@@ -149,7 +147,8 @@ std::vector<Object*> Universe::findObjectsInRadius(ObjectType objectType,
 }
 
 Object* Universe::findClosestObjectOfType(const sf::Vector2f& pos,
-                                          ObjectType objectType) {
+                                          ObjectType objectType,
+                                          float maxRange) {
   float bestDistance{std::numeric_limits<float>::max()};
   Object* bestObject{nullptr};
 
@@ -159,6 +158,11 @@ Object* Universe::findClosestObjectOfType(const sf::Vector2f& pos,
     }
 
     float distance = object->calculateDistanceFrom(pos);
+
+    if (distance > maxRange) {
+      continue;
+    }
+
     if (distance < bestDistance) {
       bestDistance = distance;
       bestObject = object;

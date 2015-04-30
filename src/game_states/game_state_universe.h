@@ -49,6 +49,7 @@ private:
   UniverseView* m_universeView{nullptr};
   el::ButtonView* m_createPowerGeneratorButton{nullptr};
   el::ButtonView* m_createMinerButton{nullptr};
+  el::ButtonView* m_createTurretButton{nullptr};
   el::TextView* m_totalPowerText{nullptr};
   el::TextView* m_totalMineralsText{nullptr};
 

@@ -36,6 +36,7 @@ enum class ObjectType {
   CommandCenter,
   PowerGenerator,
   Miner,
+  Turret,
   Asteroid,
   EnemyShip,
   Bullet,
