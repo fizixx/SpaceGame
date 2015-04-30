@@ -21,7 +21,7 @@
 DEFINE_STRUCTURE(PowerGenerator, "Power Generator", 500, 1000);
 
 PowerGenerator::PowerGenerator(Universe* universe)
-  : Structure(universe, ObjectType::PowerGenerator, 1), m_shape(50.f) {
+  : Structure(universe, ObjectType::PowerGenerator, 500), m_shape(50.f) {
   m_shape.setFillColor(sf::Color{255, 255, 0, 255});
   m_shape.setOrigin(m_shape.getGlobalBounds().width / 2.f,
                     m_shape.getGlobalBounds().height / 2.f);

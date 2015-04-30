@@ -187,15 +187,11 @@ void Universe::tick(float adjustment) {
     object->tick(adjustment);
   }
 
-  m_useIncomingObjectList = false;
-
   // Check for collision between bullets and structures.
   for (auto& bullet : m_objects) {
-    if (!bullet || bullet->getType() != ObjectType::Bullet) {
+    if (bullet->getType() != ObjectType::Bullet) {
       continue;
     }
-
-    assert(!!bullet);
 
     static const ObjectType kStructures[] = {ObjectType::CommandCenter,
                                              ObjectType::PowerGenerator,
@@ -211,6 +207,8 @@ void Universe::tick(float adjustment) {
       }
     }
   }
+
+  m_useIncomingObjectList = false;
 
   // Remove items that is in the incoming remove list.
   if (!m_incomingRemoveObjects.empty()) {
@@ -263,4 +261,6 @@ void Universe::removeObjectInternal(Object* object) {
 
   // Remove all links that is connected to this.
   removeLinksConnectedTo(obj.get());
+
+  m_objects.erase(it);
 }

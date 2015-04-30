@@ -26,7 +26,7 @@ public:
   ~Bullet() override;
 
   // Override: Projectile
-  int32_t getDamageAmount() const override { return 10; }
+  int32_t getDamageAmount() const override { return 50; }
   void moveTo(const sf::Vector2f& pos) override;
   sf::FloatRect getBounds() const override;
   void tick(float adjustment) override;

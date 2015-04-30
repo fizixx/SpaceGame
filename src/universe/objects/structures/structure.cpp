@@ -35,9 +35,9 @@ void Structure::shot(Projectile* projectile) {
   // WARNING: Don't do anything after this point, because we're deleting this.
 
   // Check if we died.
-  //if (m_hitPoints < 0.f) {
-  //  m_universe->removeObject(this);
-  //}
+  if (m_hitPoints < 0.f) {
+    m_universe->removeObject(this);
+  }
 }
 
 void Structure::tick(float adjustment) {
