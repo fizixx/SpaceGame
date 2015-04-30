@@ -23,10 +23,13 @@
 
 EnemyShip::EnemyShip(Universe* universe)
   : Unit(universe, ObjectType::EnemyShip) {
+  // Set up the shape of the ship.
   m_shape.setPrimitiveType(sf::Triangles);
   m_shape.append(sf::Vertex{sf::Vector2f{0.f, -25.f}});
   m_shape.append(sf::Vertex{sf::Vector2f{75.f, 0.f}});
   m_shape.append(sf::Vertex{sf::Vector2f{0.f, 25.f}});
+
+  createEngagementRangeShape();
 }
 
 EnemyShip::~EnemyShip() {
@@ -75,9 +78,8 @@ void EnemyShip::tick(float adjustment) {
 
     // If we have speed, update out position.
     if (m_speed > 0.f) {
-      m_pos = sf::Vector2f{
-          m_pos.x + std::cos(degToRad(m_direction)) * m_speed,
-          m_pos.y + std::sin(degToRad(m_direction)) * m_speed};
+      m_pos = sf::Vector2f{m_pos.x + std::cos(degToRad(m_direction)) * m_speed,
+                           m_pos.y + std::sin(degToRad(m_direction)) * m_speed};
     }
   }
 }
@@ -85,5 +87,30 @@ void EnemyShip::tick(float adjustment) {
 void EnemyShip::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   states.transform.translate(m_pos);
   states.transform.rotate(m_direction);
+  target.draw(m_engagementRangeShape, states);
   target.draw(m_shape, states);
+}
+
+void EnemyShip::createEngagementRangeShape() {
+  const float kEngagementRange = 750.f;
+  const float kSpread = 45.f;
+  const int kSteps = 9;
+  static const sf::Color color{255, 0, 0, 127};
+
+  m_engagementRangeShape.setPrimitiveType(sf::TrianglesFan);
+  m_engagementRangeShape.resize(2 + kSteps);
+
+  m_engagementRangeShape[0].position = sf::Vector2f(75.f, 0.f);
+  m_engagementRangeShape[0].color = color;
+
+  size_t i = 1;
+  const float spreadStep = kSpread / static_cast<float>(kSteps);
+  const float half = kSpread / -2.f;
+  for (float degrees = 0.f; degrees <= kSpread; degrees += spreadStep, ++i) {
+    m_engagementRangeShape[i].position.x =
+        std::cos(degToRad(half + degrees)) * kEngagementRange;
+    m_engagementRangeShape[i].position.y =
+        std::sin(degToRad(half + degrees)) * kEngagementRange;
+    m_engagementRangeShape[i].color = color;
+  }
 }

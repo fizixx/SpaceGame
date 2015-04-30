@@ -33,10 +33,17 @@ private:
   enum class Task {
     Nothing,
     Travel,
+    Attacking,
   };
+
+  // Create the shape that we use to show the engagement envelope of the ship.
+  void createEngagementRangeShape();
 
   // The shape we use to render the ship.
   sf::VertexArray m_shape;
+
+  // A shape used to show the engagement envelope of the ship.
+  sf::VertexArray m_engagementRangeShape;
 
   // This ship's current task.
   Task m_task{Task::Nothing};
