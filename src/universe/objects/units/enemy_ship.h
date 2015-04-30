@@ -22,6 +22,8 @@
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
 
+#include "particles/particle_emitter.h"
+
 class EnemyShip : public Unit {
 public:
   explicit EnemyShip(Universe* universe);
@@ -52,11 +54,18 @@ private:
   // Shoot a projectile at the target.
   void shoot();
 
+  // Factory function to create a smoke particle.
+  Particle* createSmokeParticle(ParticleEmitter* emitter,
+                                const sf::Vector2f& pos);
+
   // The shape we use to render the ship.
   sf::VertexArray m_shape;
 
   // A shape used to show the engagement envelope of the ship.
   sf::VertexArray m_engagementRangeShape;
+
+  // Particle emitter to render the smoke trail.
+  ParticleEmitter m_smokeEmitter;
 
   // This ship's current task.
   Task m_task{Task::Nothing};

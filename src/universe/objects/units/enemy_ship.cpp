@@ -14,14 +14,17 @@
 
 #include "universe/objects/units/enemy_ship.h"
 
+#include <functional>
 #include <sstream>
 
+#include <nucleus/logging.h>
 #include <SFML/Graphics/RenderTarget.hpp>
 
 #include "universe/objects/projectiles/bullet.h"
 #include "universe/universe.h"
 #include "utils/math.h"
 #include "utils/stream_operators.h"
+#include "particles/particle.h"
 
 namespace {
 
@@ -33,7 +36,9 @@ const float kMaxEngagementRange = 750.f;
 }  // namespace
 
 EnemyShip::EnemyShip(Universe* universe)
-  : Unit(universe, ObjectType::EnemyShip) {
+  : Unit(universe, ObjectType::EnemyShip),
+    m_smokeEmitter(std::bind(&EnemyShip::createSmokeParticle, this,
+                             std::placeholders::_1, std::placeholders::_2)) {
   // Set up the shape of the ship.
   m_shape.setPrimitiveType(sf::Triangles);
   m_shape.append(
@@ -77,6 +82,10 @@ void EnemyShip::tick(float adjustment) {
     return;
   }
 #endif  // 0
+
+  // Move the emitter into place and tick it.
+  m_smokeEmitter.setPos(m_pos);
+  m_smokeEmitter.tick(adjustment);
 
   // If we're doing nothing, then decide where we want to go and then go there.
   if (m_task == Task::Nothing) {
@@ -216,6 +225,9 @@ void EnemyShip::tick(float adjustment) {
 void EnemyShip::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   sf::RenderStates originalStates{states};
 
+  // Draw the particles first.
+  target.draw(m_smokeEmitter, states);
+
   states.transform.translate(m_pos);
   states.transform.rotate(m_direction);
   // target.draw(m_engagementRangeShape, states);
@@ -280,4 +292,10 @@ void EnemyShip::shoot() {
   auto bullet =
       std::make_unique<Bullet>(m_universe, m_pos, m_direction, m_speed * 2.f);
   m_universe->addObject(std::move(bullet));
+}
+
+Particle* EnemyShip::createSmokeParticle(ParticleEmitter* emitter,
+                                         const sf::Vector2f& pos) {
+  auto particle = std::make_unique<Particle>(emitter, pos);
+  return particle.release();
 }
