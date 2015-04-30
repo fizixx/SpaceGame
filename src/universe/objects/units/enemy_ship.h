@@ -27,6 +27,9 @@ public:
   explicit EnemyShip(Universe* universe);
   ~EnemyShip() override;
 
+  // Set the current target for the ship.
+  void setTarget(Object* target);
+
   // Override: Unit
   sf::FloatRect getBounds() const override;
   void tick(float adjustment) override;
@@ -37,7 +40,11 @@ private:
     Nothing,
     Travel,
     Attacking,
+    Egress,
   };
+
+  // From our current position, select the best target to attack.
+  Object* selectBestTarget();
 
   // Create the shape that we use to show the engagement envelope of the ship.
   void createEngagementRangeShape();
@@ -56,6 +63,9 @@ private:
 
   // The current speed that we are traveling at.
   float m_speed{0.f};
+
+  // The object we are attacking.
+  Object* m_target;
 
   // The current target that we are travelling towards.
   sf::Vector2f m_travelTargetPos;

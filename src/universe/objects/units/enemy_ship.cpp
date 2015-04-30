@@ -25,8 +25,9 @@
 
 namespace {
 
-const float kMaxTurnRadius = 1.f;
-const float kMaxSpeed = 1.f;
+const float kMaxTurnRadius = 1.5f;
+const float kMaxTravelSpeed = 5.f;
+const float kMaxAttackSpeed = 3.f;
 const float kMaxEngagementRange = 750.f;
 
 }  // namespace
@@ -35,9 +36,12 @@ EnemyShip::EnemyShip(Universe* universe)
   : Unit(universe, ObjectType::EnemyShip) {
   // Set up the shape of the ship.
   m_shape.setPrimitiveType(sf::Triangles);
-  m_shape.append(sf::Vertex{sf::Vector2f{0.f, -25.f}});
-  m_shape.append(sf::Vertex{sf::Vector2f{75.f, 0.f}});
-  m_shape.append(sf::Vertex{sf::Vector2f{0.f, 25.f}});
+  m_shape.append(
+      sf::Vertex{sf::Vector2f{0.f, -25.f}, sf::Color{255, 0, 0, 255}});
+  m_shape.append(
+      sf::Vertex{sf::Vector2f{75.f, 0.f}, sf::Color{255, 0, 0, 255}});
+  m_shape.append(
+      sf::Vertex{sf::Vector2f{0.f, 25.f}, sf::Color{255, 0, 0, 255}});
 
 #if BUILD(DEBUG)
   // Set up the info text.
@@ -45,7 +49,7 @@ EnemyShip::EnemyShip(Universe* universe)
       universe->getResourceManager()->getFont(ResourceManager::Font::Default);
   if (font) {
     m_infoText.setFont(*font);
-    m_infoText.setColor(sf::Color{0, 255, 0, 255});
+    m_infoText.setColor(sf::Color{255, 255, 255, 255});
     m_infoText.setCharacterSize(20);
     m_infoText.setString("Nothing to say");
   }
@@ -57,57 +61,75 @@ EnemyShip::EnemyShip(Universe* universe)
 EnemyShip::~EnemyShip() {
 }
 
+void EnemyShip::setTarget(Object* target) {
+  m_target = target;
+  m_task = Task::Nothing;
+}
+
 sf::FloatRect EnemyShip::getBounds() const {
   return m_shape.getBounds();
 }
 
 void EnemyShip::tick(float adjustment) {
+#if 0
   stepper++;
   if (stepper % 10 != 0) {
     return;
   }
+#endif  // 0
 
   // If we're doing nothing, then decide where we want to go and then go there.
   if (m_task == Task::Nothing) {
+    // We have nothing to do, so select the best target to attack and travel
+    // there.
     m_task = Task::Travel;
-
-    // Find the nearest command center and travel there.
-    Object* closestObject =
-        m_universe->findClosestObjectOfType(m_pos, ObjectType::CommandCenter);
-    if (closestObject) {
-      m_travelTargetPos = closestObject->getPos();
+    m_target = selectBestTarget();
+    if (m_target) {
+      m_travelTargetPos = m_target->getPos();
     }
+  }
+
+  // If we don't have a target, we don't know what to do.
+  if (!m_target) {
+    return;
   }
 
   // If we are traveling, update the direction and speed we are traveling in.
   if (m_task == Task::Travel) {
     // Calculate the direction to the target.
-    float directionToTarget = directionBetween(m_pos, m_travelTargetPos);
+    const float directionToTarget = directionBetween(m_pos, m_travelTargetPos);
 
     // If we are not pointing directly towards the target, then we must turn.
     if (m_direction != directionToTarget) {
-      // Calculate the direction we have to turn.
-      float turnSide = directionToTarget - m_direction;
+      const float leftDiff =
+          wrap(360.f - directionToTarget + m_direction, 0.f, 360.f);
+      const float rightDiff = wrap(directionToTarget - m_direction, 0.f, 360.f);
 
-      if (std::abs(turnSide) < kMaxTurnRadius) {
+      // Figure out which way to turn.
+      const float turnSide =
+          (leftDiff < rightDiff) ? -kMaxTurnRadius : kMaxTurnRadius;
+
+      // Adjust the direction towards the target.
+      m_direction = wrap(m_direction + turnSide, 0.f, 360.f);
+
+      // If the direction is within kMaxTurnRadius of the target direction, then
+      // snap it directly to the target, to avoid oscillation.
+      if (std::abs(wrap(m_direction - directionToTarget, 0.f, 360.f)) <
+          kMaxTurnRadius) {
         m_direction = directionToTarget;
-      } else {
-        turnSide = (turnSide < 0.f) ? -kMaxTurnRadius : kMaxTurnRadius;
-        m_direction = wrap(m_direction + turnSide, 0.f, 360.f);
       }
     }
 
-    m_speed = kMaxSpeed;
+    m_speed = kMaxTravelSpeed;
 
     // If we have speed, update our position.
     m_pos = sf::Vector2f{m_pos.x + std::cos(degToRad(m_direction)) * m_speed,
                          m_pos.y + std::sin(degToRad(m_direction)) * m_speed};
 
     // If we are heading directly towards the target and the target comes into
-    // range, then we start our attack run.  We check if the difference is
-    // within 1.f, to eliminate rounding errors.
-    if (std::abs(m_direction - directionToTarget) < 1.f) {
-      float distanceToTarget = distanceBetween(m_pos, m_travelTargetPos);
+    // range, then we start our attack run.
+    if (m_direction == directionToTarget) {
+      const float distanceToTarget = distanceBetween(m_pos, m_travelTargetPos);
       if (distanceToTarget < kMaxEngagementRange) {
         m_task = Task::Attacking;
       }
@@ -117,10 +139,31 @@ void EnemyShip::tick(float adjustment) {
   if (m_task == Task::Attacking) {
     // We don't move any more, but we only travel forward.
 
-    // If we have speed, update out position.
-    if (m_speed > 0.f) {
-      m_pos = sf::Vector2f{m_pos.x + std::cos(degToRad(m_direction)) * m_speed,
-                           m_pos.y + std::sin(degToRad(m_direction)) * m_speed};
+    // TODO: Shoot! Shoot!
+
+    m_speed = kMaxAttackSpeed;
+
+    // If we have speed, update our position.
+    m_pos = sf::Vector2f{m_pos.x + std::cos(degToRad(m_direction)) * m_speed,
+                         m_pos.y + std::sin(degToRad(m_direction)) * m_speed};
+
+    const float directionToTarget = directionBetween(m_pos, m_travelTargetPos);
+    if (std::abs(directionToTarget - m_direction) > kMaxTurnRadius) {
+      // m_direction += (std::rand() % 2 == 0) ? 30.f : -30.f;
+      m_task = Task::Egress;
+    }
+  }
+
+  if (m_task == Task::Egress) {
+    m_speed = kMaxTravelSpeed;
+    m_direction = wrap(m_direction -= kMaxTurnRadius / 3.f, 0.f, 360.f);
+    // If we have speed, update our position.
+    m_pos = sf::Vector2f{m_pos.x + std::cos(degToRad(m_direction)) * m_speed,
+                         m_pos.y + std::sin(degToRad(m_direction)) * m_speed};
+
+    const float distanceToTarget = distanceBetween(m_pos, m_travelTargetPos);
+    if (distanceToTarget > kMaxEngagementRange * 1.5f) {
+      m_task = Task::Nothing;
     }
   }
 
@@ -129,21 +172,25 @@ void EnemyShip::tick(float adjustment) {
     std::ostringstream ss;
 
     switch (m_task) {
-    case Task::Nothing:
-      ss << "Nothing";
-      break;
+      case Task::Nothing:
+        ss << "Nothing";
+        break;
 
-    case Task::Travel:
-      ss << "Travel";
-      break;
+      case Task::Travel:
+        ss << "Travel";
+        break;
 
-    case Task::Attacking:
-      ss << "Attacking";
-      break;
+      case Task::Attacking:
+        ss << "Attacking";
+        break;
 
-    default:
-      ss << "Unknown";
-      break;
+      case Task::Egress:
+        ss << "Egress";
+        break;
+
+      default:
+        ss << "Unknown";
+        break;
     }
 
     ss << '\n' << m_direction << " ("
@@ -169,6 +216,26 @@ void EnemyShip::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 #if BUILD(DEBUG)
   target.draw(m_infoText, originalStates);
 #endif
+}
+
+Object* EnemyShip::selectBestTarget() {
+  Object* bestTarget = nullptr;
+
+  // First find miners and then power generators to destroy, so that they can't
+  // gather resources any more.
+  bestTarget = m_universe->findClosestObjectOfType(m_pos, ObjectType::Miner);
+  if (bestTarget) {
+    return bestTarget;
+  }
+
+  bestTarget =
+      m_universe->findClosestObjectOfType(m_pos, ObjectType::PowerGenerator);
+  if (bestTarget) {
+    return bestTarget;
+  }
+
+  // If we can't find a miner to kill, start killing the command center.
+  return m_universe->findClosestObjectOfType(m_pos, ObjectType::CommandCenter);
 }
 
 void EnemyShip::createEngagementRangeShape() {

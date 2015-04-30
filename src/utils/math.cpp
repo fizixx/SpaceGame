@@ -28,5 +28,5 @@ float directionBetween(const sf::Vector2f& p1, const sf::Vector2f& p2) {
   float dx = p2.x - p1.x;
   float dy = p2.y - p1.y;
   float direction = radToDeg(std::atan2(dy, dx));
-  return direction;
+  return wrap(direction, 0.f, 360.f);
 }
