@@ -17,7 +17,7 @@
 
 #include "universe/objects/projectiles/projectile.h"
 
-#include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 
 class Bullet : public Projectile {
 public:
@@ -37,7 +37,7 @@ private:
   sf::Vector2f m_originalPos;
 
   // The shape we use to represent the bullet.
-  sf::CircleShape m_shape;
+  sf::RectangleShape m_shape;
 
   DISALLOW_COPY_AND_ASSIGN(Bullet);
 };

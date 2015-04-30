@@ -26,9 +26,9 @@ Bullet::Bullet(Universe* universe, const sf::Vector2f& pos, float direction,
     m_originalPos(pos) {
   // Set up the circle shape.
   m_shape.setFillColor(sf::Color{255, 0, 0, 255});
-  m_shape.setRadius(5.f);
-  sf::FloatRect bounds = m_shape.getLocalBounds();
-  m_shape.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+  m_shape.setSize(sf::Vector2f{25.f, 5.f});
+  m_shape.setOrigin(sf::Vector2f{-15.f, 2.5f});
+  m_shape.setRotation(direction);
 }
 
 Bullet::~Bullet() {
