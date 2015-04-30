@@ -19,8 +19,9 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 
 #include "universe/objects/structures/structure.h"
+#include "universe/observers.h"
 
-class Turret : public Structure {
+class Turret : public Structure, public RemoveObjectObserver {
   DECLARE_STRUCTURE(Turret);
 
 public:
@@ -34,6 +35,9 @@ public:
   void tick(float adjustment) override;
   void draw(sf::RenderTarget& target,
                     sf::RenderStates states) const override;
+
+  // Override: RemoveObjectObserver
+  void onObjectRemoved(Object* object) override;
 
 private:
   enum class Task {

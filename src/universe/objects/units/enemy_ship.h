@@ -23,8 +23,9 @@
 #include <SFML/Graphics/VertexArray.hpp>
 
 #include "particles/particle_emitter.h"
+#include "universe/observers.h"
 
-class EnemyShip : public Unit {
+class EnemyShip : public Unit, public RemoveObjectObserver {
 public:
   explicit EnemyShip(Universe* universe);
   ~EnemyShip() override;
@@ -36,6 +37,9 @@ public:
   sf::FloatRect getBounds() const override;
   void tick(float adjustment) override;
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+  // Override: RemoveObjectObserver
+  void onObjectRemoved(Object* object) override;
 
 private:
   enum class Task {

@@ -227,6 +227,14 @@ void Universe::tick(float adjustment) {
   }
 }
 
+void Universe::addRemoveObjectObserver(RemoveObjectObserver* observer) {
+  m_removeObjectObservers.addObserver(observer);
+}
+
+void Universe::removeRemoveObjectObserver(RemoveObjectObserver* observer) {
+  m_removeObjectObservers.removeObserver(observer);
+}
+
 void Universe::createAsteroids(const sf::Vector2f& origin, float minRadius,
                                float maxRadius, size_t count) {
   const float kPi = 3.1415f;
@@ -257,6 +265,10 @@ void Universe::removeObjectInternal(Object* object) {
   auto it = std::find(std::begin(m_objects), std::end(m_objects), object);
   if (it == std::end(m_objects))
     return;
+
+  // Let all the observers know that this object is about to be removed.
+  FOR_EACH_OBSERVER(RemoveObjectObserver, m_removeObjectObservers,
+                    onObjectRemoved(*it));
 
   std::unique_ptr<Object> obj(*it);
 

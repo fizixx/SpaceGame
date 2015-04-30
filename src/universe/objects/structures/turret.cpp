@@ -40,9 +40,12 @@ Turret::Turret(Universe* universe)
   m_turretShape.setSize(sf::Vector2f{70.f, 5.f});
   m_turretShape.setFillColor(sf::Color{0, 127, 0, 255});
   m_turretShape.setOrigin(sf::Vector2f{-35.0f, 2.5f});
+
+  m_universe->addRemoveObjectObserver(this);
 }
 
 Turret::~Turret() {
+  m_universe->removeRemoveObjectObserver(this);
 }
 
 void Turret::shot(Projectile* projectile) {
@@ -94,10 +97,20 @@ void Turret::tick(float adjustment) {
   }
 }
 
-void Turret::draw(sf::RenderTarget& target,
-                          sf::RenderStates states) const {
+void Turret::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   target.draw(m_baseShape);
   target.draw(m_turretShape);
+}
+
+void Turret::onObjectRemoved(Object* object) {
+  // If the object that is about to removed is our target, then we need a new
+  // target.
+  if (object == m_target) {
+    m_target = nullptr;
+
+    // Go back to idle so that we can select a new target.
+    m_task == Task::Idle;
+  }
 }
 
 Object* Turret::findBestTarget() {

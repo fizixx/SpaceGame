@@ -19,10 +19,12 @@
 #include <vector>
 
 #include <nucleus/macros.h>
+#include <nucleus/utils/observer_list.h>
 
 #include "game/resource_manager.h"
 #include "universe/camera.h"
 #include "universe/objects/object.h"
+#include "universe/observers.h"
 
 class Link;
 class Object;
@@ -83,6 +85,10 @@ public:
   // Update the entire universe.  This should run at 60fps.
   void tick(float adjustment);
 
+  // RemoveObjectObserver
+  void addRemoveObjectObserver(RemoveObjectObserver* observer);
+  void removeRemoveObjectObserver(RemoveObjectObserver* observer);
+
 private:
   friend class UniverseView;
 
@@ -118,6 +124,10 @@ private:
 
   // The total amount of minerals in the universe.
   int32_t m_totalMinerals{5000};
+
+  // A list of observers that is interested in when objects are removed from the
+  // universe.
+  nu::ObserverList<RemoveObjectObserver, true> m_removeObjectObservers;
 
   DISALLOW_COPY_AND_ASSIGN(Universe);
 };

@@ -61,9 +61,13 @@ EnemyShip::EnemyShip(Universe* universe)
 #endif  // BUILD(DEBUG)
 
   createEngagementRangeShape();
+
+  // We want to know when objects are removed from the universe.
+  m_universe->addRemoveObjectObserver(this);
 }
 
 EnemyShip::~EnemyShip() {
+  m_universe->removeRemoveObjectObserver(this);
 }
 
 void EnemyShip::setTarget(Object* target) {
@@ -236,6 +240,14 @@ void EnemyShip::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 #if BUILD(DEBUG)
   target.draw(m_infoText, originalStates);
 #endif
+}
+
+void EnemyShip::onObjectRemoved(Object* object) {
+  // If our target was removed, then we should do something else.
+  if (object == m_target) {
+    m_target = nullptr;
+    m_task = Task::Nothing;
+  }
 }
 
 Object* EnemyShip::selectBestTarget() {
