@@ -22,7 +22,7 @@
 DEFINE_STRUCTURE(Miner, "Miner", -750, 1500);
 
 Miner::Miner(Universe* universe)
-  : Structure(universe, ObjectType::Miner), m_shape(75.f) {
+  : Structure(universe, ObjectType::Miner, 1500), m_shape(75.f) {
   m_shape.setFillColor(sf::Color{0, 255, 255, 255});
   m_shape.setOrigin(m_shape.getGlobalBounds().width / 2.f,
                     m_shape.getGlobalBounds().height / 2.f);

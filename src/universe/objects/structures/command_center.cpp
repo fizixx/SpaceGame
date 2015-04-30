@@ -21,7 +21,7 @@
 DEFINE_STRUCTURE(CommandCenter, "Command Center", 2000, 0);
 
 CommandCenter::CommandCenter(Universe* universe)
-  : Structure(universe, ObjectType::CommandCenter), m_shape(100.f) {
+  : Structure(universe, ObjectType::CommandCenter, 5000), m_shape(100.f) {
   m_shape.setOrigin(m_shape.getGlobalBounds().width / 2.f,
                     m_shape.getGlobalBounds().height / 2.f);
 }

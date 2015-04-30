@@ -27,6 +27,7 @@ public:
   ~PowerGenerator() override;
 
   // Override: Object
+  void shot(Projectile* projectile) override;
   void moveTo(const sf::Vector2f& pos) override;
   sf::FloatRect getBounds() const override;
   void draw(sf::RenderTarget& target,

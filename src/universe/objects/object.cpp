@@ -27,6 +27,10 @@ Object::Object(Universe* universe, ObjectType objectType)
 Object::~Object() {
 }
 
+void Object::shot(Projectile* projectile) {
+  // By default we do nothing when we are shot.
+}
+
 bool Object::canLink() const {
   return false;
 }

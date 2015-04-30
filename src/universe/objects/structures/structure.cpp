@@ -15,14 +15,29 @@
 #include "universe/objects/structures/structure.h"
 
 #include "universe/universe.h"
+#include "universe/objects/projectiles/projectile.h"
 
 DEFINE_STRUCTURE(Structure, "Structure", 0, 0);
 
-Structure::Structure(Universe* universe, ObjectType objectType)
-  : Object(universe, objectType) {
+Structure::Structure(Universe* universe, ObjectType objectType, int32_t hitPoints)
+  : Object(universe, objectType), m_hitPoints(hitPoints) {
 }
 
 Structure::~Structure() {
+}
+
+void Structure::shot(Projectile* projectile) {
+  // We have been shot so remove some hitpoints.
+  m_hitPoints -= projectile->getDamageAmount();
+
+  m_universe->removeObject(projectile);
+
+  // WARNING: Don't do anything after this point, because we're deleting this.
+
+  // Check if we died.
+  //if (m_hitPoints < 0.f) {
+  //  m_universe->removeObject(this);
+  //}
 }
 
 void Structure::tick(float adjustment) {

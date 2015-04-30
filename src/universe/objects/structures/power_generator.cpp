@@ -21,13 +21,20 @@
 DEFINE_STRUCTURE(PowerGenerator, "Power Generator", 500, 1000);
 
 PowerGenerator::PowerGenerator(Universe* universe)
-  : Structure(universe, ObjectType::PowerGenerator), m_shape(50.f) {
+  : Structure(universe, ObjectType::PowerGenerator, 1), m_shape(50.f) {
   m_shape.setFillColor(sf::Color{255, 255, 0, 255});
   m_shape.setOrigin(m_shape.getGlobalBounds().width / 2.f,
                     m_shape.getGlobalBounds().height / 2.f);
 }
 
 PowerGenerator::~PowerGenerator() {
+}
+
+void PowerGenerator::shot(Projectile* projectile) {
+  Structure::shot(projectile);
+
+  m_shape.setFillColor(
+      sf::Color{255, 255, 0, static_cast<sf::Uint8>(255 * m_hitPoints / 500)});
 }
 
 void PowerGenerator::moveTo(const sf::Vector2f& pos) {

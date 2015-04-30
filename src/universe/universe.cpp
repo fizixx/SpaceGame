@@ -14,6 +14,8 @@
 
 #include "universe/universe.h"
 
+#include <cassert>
+
 #include <cstdlib>
 #include <algorithm>
 #include <limits>
@@ -45,7 +47,9 @@ Universe::Universe(ResourceManager* resourceManager)
   addLink(m_objects[0], m_objects[1]);
   addLink(m_objects[0], m_objects[2]);
 
+#if 0
   createAsteroids(sf::Vector2f{0.f, 0.f}, 500.f, 5000.f, 100);
+#endif  // 0
 }
 
 Universe::~Universe() {
@@ -69,15 +73,11 @@ void Universe::addObject(std::unique_ptr<Object> object) {
 }
 
 void Universe::removeObject(Object* object) {
-  // We don't erase the object from the list yet, we set it to null and then
-  // delete it when it is convenient.
-  auto it = std::find(std::begin(m_objects), std::end(m_objects), object);
-  if (it == std::end(m_objects))
-    return;
-
-  Object* ptr = *it;
-  *it = nullptr;
-  delete ptr;
+  if (m_useIncomingObjectList) {
+    m_incomingRemoveObjects.push_back(object);
+  } else {
+    removeObjectInternal(object);
+  }
 }
 
 void Universe::addLink(Object* source, Object* destination) {
@@ -104,7 +104,7 @@ Object* Universe::getClosestLinkObject(const sf::Vector2f& pos) const {
   Object* bestObject = nullptr;
 
   for (const auto& object : m_objects) {
-    if (!object || !object->canLink()) {
+    if (!object->canLink()) {
       continue;
     }
 
@@ -154,7 +154,7 @@ Object* Universe::findClosestObjectOfType(const sf::Vector2f& pos,
   Object* bestObject{nullptr};
 
   for (const auto& object : m_objects) {
-    if (!object || object->getType() != objectType) {
+    if (object->getType() != objectType) {
       continue;
     }
 
@@ -180,18 +180,6 @@ void Universe::tick(float adjustment) {
   // We start with 0 power so that we can calculate the total.
   m_totalPower = 0;
 
-  // Add any objects that might be in the incoming object list.
-  if (!m_incomingObjects.empty()) {
-    std::copy(std::begin(m_incomingObjects), std::end(m_incomingObjects),
-              std::back_inserter(m_objects));
-    m_incomingObjects.clear();
-  }
-
-  // Delete all the null objects.
-  m_objects.erase(
-      std::remove(std::begin(m_objects), std::end(m_objects), nullptr),
-      std::end(m_objects));
-
   m_useIncomingObjectList = true;
 
   // Update each object.
@@ -200,6 +188,44 @@ void Universe::tick(float adjustment) {
   }
 
   m_useIncomingObjectList = false;
+
+  // Check for collision between bullets and structures.
+  for (auto& bullet : m_objects) {
+    if (!bullet || bullet->getType() != ObjectType::Bullet) {
+      continue;
+    }
+
+    assert(!!bullet);
+
+    static const ObjectType kStructures[] = {ObjectType::CommandCenter,
+                                             ObjectType::PowerGenerator,
+                                             ObjectType::Miner};
+
+    for (size_t i = 0; i < ARRAY_SIZE(kStructures); ++i) {
+      std::vector<Object*> closeStructures =
+          findObjectsInRadius(kStructures[i], bullet->getPos(), 10.f);
+      // TODO: This will send a shot call to all objects even if the projectile
+      // was deleted.
+      for (auto& structure : closeStructures) {
+        structure->shot(reinterpret_cast<Projectile*>(bullet));
+      }
+    }
+  }
+
+  // Remove items that is in the incoming remove list.
+  if (!m_incomingRemoveObjects.empty()) {
+    for (auto& incomingObject : m_incomingRemoveObjects) {
+      removeObjectInternal(incomingObject);
+    }
+    m_incomingRemoveObjects.clear();
+  }
+
+  // Add any objects that might be in the incoming object list.
+  if (!m_incomingObjects.empty()) {
+    std::copy(std::begin(m_incomingObjects), std::end(m_incomingObjects),
+              std::back_inserter(m_objects));
+    m_incomingObjects.clear();
+  }
 }
 
 void Universe::createAsteroids(const sf::Vector2f& origin, float minRadius,
@@ -224,4 +250,17 @@ void Universe::createAsteroids(const sf::Vector2f& origin, float minRadius,
     auto asteroid = createObject<Asteroid>(mineralCount);
     asteroid->moveTo(pos);
   }
+}
+
+void Universe::removeObjectInternal(Object* object) {
+  // We don't erase the object from the list yet, we set it to null and then
+  // delete it when it is convenient.
+  auto it = std::find(std::begin(m_objects), std::end(m_objects), object);
+  if (it == std::end(m_objects))
+    return;
+
+  std::unique_ptr<Object> obj(*it);
+
+  // Remove all links that is connected to this.
+  removeLinksConnectedTo(obj.get());
 }

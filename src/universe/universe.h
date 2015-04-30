@@ -90,6 +90,9 @@ private:
   void createAsteroids(const sf::Vector2f& origin, float minRadius,
                        float maxRadius, size_t count);
 
+  // Do the actual work of deleting an object.
+  void removeObjectInternal(Object* object);
+
   // The resource manager we load everything from.
   ResourceManager* m_resourceManager{nullptr};
 
@@ -105,6 +108,9 @@ private:
 
   // A list of objects that was added while we were updateing other objects.
   std::vector<Object*> m_incomingObjects;
+
+  // A list used for all objects that need to be deleted.
+  std::vector<Object*> m_incomingRemoveObjects;
 
   // The total amount of power in the universe.
   int32_t m_totalPower{0};

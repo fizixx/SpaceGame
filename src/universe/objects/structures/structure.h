@@ -36,11 +36,16 @@ class Structure : public Object {
   DECLARE_STRUCTURE(Structure);
 
 public:
-  Structure(Universe* universe, ObjectType objectType);
+  Structure(Universe* universe, ObjectType objectType, int32_t hitPoints);
   ~Structure() override;
 
   // Override: Object
+  void shot(Projectile* projectile) override;
   void tick(float adjustment) override;
+
+protected:
+  // The amount of hit points that this structure has.
+  int32_t m_hitPoints{0};
 
 private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(Structure);

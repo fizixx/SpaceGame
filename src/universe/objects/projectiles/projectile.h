@@ -23,6 +23,8 @@ public:
              float direction, float speed);
   ~Projectile() override;
 
+  virtual int32_t getDamageAmount() const = 0;
+
   // Override: Object
   virtual void tick(float adjustment) override;
 

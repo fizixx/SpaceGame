@@ -20,6 +20,7 @@
 #include <nucleus/macros.h>
 #include <SFML/Graphics/Drawable.hpp>
 
+class Projectile;
 class Universe;
 
 #define DECLARE_OBJECT(ClassName)                                              \
@@ -55,6 +56,9 @@ public:
 
   // Calculate the distance from pos to this object.
   float calculateDistanceFrom(const sf::Vector2f& pos) const;
+
+  // This is called when we are shot by the specified projectile.
+  virtual void shot(Projectile* projectile);
 
   // Return true if we can link to this object.  Default is false.
   virtual bool canLink() const;
