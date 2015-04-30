@@ -16,6 +16,7 @@
 
 #include "universe/link.h"
 #include "universe/objects/object.h"
+#include "universe/objects/projectiles/bullet.h"
 #include "universe/objects/units/enemy_ship.h"
 #include "universe/universe.h"
 
@@ -192,6 +193,8 @@ void UniverseView::onKeyPressed(sf::Event& event) {
 void UniverseView::onKeyReleased(sf::Event& event) {
   if (event.key.code == sf::Keyboard::E) {
     placeEnemyShip(m_camera.mousePosToUniversePos(m_viewMousePos));
+  } else if (event.key.code == sf::Keyboard::B) {
+    placeBullet(m_camera.mousePosToUniversePos(m_viewMousePos), 0.f, 1.f);
   }
 }
 
@@ -232,6 +235,9 @@ void UniverseView::draw(sf::RenderTarget& target,
 
   // Render the objects.
   for (const auto& object : m_universe->m_objects) {
+    if (!object) {
+      continue;
+    }
     target.draw(*object);
   }
 
@@ -272,4 +278,9 @@ void UniverseView::updateGhostPosition(const sf::Vector2f& universeMousePos) {
 
 void UniverseView::placeEnemyShip(const sf::Vector2f& pos) {
   m_universe->createObject<EnemyShip>()->moveTo(pos);
+}
+
+void UniverseView::placeBullet(const sf::Vector2f& pos, float direction, float speed) {
+  m_universe->addObject(
+      std::move(std::make_unique<Bullet>(m_universe, pos, direction, speed)));
 }

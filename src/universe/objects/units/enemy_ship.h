@@ -49,6 +49,9 @@ private:
   // Create the shape that we use to show the engagement envelope of the ship.
   void createEngagementRangeShape();
 
+  // Shoot a projectile at the target.
+  void shoot();
+
   // The shape we use to render the ship.
   sf::VertexArray m_shape;
 
@@ -69,6 +72,9 @@ private:
 
   // The current target that we are travelling towards.
   sf::Vector2f m_travelTargetPos;
+
+  // Ticks since the last time we fired a shot.
+  float m_timeSinceLastShot{0.f};
 
 #if BUILD(DEBUG)
   // Info text that we print out with the ship.

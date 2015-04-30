@@ -61,15 +61,23 @@ Universe::~Universe() {
 }
 
 void Universe::addObject(std::unique_ptr<Object> object) {
-  m_objects.push_back(object.release());
+  if (m_useIncomingObjectList) {
+    m_incomingObjects.push_back(object.release());
+  } else {
+    m_objects.push_back(object.release());
+  }
 }
 
 void Universe::removeObject(Object* object) {
+  // We don't erase the object from the list yet, we set it to null and then
+  // delete it when it is convenient.
   auto it = std::find(std::begin(m_objects), std::end(m_objects), object);
   if (it == std::end(m_objects))
     return;
 
-  m_objects.erase(it);
+  Object* ptr = *it;
+  *it = nullptr;
+  delete ptr;
 }
 
 void Universe::addLink(Object* source, Object* destination) {
@@ -96,7 +104,7 @@ Object* Universe::getClosestLinkObject(const sf::Vector2f& pos) const {
   Object* bestObject = nullptr;
 
   for (const auto& object : m_objects) {
-    if (!object->canLink()) {
+    if (!object || !object->canLink()) {
       continue;
     }
 
@@ -112,7 +120,7 @@ Object* Universe::getClosestLinkObject(const sf::Vector2f& pos) const {
 
 Object* Universe::findObjectAt(const sf::Vector2f& pos) const {
   for (size_t i = m_objects.size() - 1; i != -1; --i) {
-    if (m_objects[i]->getBounds().contains(pos)) {
+    if (m_objects[i] && m_objects[i]->getBounds().contains(pos)) {
       return m_objects[i];
     }
   }
@@ -146,7 +154,7 @@ Object* Universe::findClosestObjectOfType(const sf::Vector2f& pos,
   Object* bestObject{nullptr};
 
   for (const auto& object : m_objects) {
-    if (object->getType() != objectType) {
+    if (!object || object->getType() != objectType) {
       continue;
     }
 
@@ -172,10 +180,26 @@ void Universe::tick(float adjustment) {
   // We start with 0 power so that we can calculate the total.
   m_totalPower = 0;
 
+  // Add any objects that might be in the incoming object list.
+  if (!m_incomingObjects.empty()) {
+    std::copy(std::begin(m_incomingObjects), std::end(m_incomingObjects),
+              std::back_inserter(m_objects));
+    m_incomingObjects.clear();
+  }
+
+  // Delete all the null objects.
+  m_objects.erase(
+      std::remove(std::begin(m_objects), std::end(m_objects), nullptr),
+      std::end(m_objects));
+
+  m_useIncomingObjectList = true;
+
   // Update each object.
   for (auto& object : m_objects) {
     object->tick(adjustment);
   }
+
+  m_useIncomingObjectList = false;
 }
 
 void Universe::createAsteroids(const sf::Vector2f& origin, float minRadius,

@@ -99,6 +99,13 @@ private:
   // The entire list of objects that exist in the universe.
   std::vector<Object*> m_objects;
 
+  // If this is true, we add objects to the incoming list and not directly to
+  // the object list.
+  bool m_useIncomingObjectList{false};
+
+  // A list of objects that was added while we were updateing other objects.
+  std::vector<Object*> m_incomingObjects;
+
   // The total amount of power in the universe.
   int32_t m_totalPower{0};
 

@@ -43,11 +43,10 @@ void Asteroid::moveTo(const sf::Vector2f& pos) {
 }
 
 sf::FloatRect Asteroid::getBounds() const {
-  return m_shape.getGlobalBounds();
+  return m_shape.getLocalBounds();
 }
 
 void Asteroid::tick(float adjustment) {
-
 }
 
 void Asteroid::draw(sf::RenderTarget& target,

@@ -16,9 +16,9 @@
 
 #include <sstream>
 
-#include <nucleus/logging.h>
 #include <SFML/Graphics/RenderTarget.hpp>
 
+#include "universe/objects/projectiles/bullet.h"
 #include "universe/universe.h"
 #include "utils/math.h"
 #include "utils/stream_operators.h"
@@ -132,6 +132,8 @@ void EnemyShip::tick(float adjustment) {
       const float distanceToTarget = distanceBetween(m_pos, m_travelTargetPos);
       if (distanceToTarget < kMaxEngagementRange) {
         m_task = Task::Attacking;
+        // Shoot as soon as we're attacking.
+        shoot();
       }
     }
   }
@@ -139,7 +141,13 @@ void EnemyShip::tick(float adjustment) {
   if (m_task == Task::Attacking) {
     // We don't move any more, but we only travel forward.
 
-    // TODO: Shoot! Shoot!
+    // If we are allowed to attack, then do it.
+    if (m_timeSinceLastShot > 100.f) {
+      shoot();
+      m_timeSinceLastShot = 0.f;
+    } else {
+      m_timeSinceLastShot += adjustment;
+    }
 
     m_speed = kMaxAttackSpeed;
 
@@ -210,7 +218,7 @@ void EnemyShip::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 
   states.transform.translate(m_pos);
   states.transform.rotate(m_direction);
-  target.draw(m_engagementRangeShape, states);
+  // target.draw(m_engagementRangeShape, states);
   target.draw(m_shape, states);
 
 #if BUILD(DEBUG)
@@ -259,4 +267,10 @@ void EnemyShip::createEngagementRangeShape() {
         std::sin(degToRad(half + degrees)) * kMaxEngagementRange;
     m_engagementRangeShape[i].color = color;
   }
+}
+
+void EnemyShip::shoot() {
+  auto bullet =
+      std::make_unique<Bullet>(m_universe, m_pos, m_direction, m_speed * 2.f);
+  m_universe->addObject(std::move(bullet));
 }

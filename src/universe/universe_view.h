@@ -77,6 +77,10 @@ private:
   // Place an enemy ship at the given universe location.
   void placeEnemyShip(const sf::Vector2f& pos);
 
+  // Place a bullet at a random direction and speed.
+  void UniverseView::placeBullet(const sf::Vector2f& pos, float direction,
+                                 float speed);
+
   // The universe we are looking at.
   Universe* m_universe;
 
