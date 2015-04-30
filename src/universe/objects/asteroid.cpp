@@ -43,7 +43,7 @@ void Asteroid::moveTo(const sf::Vector2f& pos) {
 }
 
 sf::FloatRect Asteroid::getBounds() const {
-  return m_shape.getLocalBounds();
+  return m_shape.getGlobalBounds();
 }
 
 void Asteroid::tick(float adjustment) {
@@ -55,5 +55,5 @@ void Asteroid::draw(sf::RenderTarget& target,
 }
 
 float Asteroid::getRadiusForMinerals(int32_t minerals) {
-  return 25.f + 0.005f * static_cast<float>(minerals);
+  return 25.f + 0.05f * static_cast<float>(minerals);
 }

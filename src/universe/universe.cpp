@@ -84,15 +84,12 @@ void Universe::addLink(Object* source, Object* destination) {
 
 void Universe::removeLinksConnectedTo(Object* object) {
   // Find links that are either sources or destinations of the specified object.
-  auto it = std::find_if(
-      std::begin(m_links), std::end(m_links), [object](Link* link) {
-        return link->getSource() == object || link->getDestination() == object;
-      });
-
-  if (it == std::end(m_links))
-    return;
-
-  m_links.erase(it);
+  m_links.erase(std::remove_if(std::begin(m_links), std::end(m_links),
+                               [object](Link* link) {
+                                 return link->getSource() == object ||
+                                        link->getDestination() == object;
+                               }),
+                std::end(m_links));
 }
 
 Object* Universe::getClosestLinkObject(const sf::Vector2f& pos) const {
@@ -245,7 +242,7 @@ void Universe::createAsteroids(const sf::Vector2f& origin, float minRadius,
                                           std::roundl(maxRadius) - minRadius)));
 
     // Get a random starting amount.
-    int32_t mineralCount = (std::rand() % 100) + 500;
+    int32_t mineralCount = (std::rand() % 1000) + 100;
 
     sf::Vector2f pos{origin.x + randRadius * std::cosf(randDirection),
                      origin.y + randRadius * std::sinf(randDirection)};
