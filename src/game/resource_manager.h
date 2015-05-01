@@ -25,6 +25,10 @@ public:
     Default,
   };
 
+  enum class Texture {
+    CommandCenter,
+  };
+
   ResourceManager();
   ~ResourceManager();
 
@@ -34,8 +38,12 @@ public:
   // Return the requested font.
   sf::Font* getFont(Font font);
 
+  // Return the requested texture.
+  sf::Texture* getTexture(Texture texture);
+
 private:
   el::ResourceStore<sf::Font, Font> m_fontStore;
+  el::ResourceStore<sf::Texture, Texture> m_textureStore;
 
   DISALLOW_COPY_AND_ASSIGN(ResourceManager);
 };

@@ -31,9 +31,19 @@ bool ResourceManager::loadAll(const std::string& root) {
     return false;
   }
 
+  if (!m_textureStore.load(Texture::CommandCenter,
+    loaders::fromFile<sf::Texture>(root + "images\\objects\\command_center.png"))) {
+    LOG(Error) << "Could not load command center texture.";
+    return false;
+  }
+
   return true;
 }
 
 sf::Font* ResourceManager::getFont(Font font) {
   return m_fontStore.get(font);
+}
+
+sf::Texture* ResourceManager::getTexture(Texture texture) {
+  return m_textureStore.get(texture);
 }

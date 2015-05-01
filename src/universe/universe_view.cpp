@@ -14,9 +14,8 @@
 
 #include "universe/universe_view.h"
 
-#include "universe/link.h"
 #include "universe/objects/object.h"
-#include "universe/objects/projectiles/bullet.h"
+#include "universe/objects/structures/miner.h"
 #include "universe/objects/structures/turret.h"
 #include "universe/objects/units/enemy_ship.h"
 #include "universe/universe.h"
@@ -38,23 +37,14 @@ UniverseView::~UniverseView() {
 
 void UniverseView::startPlacingObject(std::unique_ptr<Object> object) {
   m_ghostObject = std::move(object);
-
-  // Create the ghost link between the closest link object and the ghost object.
-  Object* closestLinkObject =
-      m_universe->getClosestLinkObject(m_ghostObject->getPos());
-  m_ghostLink = std::make_unique<Link>(m_universe, closestLinkObject,
-                                       m_ghostObject.get());
 }
 
 void UniverseView::stopPlacingObject(bool place) {
   if (place) {
     m_universe->addObject(std::move(m_ghostObject));
-    m_universe->addLink(m_ghostLink->getSource(),
-                        m_ghostLink->getDestination());
   } else {
     m_ghostObject.reset();
   }
-  m_ghostLink.reset();
 }
 
 bool UniverseView::onMousePressed(sf::Event& event) {
@@ -194,11 +184,12 @@ void UniverseView::onKeyPressed(sf::Event& event) {
 void UniverseView::onKeyReleased(sf::Event& event) {
   if (event.key.code == sf::Keyboard::E) {
     placeEnemyShip(m_camera.mousePosToUniversePos(m_viewMousePos));
-  } else if (event.key.code == sf::Keyboard::B) {
-    placeBullet(m_camera.mousePosToUniversePos(m_viewMousePos), 0.f, 1.f);
   } else if (event.key.code == sf::Keyboard::T) {
     startPlacingObject(std::make_unique<Turret>(
         m_universe, m_camera.mousePosToUniversePos(m_viewMousePos)));
+  } else if (event.key.code == sf::Keyboard::M) {
+    startPlacingObject(std::make_unique<Miner>(
+      m_universe, m_camera.mousePosToUniversePos(m_viewMousePos)));
   }
 }
 
@@ -226,16 +217,6 @@ void UniverseView::draw(sf::RenderTarget& target,
 
   // Set the new view to our camera view.
   target.setView(m_camera.getView());
-
-  // Render the links first.
-  for (const auto& link : m_universe->m_links) {
-    target.draw(*link);
-  }
-
-  // Render the ghost link with the rest of the links.
-  if (m_ghostLink) {
-    target.draw(*m_ghostLink);
-  }
 
   // Render the objects.
   for (const auto& object : m_universe->m_objects) {
@@ -269,19 +250,8 @@ void UniverseView::updateGhostPosition(const sf::Vector2f& universeMousePos) {
   if (m_ghostObject) {
     m_ghostObject->moveTo(universeMousePos);
   }
-
-  // Find a new link source and update the link.
-  if (m_ghostLink) {
-    Object* closestObject = m_universe->getClosestLinkObject(universeMousePos);
-    m_ghostLink->setSource(closestObject);
-  }
 }
 
 void UniverseView::placeEnemyShip(const sf::Vector2f& pos) {
   m_universe->addObject(std::make_unique<EnemyShip>(m_universe, pos));
-}
-
-void UniverseView::placeBullet(const sf::Vector2f& pos, float direction, float speed) {
-  m_universe->addObject(
-      std::move(std::make_unique<Bullet>(m_universe, pos, direction, speed)));
 }

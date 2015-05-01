@@ -77,10 +77,6 @@ private:
   // Place an enemy ship at the given universe location.
   void placeEnemyShip(const sf::Vector2f& pos);
 
-  // Place a bullet at a random direction and speed.
-  void UniverseView::placeBullet(const sf::Vector2f& pos, float direction,
-                                 float speed);
-
   // The universe we are looking at.
   Universe* m_universe;
 
@@ -108,10 +104,6 @@ private:
   // The current ghost object.  We own this pointer as it's not part of the
   // universe yet.
   std::unique_ptr<Object> m_ghostObject;
-
-  // The current ghost link.  We draw this link between the closest link object
-  // and the ghost object.
-  std::unique_ptr<Link> m_ghostLink;
 
 #if SHOW_UNIVERSE_MOUSE_POS
   // A shape to show where the current mouse position is in the universe.

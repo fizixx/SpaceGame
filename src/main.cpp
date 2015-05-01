@@ -75,7 +75,7 @@ int main() {
     gameState->tick(adjustment);
 
     // Clear the viewport with black.
-    window.clear(sf::Color(0, 0, 0));
+    window.clear(sf::Color(31, 31, 31, 255));
 
     // Draw the universe.
     window.draw(*gameState);

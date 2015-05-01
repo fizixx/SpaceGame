@@ -15,7 +15,7 @@
 #ifndef UNIVERSE_OBJECTS_STRUCTURES_COMMAND_CENTER_H_
 #define UNIVERSE_OBJECTS_STRUCTURES_COMMAND_CENTER_H_
 
-#include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 
 #include "universe/objects/structures/structure.h"
 
@@ -32,7 +32,11 @@ public:
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
-  sf::CircleShape m_shape;
+  // The texture to render the command center.
+  sf::Texture* m_texture;
+
+  // the shape we use to render the command center.
+  sf::Sprite m_shape;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(CommandCenter);
 };

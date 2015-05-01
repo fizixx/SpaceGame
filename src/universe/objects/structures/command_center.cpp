@@ -21,9 +21,17 @@
 DEFINE_STRUCTURE(CommandCenter, "Command Center", 2000, 0);
 
 CommandCenter::CommandCenter(Universe* universe, const sf::Vector2f& pos)
-  : Structure(universe, ObjectType::CommandCenter, pos, 5000), m_shape(100.f) {
-  m_shape.setOrigin(m_shape.getGlobalBounds().width / 2.f,
-                    m_shape.getGlobalBounds().height / 2.f);
+  : Structure(universe, ObjectType::CommandCenter, pos, 5000) {
+  m_texture = m_universe->getResourceManager()->getTexture(
+      ResourceManager::Texture::CommandCenter);
+
+  if (m_texture) {
+    m_texture->setSmooth(false);
+    m_shape.setTexture(*m_texture);
+    //m_shape.setScale(2.f, 2.f);
+    sf::FloatRect bounds = m_shape.getLocalBounds();
+    m_shape.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+  }
 }
 
 CommandCenter::~CommandCenter() {
@@ -43,5 +51,5 @@ void CommandCenter::tick(float adjustment) {
 void CommandCenter::draw(sf::RenderTarget& target,
                          sf::RenderStates states) const {
   states.transform.translate(m_pos);
-  target.draw(m_shape);
+  target.draw(m_shape, states);
 }

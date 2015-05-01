@@ -24,7 +24,6 @@ public:                                                                        \
   static const int32_t mineralCost;                                            \
   virtual int32_t getPowerCost() { return ClassName::powerCost; }              \
   virtual int32_t getMineralCost() { return ClassName::mineralCost; }          \
-  bool canLink() const override { return true; }                               \
   DECLARE_OBJECT(ClassName);
 
 #define DEFINE_STRUCTURE(ClassName, Label, PowerCost, MineralCost)             \
@@ -41,6 +40,7 @@ public:
   ~Structure() override;
 
   // Override: Object
+  bool canLink() const { return true; }
   void tick(float adjustment) override;
 
 private:

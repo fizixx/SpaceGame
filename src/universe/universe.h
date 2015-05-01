@@ -26,7 +26,6 @@
 #include "universe/objects/object.h"
 #include "universe/observers.h"
 
-class Link;
 class Object;
 
 class Universe {
@@ -41,10 +40,6 @@ public:
   // Add or remove objects from the universe.
   Object* addObject(std::unique_ptr<Object> object);
   void removeObject(Object* object);
-
-  // Add or remove links.
-  void addLink(Object* source, Object* destination);
-  void removeLinksConnectedTo(Object* object);
 
   // Given a position, find the closest object that can be linked to.  Returns
   // null if no point could be found.
@@ -96,9 +91,6 @@ private:
 
   // The resource manager we load everything from.
   ResourceManager* m_resourceManager{nullptr};
-
-  // The entire list of links that exist in the universe.
-  std::vector<Link*> m_links;
 
   // The entire list of objects that exist in the universe.
   std::vector<Object*> m_objects;

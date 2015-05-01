@@ -25,7 +25,6 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 
-#include "universe/link.h"
 #include "universe/objects/asteroid.h"
 #include "universe/objects/structures/command_center.h"
 #include "universe/objects/structures/power_generator.h"
@@ -39,19 +38,11 @@ Universe::Universe(ResourceManager* resourceManager)
   // addObject(std::make_unique<PowerGenerator>(this, sf::Vector2f{500.f, 250.f}));
   // addObject(std::make_unique<PowerGenerator>(this, sf::Vector2f{-450.f, 50.f}));
 
-  // addLink(m_objects[0], m_objects[1]);
-  // addLink(m_objects[0], m_objects[2]);
-
   createAsteroids(sf::Vector2f{0.f, 0.f}, 500.f, 5000.f, 100);
 }
 
 Universe::~Universe() {
   m_inDestructor = true;
-
-  // Delete all the links we own.
-  for (auto& link : m_links) {
-    delete link;
-  }
 
   // Delete all the objects we own.
   for (auto& object : m_objects) {
@@ -87,20 +78,6 @@ void Universe::removeObject(Object* object) {
   } else {
     removeObjectInternal(object);
   }
-}
-
-void Universe::addLink(Object* source, Object* destination) {
-  m_links.emplace_back(new Link{this, source, destination});
-}
-
-void Universe::removeLinksConnectedTo(Object* object) {
-  // Find links that are either sources or destinations of the specified object.
-  m_links.erase(std::remove_if(std::begin(m_links), std::end(m_links),
-                               [object](Link* link) {
-                                 return link->getSource() == object ||
-                                        link->getDestination() == object;
-                               }),
-                std::end(m_links));
 }
 
 Object* Universe::getClosestLinkObject(const sf::Vector2f& pos) const {
@@ -269,9 +246,6 @@ void Universe::removeObjectInternal(Object* object) {
   // Let all the observers know that this object is about to be removed.
   FOR_EACH_OBSERVER(RemoveObjectObserver, m_removeObjectObservers,
                     onRemovingObject(object));
-
-  // Remove all links that is connected to this.
-  removeLinksConnectedTo(object);
 
   delete *it;
   m_objects.erase(it);
