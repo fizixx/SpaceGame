@@ -21,16 +21,19 @@
 
 DEFINE_STRUCTURE(Miner, "Miner", -750, 1500);
 
-Miner::Miner(Universe* universe)
-  : Structure(universe, ObjectType::Miner, 1500), m_shape(75.f) {
+Miner::Miner(Universe* universe, const sf::Vector2f& pos)
+  : Structure(universe, ObjectType::Miner, pos, 1500), m_shape(75.f) {
   m_shape.setFillColor(sf::Color{0, 255, 255, 255});
   m_shape.setOrigin(m_shape.getGlobalBounds().width / 2.f,
                     m_shape.getGlobalBounds().height / 2.f);
 
   recreateLasers();
+
+  m_universe->addRemoveObjectObserver(this);
 }
 
 Miner::~Miner() {
+  m_universe->removeRemoveObjectObserver(this);
 }
 
 void Miner::moveTo(const sf::Vector2f& pos) {
@@ -46,6 +49,17 @@ sf::FloatRect Miner::getBounds() const {
   return m_shape.getGlobalBounds();
 }
 
+void Miner::tick(float adjustment) {
+  Structure::tick(adjustment);
+
+  if (m_lastMinedAsteroid > 100.f) {
+    mineAsteroids();
+    m_lastMinedAsteroid = 0.f;
+  } else {
+    m_lastMinedAsteroid += adjustment;
+  }
+}
+
 void Miner::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   // Draw all the lasers
   for (const auto& laser : m_lasers) {
@@ -54,6 +68,15 @@ void Miner::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 
   // Draw the miner itself.
   target.draw(m_shape, states);
+}
+
+void Miner::onRemovingObject(Object* object) {
+}
+
+void Miner::onObjectRemoved(Object* object) {
+  // We just blindly recreate the lasers to handle the fact that one of our
+  // asteroids might be gone.
+  recreateLasers();
 }
 
 Miner::Laser::Laser(Universe* universe, Miner* miner, Asteroid* asteroid)
@@ -89,8 +112,9 @@ void Miner::recreateLasers() {
   m_lasers.clear();
 
   // Find a list of all the astroids in our range.
-  std::vector<Object*> asteroids =
-      m_universe->findObjectsInRadius(ObjectType::Asteroid, m_pos, 500.f);
+  std::vector<Object*> asteroids;
+  m_universe->findObjectsInRadius(ObjectType::Asteroid, m_pos, 500.f,
+                                  &asteroids);
   if (asteroids.empty()) {
     return;
   }
@@ -99,5 +123,14 @@ void Miner::recreateLasers() {
   for (auto& asteroid : asteroids) {
     m_lasers.push_back(std::make_unique<Laser>(
         m_universe, this, static_cast<Asteroid*>(asteroid)));
+  }
+}
+
+void Miner::mineAsteroids() {
+  for (auto& laser : m_lasers) {
+    Asteroid* asteroid = laser->getAsteroid();
+    // Mine the asteroid.
+    int32_t amountMined = asteroid->mine(10);
+    m_universe->adjustMinerals(amountMined);
   }
 }

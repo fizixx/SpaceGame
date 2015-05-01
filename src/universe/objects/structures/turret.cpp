@@ -16,7 +16,7 @@
 
 #include <SFML/Graphics/RenderTarget.hpp>
 
-#include "universe/objects/projectiles/bullet.h"
+#include "universe/objects/projectiles/missile.h"
 #include "universe/universe.h"
 #include "utils/math.h"
 
@@ -28,24 +28,42 @@ const float kMaxAttachRange = 2500.f;
 
 }  // namespace
 
-Turret::Turret(Universe* universe)
-  : Structure(universe, ObjectType::Turret, 500) {
+Turret::Turret(Universe* universe, const sf::Vector2f& pos)
+  : Structure(universe, ObjectType::Turret, pos, 500) {
   // Set up the base shape.
-  m_baseShape.setRadius(50.f);
-  m_baseShape.setFillColor(sf::Color{0, 255, 0, 255});
-  m_baseShape.setOrigin(m_baseShape.getGlobalBounds().width / 2.f,
-                        m_baseShape.getGlobalBounds().height / 2.f);
+  {
+    m_baseShape.setRadius(50.f);
+    m_baseShape.setFillColor(sf::Color{0, 255, 0, 255});
+    sf::FloatRect bounds = m_baseShape.getLocalBounds();
+    m_baseShape.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+  }
 
   // Set up the turret shape.
-  m_turretShape.setSize(sf::Vector2f{70.f, 5.f});
-  m_turretShape.setFillColor(sf::Color{0, 127, 0, 255});
-  m_turretShape.setOrigin(sf::Vector2f{-35.0f, 2.5f});
+  {
+    m_launcherRailShape.setSize(sf::Vector2f{20.f, 40.f});
+    m_launcherRailShape.setFillColor(sf::Color{0, 127, 0, 255});
+    sf::FloatRect bounds = m_launcherRailShape.getLocalBounds();
+    m_launcherRailShape.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+  }
+
+  // Create our 3 missiles.
+  for (auto& missile : m_missiles) {
+    missile = static_cast<Missile*>(m_universe->addObject(
+        std::make_unique<Missile>(m_universe, m_pos, m_turretDirection)));
+  }
 
   m_universe->addRemoveObjectObserver(this);
 }
 
 Turret::~Turret() {
   m_universe->removeRemoveObjectObserver(this);
+
+  // If we die and we have missiles on the rail, then our missiles die too.
+  for (auto& missile : m_missiles) {
+    if (missile && !missile->isLaunched()) {
+      m_universe->removeObject(missile);
+    }
+  }
 }
 
 void Turret::shot(Projectile* projectile) {
@@ -56,23 +74,25 @@ void Turret::shot(Projectile* projectile) {
 }
 
 void Turret::moveTo(const sf::Vector2f& pos) {
-  Object::moveTo(pos);
-
-  m_baseShape.setPosition(pos);
-  m_turretShape.setPosition(pos);
+  Structure::moveTo(pos);
+  for (auto& missile : m_missiles) {
+    missile->moveTo(pos);
+  }
 }
 
 sf::FloatRect Turret::getBounds() const {
-  return m_baseShape.getGlobalBounds();
+  sf::FloatRect bounds = m_baseShape.getGlobalBounds();
+  bounds.left += m_pos.x;
+  bounds.top += m_pos.y;
+  return bounds;
 }
 
 void Turret::tick(float adjustment) {
   Structure::tick(adjustment);
 
   if (m_task == Task::Idle) {
-    // If we're idle, we act like a search radar until we find a target.
-    m_turretDirection += 1.f * adjustment;
-    m_turretShape.setRotation(m_turretDirection);
+    // Turn the rails as if they are searching for a target.
+    turnRail(m_turretDirection + 1.f * adjustment);
 
     m_target = findBestTarget();
     if (m_target) {
@@ -85,8 +105,7 @@ void Turret::tick(float adjustment) {
 
     // Snap the turret to the target for now.  In future we should have a max
     // turn radius.
-    m_turretDirection = directionToTarget;
-    m_turretShape.setRotation(m_turretDirection);
+    turnRail(directionToTarget);
 
     if (m_timeSinceLastShot > 100.f) {
       shoot();
@@ -98,18 +117,31 @@ void Turret::tick(float adjustment) {
 }
 
 void Turret::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-  target.draw(m_baseShape);
-  target.draw(m_turretShape);
+  states.transform.translate(m_pos);
+  target.draw(m_baseShape, states);
+  target.draw(m_launcherRailShape, states);
+}
+
+void Turret::onRemovingObject(Object* object) {
 }
 
 void Turret::onObjectRemoved(Object* object) {
+  // If the object is one of our missiles, then we should create a missile in
+  // it's place.
+  for (size_t i = 0; i < m_missiles.size(); ++i) {
+    if (m_missiles[i] == object) {
+      m_missiles[i] = static_cast<Missile*>(m_universe->addObject(
+          std::make_unique<Missile>(m_universe, m_pos, m_turretDirection)));
+    }
+  }
+
   // If the object that is about to removed is our target, then we need a new
   // target.
   if (object == m_target) {
     m_target = nullptr;
 
     // Go back to idle so that we can select a new target.
-    m_task == Task::Idle;
+    m_task = Task::Idle;
   }
 }
 
@@ -119,8 +151,39 @@ Object* Turret::findBestTarget() {
                                              kMaxAttachRange);
 }
 
+void Turret::turnRail(float direction) {
+  m_turretDirection = direction;
+  m_launcherRailShape.setRotation(m_turretDirection);
+
+  for (size_t i = 0; i < m_missiles.size(); ++i) {
+    // If the missile has been launched, we don't have control over it any more.
+    if (m_missiles[i]->isLaunched()) {
+      continue;
+    }
+
+    sf::Transform transform;
+    transform.rotate(direction);
+    m_missiles[i]->moveTo(
+        m_pos +
+        transform.transformPoint(
+            0.f, static_cast<float>(static_cast<int32_t>(i) - 1) * 15.f));
+    m_missiles[i]->setDirection(direction);
+  }
+}
+
 void Turret::shoot() {
-  auto bullet =
-      std::make_unique<Bullet>(m_universe, m_pos, m_turretDirection, 10.f);
-  m_universe->addObject(std::move(bullet));
+  // DCHECK(m_target) << "To launch a missile we need a target.";
+
+  // Find a missile that we can launch.
+  Missile* ready = nullptr;
+  for (size_t i = 0; i < m_missiles.size(); ++i) {
+    if (m_missiles[i] && !m_missiles[i]->isLaunched()) {
+      ready = m_missiles[i];
+      break;
+    }
+  }
+
+  if (ready) {
+    ready->launchAt(m_target);
+  }
 }

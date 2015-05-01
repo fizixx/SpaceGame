@@ -19,22 +19,13 @@
 
 class Projectile : public Object {
 public:
-  Projectile(Universe* universe, ObjectType objectType, const sf::Vector2f& pos,
-             float direction, float speed);
+  Projectile(Universe* universe, ObjectType objectType,
+             const sf::Vector2f& pos);
   ~Projectile() override;
 
   virtual int32_t getDamageAmount() const = 0;
 
-  // Override: Object
-  virtual void tick(float adjustment) override;
-
 private:
-  // The direction we are traveling in.
-  float m_direction{0.f};
-
-  // The speed we are travelling.
-  float m_speed{0.f};
-
   DISALLOW_COPY_AND_ASSIGN(Projectile);
 };
 

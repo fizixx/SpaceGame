@@ -15,17 +15,21 @@
 #ifndef UNIVERSE_OBJECTS_STRUCTURES_TURRET_H_
 #define UNIVERSE_OBJECTS_STRUCTURES_TURRET_H_
 
+#include <array>
+
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
 #include "universe/objects/structures/structure.h"
 #include "universe/observers.h"
 
+class Missile;
+
 class Turret : public Structure, public RemoveObjectObserver {
   DECLARE_STRUCTURE(Turret);
 
 public:
-  explicit Turret(Universe* universe);
+  Turret(Universe* universe, const sf::Vector2f& pos);
   ~Turret() override;
 
   // Override: Object
@@ -37,6 +41,7 @@ public:
                     sf::RenderStates states) const override;
 
   // Override: RemoveObjectObserver
+  void onRemovingObject(Object* object) override;
   void onObjectRemoved(Object* object) override;
 
 private:
@@ -47,6 +52,9 @@ private:
 
   // Find the best target to shoot at.
   Object* findBestTarget();
+
+  // Move the missiles into their positions on the rail.
+  void turnRail(float degrees);
 
   // Shoot the gun.
   void shoot();
@@ -63,11 +71,14 @@ private:
   // The time that has passed since the last shot was fired.
   float m_timeSinceLastShot{0.f};
 
+  // We have 3 missiles.
+  std::array<Missile*, 3> m_missiles;
+
   // The shape we use to render the base of the turret.
   sf::CircleShape m_baseShape;
 
   // The shape we use to render the turret.
-  sf::RectangleShape m_turretShape;
+  sf::RectangleShape m_launcherRailShape;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(Turret);
 };

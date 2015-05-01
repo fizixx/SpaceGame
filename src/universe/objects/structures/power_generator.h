@@ -23,12 +23,11 @@ class PowerGenerator : public Structure {
   DECLARE_STRUCTURE(PowerGenerator);
 
 public:
-  explicit PowerGenerator(Universe* universe);
+  PowerGenerator(Universe* universe, const sf::Vector2f& pos);
   ~PowerGenerator() override;
 
   // Override: Object
   void shot(Projectile* projectile) override;
-  void moveTo(const sf::Vector2f& pos) override;
   sf::FloatRect getBounds() const override;
   void draw(sf::RenderTarget& target,
                     sf::RenderStates states) const override;

@@ -35,8 +35,8 @@ const float kMaxEngagementRange = 750.f;
 
 }  // namespace
 
-EnemyShip::EnemyShip(Universe* universe)
-  : Unit(universe, ObjectType::EnemyShip),
+EnemyShip::EnemyShip(Universe* universe, const sf::Vector2f& pos)
+  : Unit(universe, ObjectType::EnemyShip, pos, 250),
     m_smokeEmitter(std::bind(&EnemyShip::createSmokeParticle, this,
                              std::placeholders::_1, std::placeholders::_2)) {
   // Set up the shape of the ship.
@@ -73,6 +73,10 @@ EnemyShip::~EnemyShip() {
 void EnemyShip::setTarget(Object* target) {
   m_target = target;
   m_task = Task::Nothing;
+}
+
+void EnemyShip::shot(Projectile* projectile) {
+  Unit::shot(projectile);
 }
 
 sf::FloatRect EnemyShip::getBounds() const {
@@ -242,12 +246,15 @@ void EnemyShip::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 #endif
 }
 
-void EnemyShip::onObjectRemoved(Object* object) {
+void EnemyShip::onRemovingObject(Object* object) {
   // If our target was removed, then we should do something else.
   if (object == m_target) {
     m_target = nullptr;
     m_task = Task::Nothing;
   }
+}
+
+void EnemyShip::onObjectRemoved(Object* object) {
 }
 
 Object* EnemyShip::selectBestTarget() {

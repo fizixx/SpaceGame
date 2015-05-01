@@ -19,6 +19,7 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 
 #include "universe/objects/object.h"
+#include "utils/math.h"
 
 Link::Link(Universe* universe, Object* source, Object* destination)
   : m_universe(universe), m_source(source), m_destination(destination) {
@@ -50,19 +51,17 @@ void Link::calculateShape() {
     return;
   }
 
-  const float kLinkWidth{15.f};
-
-  float xd = m_destination->getPos().x - m_source->getPos().x;
-  float yd = m_destination->getPos().y - m_source->getPos().y;
+  const float kLinkWidth{20.f};
 
   // Calculate the distance between the source and destination.
-  float distance = std::sqrtf(xd * xd + yd * yd);
+  float distance = distanceBetween(m_source->getPos(), m_destination->getPos());
 
   // Calculate the angle between the source and destination.
-  float angle = std::atan2(yd, xd) * 180.f / 3.1415f;
+  float angle = directionBetween(m_source->getPos(), m_destination->getPos());
 
   m_shape.setPosition(m_source->getPos());
-  m_shape.setSize(sf::Vector2f{kLinkWidth, distance});
-  m_shape.setOrigin(sf::Vector2f{kLinkWidth / 2.f, 0.f});
-  m_shape.setRotation(angle - 90.f);
+  m_shape.setSize(sf::Vector2f{distance, kLinkWidth});
+  sf::FloatRect bounds = m_shape.getLocalBounds();
+  m_shape.setOrigin(0.f, bounds.height / 2.f);
+  m_shape.setRotation(angle);
 }

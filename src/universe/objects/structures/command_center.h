@@ -23,15 +23,13 @@ class CommandCenter : public Structure {
   DECLARE_STRUCTURE(CommandCenter);
 
 public:
-  explicit CommandCenter(Universe* universe);
+  CommandCenter(Universe* universe, const sf::Vector2f& pos);
   virtual ~CommandCenter() override;
 
   // Override: Object
-  virtual void moveTo(const sf::Vector2f& pos) override;
-  virtual sf::FloatRect getBounds() const override;
-  virtual void tick(float adjustment) override;
-  virtual void draw(sf::RenderTarget& target,
-                    sf::RenderStates states) const override;
+  sf::FloatRect getBounds() const override;
+  void tick(float adjustment) override;
+  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
   sf::CircleShape m_shape;

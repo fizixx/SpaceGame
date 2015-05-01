@@ -15,7 +15,7 @@
 #ifndef UNIVERSE_OBJECTS_STRUCTURES_STRUCTURE_H_
 #define UNIVERSE_OBJECTS_STRUCTURES_STRUCTURE_H_
 
-#include "universe/objects/object.h"
+#include "universe/objects/destructible_object.h"
 
 #define DECLARE_STRUCTURE(ClassName)                                           \
   \
@@ -32,20 +32,16 @@ public:                                                                        \
   const int32_t ClassName::mineralCost = MineralCost;                          \
   DEFINE_OBJECT(ClassName, Label)
 
-class Structure : public Object {
+class Structure : public DestructibleObject {
   DECLARE_STRUCTURE(Structure);
 
 public:
-  Structure(Universe* universe, ObjectType objectType, int32_t hitPoints);
+  Structure(Universe* universe, ObjectType objectType, const sf::Vector2f& pos,
+            int32_t hitPoints);
   ~Structure() override;
 
   // Override: Object
-  void shot(Projectile* projectile) override;
   void tick(float adjustment) override;
-
-protected:
-  // The amount of hit points that this structure has.
-  int32_t m_hitPoints{0};
 
 private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(Structure);

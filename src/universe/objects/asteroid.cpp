@@ -20,12 +20,13 @@
 
 DEFINE_OBJECT(Asteroid, "Power Generator");
 
-Asteroid::Asteroid(Universe* universe, int32_t initialMinerals)
-  : Object(universe, ObjectType::Asteroid), m_minerals(initialMinerals),
-    m_shape(getRadiusForMinerals(m_minerals)) {
+Asteroid::Asteroid(Universe* universe, const sf::Vector2f& pos,
+                   int32_t initialMinerals)
+  : Object(universe, ObjectType::Asteroid, pos), m_minerals(initialMinerals) {
+  m_shape.setRadius(getRadiusForMinerals(m_minerals));
   m_shape.setFillColor(sf::Color{127, 127, 0, 255});
-  m_shape.setOrigin(m_shape.getGlobalBounds().width / 2.f,
-                    m_shape.getGlobalBounds().height / 2.f);
+  sf::FloatRect bounds = m_shape.getLocalBounds();
+  m_shape.setOrigin(sf::Vector2f{bounds.width / 2.f, bounds.height / 2.f});
 }
 
 Asteroid::~Asteroid() {
@@ -36,14 +37,26 @@ void Asteroid::setMiniralCount(int32_t mineralCount) {
   m_shape.setRadius(getRadiusForMinerals(m_minerals));
 }
 
-void Asteroid::moveTo(const sf::Vector2f& pos) {
-  Object::moveTo(pos);
+int32_t Asteroid::mine(int32_t amount) {
+  int32_t amountMined = std::min(m_minerals, amount);
 
-  m_shape.setPosition(pos);
+  m_minerals -= amount;
+
+  if (m_minerals < 0) {
+    // This asteroid is done, pop it.
+    m_universe->removeObject(this);
+  }
+
+  // Don't do anything to the asteroid here, because it is already deleted.
+
+  return amountMined;
 }
 
 sf::FloatRect Asteroid::getBounds() const {
-  return m_shape.getGlobalBounds();
+  sf::FloatRect bounds = m_shape.getGlobalBounds();
+  bounds.left += m_pos.x;
+  bounds.top += m_pos.y;
+  return bounds;
 }
 
 void Asteroid::tick(float adjustment) {
@@ -51,7 +64,8 @@ void Asteroid::tick(float adjustment) {
 
 void Asteroid::draw(sf::RenderTarget& target,
                           sf::RenderStates states) const {
-  target.draw(m_shape);
+  states.transform.translate(m_pos);
+  target.draw(m_shape, states);
 }
 
 float Asteroid::getRadiusForMinerals(int32_t minerals) {

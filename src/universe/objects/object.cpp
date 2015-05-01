@@ -20,8 +20,51 @@
 
 DEFINE_OBJECT(Object, "Object");
 
-Object::Object(Universe* universe, ObjectType objectType)
-  : m_universe(universe), m_objectType(objectType) {
+// static
+bool Object::isAsteroid(Object* object) {
+  return object->getType() == ObjectType::Asteroid;
+}
+
+// static
+bool Object::isStructure(Object* object) {
+  switch (object->getType()) {
+    case ObjectType::CommandCenter:
+    case ObjectType::PowerGenerator:
+    case ObjectType::Miner:
+    case ObjectType::Turret:
+      return true;
+
+    default:
+      return false;
+  }
+}
+
+// static
+bool Object::isProjectile(Object* object) {
+  switch (object->getType()) {
+    case ObjectType::Bullet:
+    case ObjectType::Missile:
+      return true;
+
+    default:
+      return false;
+  }
+}
+
+// static
+bool Object::isUnit(Object* object) {
+  switch (object->getType()) {
+    case ObjectType::EnemyShip:
+      return true;
+
+    default:
+      return false;
+  }
+}
+
+Object::Object(Universe* universe, ObjectType objectType,
+               const sf::Vector2f& pos)
+  : m_universe(universe), m_objectType(objectType), m_pos(pos) {
 }
 
 Object::~Object() {

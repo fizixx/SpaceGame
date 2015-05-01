@@ -19,16 +19,9 @@
 #include "utils/math.h"
 
 Projectile::Projectile(Universe* universe, ObjectType objectType,
-                       const sf::Vector2f& pos, float direction, float speed)
-  : Object(universe, objectType), m_direction(direction), m_speed(speed) {
-  m_pos = pos;
+                       const sf::Vector2f& pos)
+  : Object(universe, objectType, pos) {
 }
 
 Projectile::~Projectile() {
-}
-
-void Projectile::tick(float adjustment) {
-  // Advance the projectile by it's speed in the direction it's travelling.
-  m_pos = sf::Vector2f{m_pos.x + std::cos(degToRad(m_direction)) * m_speed,
-                       m_pos.y + std::sin(degToRad(m_direction)) * m_speed};
 }

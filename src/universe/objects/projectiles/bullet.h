@@ -27,12 +27,17 @@ public:
 
   // Override: Projectile
   int32_t getDamageAmount() const override { return 50; }
-  void moveTo(const sf::Vector2f& pos) override;
   sf::FloatRect getBounds() const override;
   void tick(float adjustment) override;
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
+  // The direction we are traveling in.
+  float m_direction{0.f};
+
+  // The speed we are travelling.
+  float m_speed{0.f};
+
   // The original position we started to travel from.
   sf::Vector2f m_originalPos;
 

@@ -31,22 +31,35 @@ public:                                                                        \
 
 #define DEFINE_OBJECT(ClassName, Label) const char* ClassName::typeName = Label
 
+// Objects are also rendered in this order, so take care when adding new types.
 enum class ObjectType {
-  None,
+  // Asteroidst
+  Asteroid,
+
+  // Structures
   CommandCenter,
   PowerGenerator,
   Miner,
   Turret,
-  Asteroid,
+
+  // Units
   EnemyShip,
+
+  // Projectiles
   Bullet,
+  Missile,
 };
 
 class Object : public sf::Drawable {
   DECLARE_OBJECT(Object);
 
 public:
-  explicit Object(Universe* universe, ObjectType type);
+  static bool isAsteroid(Object* object);
+  static bool isStructure(Object* object);
+  static bool isProjectile(Object* object);
+  static bool isUnit(Object* object);
+
+  Object(Universe* universe, ObjectType type, const sf::Vector2f& pos);
   virtual ~Object();
 
   // objectType

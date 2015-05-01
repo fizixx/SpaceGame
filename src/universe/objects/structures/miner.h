@@ -21,21 +21,27 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 
 #include "universe/objects/structures/structure.h"
+#include "universe/observers.h"
 
 class Asteroid;
 
-class Miner : public Structure {
+class Miner : public Structure, public RemoveObjectObserver {
   DECLARE_STRUCTURE(Miner);
 
 public:
-  explicit Miner(Universe* universe);
+  Miner(Universe* universe, const sf::Vector2f& pos);
   virtual ~Miner() override;
 
   // Override: Object
-  virtual void moveTo(const sf::Vector2f& pos) override;
-  virtual sf::FloatRect getBounds() const override;
-  virtual void draw(sf::RenderTarget& target,
+  void moveTo(const sf::Vector2f& pos) override;
+  sf::FloatRect getBounds() const override;
+  void tick(float adjustment) override;
+  void draw(sf::RenderTarget& target,
                     sf::RenderStates states) const override;
+
+  // Override: RemoveObjectObserver
+  void onRemovingObject(Object* object) override;
+  void onObjectRemoved(Object* object) override;
 
 private:
   // A class representing a laser to an asteroid.
@@ -43,6 +49,9 @@ private:
   public:
     Laser(Universe* universe, Miner* miner, Asteroid* asteroid);
     ~Laser();
+
+    // Get the asteroid we are mining.
+    Asteroid* getAsteroid() const { return m_asteroid; }
 
     // Override: sf::Drawable
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -65,6 +74,12 @@ private:
 
   // Recreate all the lasers pointing to valid minable asteroids.
   void recreateLasers();
+
+  // Mine all the asteroids we have lasers on.
+  void mineAsteroids();
+
+  // The time passed since the last time we mined all the asteroids.
+  float m_lastMinedAsteroid{0.f};
 
   // Lasers to asteroids.
   std::vector<std::unique_ptr<Laser>> m_lasers;

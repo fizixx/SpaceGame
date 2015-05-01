@@ -15,11 +15,12 @@
 #ifndef UNIVERSE_OBJECTS_UNITS_UNIT_H_
 #define UNIVERSE_OBJECTS_UNITS_UNIT_H_
 
-#include "universe/objects/object.h"
+#include "universe/objects/destructible_object.h"
 
-class Unit : public Object {
+class Unit : public DestructibleObject {
 public:
-  Unit(Universe* universe, ObjectType objectType);
+  Unit(Universe* universe, ObjectType objectType, const sf::Vector2f& pos,
+       int32_t hitPoints);
   ~Unit() override;
 
 private:

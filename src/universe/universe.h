@@ -39,17 +39,8 @@ public:
   ResourceManager* getResourceManager() const { return m_resourceManager; }
 
   // Add or remove objects from the universe.
-  void addObject(std::unique_ptr<Object> object);
+  Object* addObject(std::unique_ptr<Object> object);
   void removeObject(Object* object);
-
-  // Create an object in the universe.
-  template <typename ObjectType, typename... Args>
-  ObjectType* createObject(Args... args) {
-    // Insert the new object into the universe.
-    ObjectType* obj = new ObjectType{this, args...};
-    m_objects.emplace_back(obj);
-    return obj;
-  }
 
   // Add or remove links.
   void addLink(Object* source, Object* destination);
@@ -65,9 +56,9 @@ public:
 
   // Find a list of objects with in a radius to the origin with the specified
   // type.
-  std::vector<Object*> findObjectsInRadius(ObjectType objectType,
-                                           const sf::Vector2f& origin,
-                                           float radius) const;
+  void findObjectsInRadius(ObjectType objectType, const sf::Vector2f& origin,
+                           float radius,
+                           std::vector<Object*>* objectsOut) const;
 
   // Find the closest object to the given position of the specified type.
   Object* findClosestObjectOfType(
@@ -91,6 +82,9 @@ public:
 
 private:
   friend class UniverseView;
+
+  // Add an object internally.  This keeps the list of objects sorted in the correct order.
+  void addObjectInternal(Object* object);
 
   // Create count number of asteroids within the given radius around the given
   // origin.
@@ -118,6 +112,10 @@ private:
 
   // A list used for all objects that need to be deleted.
   std::vector<Object*> m_incomingRemoveObjects;
+
+  // Whether we are in the destructor or not.  If we are in the destructor, we
+  // don't add or remove any more objects.
+  bool m_inDestructor{false};
 
   // The total amount of power in the universe.
   int32_t m_totalPower{0};

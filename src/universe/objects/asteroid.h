@@ -22,17 +22,20 @@
 #include "universe/objects/object.h"
 
 class Asteroid : public Object {
-public:
   DECLARE_OBJECT(Asteroid);
 
-  Asteroid(Universe* universe, int32_t startingMinerals);
+public:
+  Asteroid(Universe* universe, const sf::Vector2f& pos,
+           int32_t startingMinerals);
   ~Asteroid() override;
 
   int32_t getMineralCount() const { return m_minerals; }
   void setMiniralCount(int32_t mineralCount);
 
+  // Mine the asteroid.
+  int32_t mine(int32_t amount);
+
   // Override: Object
-  void moveTo(const sf::Vector2f& pos) override;
   sf::FloatRect getBounds() const override;
   void tick(float adjustment) override;
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

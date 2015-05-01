@@ -27,18 +27,20 @@
 
 class EnemyShip : public Unit, public RemoveObjectObserver {
 public:
-  explicit EnemyShip(Universe* universe);
+  EnemyShip(Universe* universe, const sf::Vector2f& pos);
   ~EnemyShip() override;
 
   // Set the current target for the ship.
   void setTarget(Object* target);
 
   // Override: Unit
+  void shot(Projectile* projectile) override;
   sf::FloatRect getBounds() const override;
   void tick(float adjustment) override;
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
   // Override: RemoveObjectObserver
+  void onRemovingObject(Object* object) override;
   void onObjectRemoved(Object* object) override;
 
 private:

@@ -197,7 +197,8 @@ void UniverseView::onKeyReleased(sf::Event& event) {
   } else if (event.key.code == sf::Keyboard::B) {
     placeBullet(m_camera.mousePosToUniversePos(m_viewMousePos), 0.f, 1.f);
   } else if (event.key.code == sf::Keyboard::T) {
-    startPlacingObject(std::make_unique<Turret>(m_universe));
+    startPlacingObject(std::make_unique<Turret>(
+        m_universe, m_camera.mousePosToUniversePos(m_viewMousePos)));
   }
 }
 
@@ -238,10 +239,7 @@ void UniverseView::draw(sf::RenderTarget& target,
 
   // Render the objects.
   for (const auto& object : m_universe->m_objects) {
-    if (!object) {
-      continue;
-    }
-    target.draw(*object);
+    target.draw(*object, states);
   }
 
   // Render the ghost object and link over the existing objects.
@@ -280,7 +278,7 @@ void UniverseView::updateGhostPosition(const sf::Vector2f& universeMousePos) {
 }
 
 void UniverseView::placeEnemyShip(const sf::Vector2f& pos) {
-  m_universe->createObject<EnemyShip>()->moveTo(pos);
+  m_universe->addObject(std::make_unique<EnemyShip>(m_universe, pos));
 }
 
 void UniverseView::placeBullet(const sf::Vector2f& pos, float direction, float speed) {

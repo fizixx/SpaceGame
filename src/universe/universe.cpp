@@ -21,6 +21,7 @@
 #include <limits>
 #include <memory>
 
+#include <nucleus/logging.h>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 
@@ -28,29 +29,25 @@
 #include "universe/objects/asteroid.h"
 #include "universe/objects/structures/command_center.h"
 #include "universe/objects/structures/power_generator.h"
+#include "utils/math.h"
 
 Universe::Universe(ResourceManager* resourceManager)
   : m_resourceManager(resourceManager) {
   // Create a dummy universe.
 
-  auto commandCenter = createObject<CommandCenter>();
-  commandCenter->moveTo(sf::Vector2f{0.f, 0.f});
+  addObject(std::make_unique<CommandCenter>(this, sf::Vector2f{0.f, 0.f}));
+  // addObject(std::make_unique<PowerGenerator>(this, sf::Vector2f{500.f, 250.f}));
+  // addObject(std::make_unique<PowerGenerator>(this, sf::Vector2f{-450.f, 50.f}));
 
-  PowerGenerator* powerGenerator;
-
-  powerGenerator = createObject<PowerGenerator>();
-  powerGenerator->moveTo(sf::Vector2f{500.f, 250.f});
-
-  powerGenerator = createObject<PowerGenerator>();
-  powerGenerator->moveTo(sf::Vector2f{-450.f, 50.f});
-
-  addLink(m_objects[0], m_objects[1]);
-  addLink(m_objects[0], m_objects[2]);
+  // addLink(m_objects[0], m_objects[1]);
+  // addLink(m_objects[0], m_objects[2]);
 
   createAsteroids(sf::Vector2f{0.f, 0.f}, 500.f, 5000.f, 100);
 }
 
 Universe::~Universe() {
+  m_inDestructor = true;
+
   // Delete all the links we own.
   for (auto& link : m_links) {
     delete link;
@@ -62,17 +59,31 @@ Universe::~Universe() {
   }
 }
 
-void Universe::addObject(std::unique_ptr<Object> object) {
-  if (m_useIncomingObjectList) {
-    m_incomingObjects.push_back(object.release());
-  } else {
-    m_objects.push_back(object.release());
+Object* Universe::addObject(std::unique_ptr<Object> object) {
+  // If we are in the destructor, we don't do anything with the object, so it
+  // will just be destroyed.
+  if (m_inDestructor) {
+    return nullptr;
   }
+
+  Object* result = object.get();
+  if (m_useIncomingObjectList) {
+    m_incomingObjects.emplace_back(object.release());
+  } else {
+    addObjectInternal(object.release());
+  }
+  return result;
 }
 
 void Universe::removeObject(Object* object) {
+  // We don't remove objects if we're in the destructor, because we're busy
+  // deleting everything anyway.
+  if (m_inDestructor) {
+    return;
+  }
+
   if (m_useIncomingObjectList) {
-    m_incomingRemoveObjects.push_back(object);
+    m_incomingRemoveObjects.emplace_back(object);
   } else {
     removeObjectInternal(object);
   }
@@ -124,10 +135,10 @@ Object* Universe::findObjectAt(const sf::Vector2f& pos) const {
   return nullptr;
 }
 
-std::vector<Object*> Universe::findObjectsInRadius(ObjectType objectType,
-                                                   const sf::Vector2f& origin,
-                                                   float radius) const {
-  std::vector<Object*> results;
+void Universe::findObjectsInRadius(ObjectType objectType,
+                                   const sf::Vector2f& origin, float radius,
+                                   std::vector<Object*>* objectsOut) const {
+  // DCHECK(objectsOut);
 
   for (const auto& object : m_objects) {
     if (objectType != object->getType()) {
@@ -136,11 +147,9 @@ std::vector<Object*> Universe::findObjectsInRadius(ObjectType objectType,
 
     float distance = object->calculateDistanceFrom(origin);
     if (distance <= radius) {
-      results.push_back(object);
+      objectsOut->emplace_back(object);
     }
   }
-
-  return std::move(results);
 }
 
 Object* Universe::findClosestObjectOfType(const sf::Vector2f& pos,
@@ -188,27 +197,6 @@ void Universe::tick(float adjustment) {
     object->tick(adjustment);
   }
 
-  // Check for collision between bullets and structures.
-  for (auto& bullet : m_objects) {
-    if (bullet->getType() != ObjectType::Bullet) {
-      continue;
-    }
-
-    static const ObjectType kStructures[] = {ObjectType::CommandCenter,
-                                             ObjectType::PowerGenerator,
-                                             ObjectType::Miner};
-
-    for (size_t i = 0; i < ARRAY_SIZE(kStructures); ++i) {
-      std::vector<Object*> closeStructures =
-          findObjectsInRadius(kStructures[i], bullet->getPos(), 10.f);
-      // TODO: This will send a shot call to all objects even if the projectile
-      // was deleted.
-      for (auto& structure : closeStructures) {
-        structure->shot(reinterpret_cast<Projectile*>(bullet));
-      }
-    }
-  }
-
   m_useIncomingObjectList = false;
 
   // Remove items that is in the incoming remove list.
@@ -235,6 +223,17 @@ void Universe::removeRemoveObjectObserver(RemoveObjectObserver* observer) {
   m_removeObjectObservers.removeObserver(observer);
 }
 
+void Universe::addObjectInternal(Object* object) {
+  // Find the place where we have to insert the new object.
+  auto it = std::lower_bound(std::begin(m_objects), std::end(m_objects), object,
+                             [](Object* left, Object* right) {
+                               return left->getType() < right->getType();
+                             });
+
+  // Insert the new object.
+  m_objects.insert(it, object);
+}
+
 void Universe::createAsteroids(const sf::Vector2f& origin, float minRadius,
                                float maxRadius, size_t count) {
   const float kPi = 3.1415f;
@@ -254,8 +253,7 @@ void Universe::createAsteroids(const sf::Vector2f& origin, float minRadius,
 
     sf::Vector2f pos{origin.x + randRadius * std::cosf(randDirection),
                      origin.y + randRadius * std::sinf(randDirection)};
-    auto asteroid = createObject<Asteroid>(mineralCount);
-    asteroid->moveTo(pos);
+    addObject(std::make_unique<Asteroid>(this, pos, mineralCount));
   }
 }
 
@@ -263,17 +261,22 @@ void Universe::removeObjectInternal(Object* object) {
   // We don't erase the object from the list yet, we set it to null and then
   // delete it when it is convenient.
   auto it = std::find(std::begin(m_objects), std::end(m_objects), object);
-  if (it == std::end(m_objects))
+  if (it == std::end(m_objects)) {
+    LOG(Error) << "Trying to delete object that doesn't exist!";
     return;
+  }
 
   // Let all the observers know that this object is about to be removed.
   FOR_EACH_OBSERVER(RemoveObjectObserver, m_removeObjectObservers,
-                    onObjectRemoved(*it));
-
-  std::unique_ptr<Object> obj(*it);
+                    onRemovingObject(object));
 
   // Remove all links that is connected to this.
-  removeLinksConnectedTo(obj.get());
+  removeLinksConnectedTo(object);
 
+  delete *it;
   m_objects.erase(it);
+
+  // Let all the observers know that this object has been removed.
+  FOR_EACH_OBSERVER(RemoveObjectObserver, m_removeObjectObservers,
+                    onObjectRemoved(object));
 }

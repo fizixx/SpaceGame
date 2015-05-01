@@ -14,8 +14,9 @@
 
 #include "universe/objects/units/unit.h"
 
-Unit::Unit(Universe* universe, ObjectType objectType)
-  : Object(universe, objectType) {
+Unit::Unit(Universe* universe, ObjectType objectType, const sf::Vector2f& pos,
+           int32_t hitPoints)
+  : DestructibleObject(universe, objectType, pos, hitPoints) {
 }
 
 Unit::~Unit() {

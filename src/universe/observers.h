@@ -22,6 +22,11 @@ class Object;
 class RemoveObjectObserver {
 public:
   virtual ~RemoveObjectObserver();
+
+  // This is called before the object is deleted.
+  virtual void onRemovingObject(Object* object) = 0;
+
+  // This is called after the object is deleted.  So don't access object.
   virtual void onObjectRemoved(Object* object) = 0;
 };
 

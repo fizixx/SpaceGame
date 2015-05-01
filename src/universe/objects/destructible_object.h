@@ -12,21 +12,26 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "universe/objects/structures/structure.h"
+#ifndef UNIVERSE_OBJECTS_DESTRUCTIBLE_OBJECT_H_
+#define UNIVERSE_OBJECTS_DESTRUCTIBLE_OBJECT_H_
 
-#include "universe/universe.h"
-#include "universe/objects/projectiles/projectile.h"
+#include "universe/objects/object.h"
 
-DEFINE_STRUCTURE(Structure, "Structure", 0, 0);
+class DestructibleObject : public Object {
+public:
+  DestructibleObject(Universe* universe, ObjectType type,
+                     const sf::Vector2f& pos, int32_t hitPoints);
+  ~DestructibleObject() override;
 
-Structure::Structure(Universe* universe, ObjectType objectType,
-                     const sf::Vector2f& pos, int32_t hitPoints)
-  : DestructibleObject(universe, objectType, pos, hitPoints) {
-}
+  // Override: Object
+  void shot(Projectile* projectile) override;
 
-Structure::~Structure() {
-}
+protected:
+  // Our hitpoints.
+  int32_t m_hitPoints;
 
-void Structure::tick(float adjustment) {
-  m_universe->adjustPower(getPowerCost());
-}
+private:
+  DISALLOW_IMPLICIT_CONSTRUCTORS(DestructibleObject);
+};
+
+#endif  // UNIVERSE_OBJECTS_DESTRUCTIBLE_OBJECT_H_

@@ -64,22 +64,22 @@ void GameStateUniverse::tick(float adjustment) {
 void GameStateUniverse::onButtonClicked(el::ButtonView* sender) {
   if (sender == m_createPowerGeneratorButton) {
     // Create the power generator.
-    m_universeView->startPlacingObject(
-        std::make_unique<PowerGenerator>(m_universe.get()));
+    m_universeView->startPlacingObject(std::make_unique<PowerGenerator>(
+        m_universe.get(), sf::Vector2f{0.f, 0.f}));
     return;
   }
 
   if (sender == m_createMinerButton) {
     // Create the Miner.
     m_universeView->startPlacingObject(
-        std::make_unique<Miner>(m_universe.get()));
+        std::make_unique<Miner>(m_universe.get(), sf::Vector2f{0.f, 0.f}));
     return;
   }
 
   if (sender == m_createTurretButton) {
     // Create the Turret.
     m_universeView->startPlacingObject(
-        std::make_unique<Turret>(m_universe.get()));
+        std::make_unique<Turret>(m_universe.get(), sf::Vector2f{0.f, 0.f}));
     return;
   }
 }
