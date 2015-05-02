@@ -27,6 +27,9 @@ public:
 
   enum class Texture {
     CommandCenter,
+    Asteroid1,
+    Asteroid2,
+    Asteroid3,
   };
 
   ResourceManager();

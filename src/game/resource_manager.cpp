@@ -18,6 +18,21 @@
 
 #include "resources/sfml_loaders.h"
 
+namespace {
+
+static const struct {
+  ResourceManager::Texture texture;
+  const char* filename;
+} kTextures[] = {
+    {ResourceManager::Texture::CommandCenter,
+     "images\\objects\\command_center.png"},
+    {ResourceManager::Texture::Asteroid1, "images\\objects\\asteroid_1.png"},
+    {ResourceManager::Texture::Asteroid2, "images\\objects\\asteroid_2.png"},
+    {ResourceManager::Texture::Asteroid3, "images\\objects\\asteroid_3.png"},
+};
+
+}  // namespace
+
 ResourceManager::ResourceManager() {
 }
 
@@ -25,16 +40,19 @@ ResourceManager::~ResourceManager() {
 }
 
 bool ResourceManager::loadAll(const std::string& root) {
-  if (!m_fontStore.load(Font::Default,
-                        loaders::fromFile<sf::Font>(root + "fonts\\arial.ttf"))) {
+  if (!m_fontStore.load(Font::Default, loaders::fromFile<sf::Font>(
+                                           root + "fonts\\arial.ttf"))) {
     LOG(Error) << "Could not load default font.";
     return false;
   }
 
-  if (!m_textureStore.load(Texture::CommandCenter,
-    loaders::fromFile<sf::Texture>(root + "images\\objects\\command_center.png"))) {
-    LOG(Error) << "Could not load command center texture.";
-    return false;
+  for (size_t i = 0; i < ARRAY_SIZE(kTextures); ++i) {
+    if (!m_textureStore.load(kTextures[i].texture,
+                             loaders::fromFile<sf::Texture>(
+                                 root + std::string(kTextures[i].filename)))) {
+      LOG(Error) << "Could not load texture. (" << kTextures[i].filename << ")";
+      return false;
+    }
   }
 
   return true;

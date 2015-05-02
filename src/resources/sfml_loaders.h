@@ -47,6 +47,15 @@ el::ResourceLoader<ResourceType> fromFile(const std::string& filename) {
   }, filename);
 }
 
+template <>
+el::ResourceLoader<sf::Texture> fromFile(const std::string& filename) {
+  return detail::makeResourceLoader<sf::Texture>([=](sf::Texture& texture) {
+    bool success = texture.loadFromFile(filename);
+    texture.setSmooth(true);
+    return success;
+  }, filename);
+}
+
 }  // namespace loaders
 
 #endif  // RESOURCES_SFML_LOADERS_H_

@@ -23,10 +23,23 @@ DEFINE_OBJECT(Asteroid, "Power Generator");
 Asteroid::Asteroid(Universe* universe, const sf::Vector2f& pos,
                    int32_t initialMinerals)
   : Object(universe, ObjectType::Asteroid, pos), m_minerals(initialMinerals) {
-  m_shape.setRadius(getRadiusForMinerals(m_minerals));
-  m_shape.setFillColor(sf::Color{127, 127, 0, 255});
-  sf::FloatRect bounds = m_shape.getLocalBounds();
-  m_shape.setOrigin(sf::Vector2f{bounds.width / 2.f, bounds.height / 2.f});
+  // Set the rotation speed.
+  m_rotationSpeed = (static_cast<float>(std::rand() % 100) - 50.f) / 100.f;
+
+  ResourceManager::Texture texture = ResourceManager::Texture::Asteroid3;
+  if (m_minerals < 700) {
+    texture = ResourceManager::Texture::Asteroid2;
+  } else if (m_minerals < 400) {
+    texture = ResourceManager::Texture::Asteroid1;
+  }
+
+  m_texture = universe->getResourceManager()->getTexture(texture);
+
+  if (m_texture) {
+    m_shape.setTexture(*m_texture);
+    sf::FloatRect bounds = m_shape.getLocalBounds();
+    m_shape.setOrigin(sf::Vector2f{bounds.width / 2.f, bounds.height / 2.f});
+  }
 }
 
 Asteroid::~Asteroid() {
@@ -34,7 +47,6 @@ Asteroid::~Asteroid() {
 
 void Asteroid::setMiniralCount(int32_t mineralCount) {
   m_minerals = mineralCount;
-  m_shape.setRadius(getRadiusForMinerals(m_minerals));
 }
 
 int32_t Asteroid::mine(int32_t amount) {
@@ -60,14 +72,11 @@ sf::FloatRect Asteroid::getBounds() const {
 }
 
 void Asteroid::tick(float adjustment) {
+  m_shape.rotate(m_rotationSpeed);
 }
 
 void Asteroid::draw(sf::RenderTarget& target,
                           sf::RenderStates states) const {
   states.transform.translate(m_pos);
   target.draw(m_shape, states);
-}
-
-float Asteroid::getRadiusForMinerals(int32_t minerals) {
-  return 25.f + 0.05f * static_cast<float>(minerals);
 }

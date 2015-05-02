@@ -17,7 +17,7 @@
 
 #include <vector>
 
-#include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 
 #include "universe/objects/object.h"
 
@@ -41,14 +41,17 @@ public:
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
-  // Get the radius of the shape we are rendering based on the mineral amount.
-  float getRadiusForMinerals(int32_t minerals);
-
   // The amount of minerals we have.
   int32_t m_minerals;
 
+  // The speed we are rotating.
+  float m_rotationSpeed;
+
+  // The texture we use to render the asteroid.
+  sf::Texture* m_texture;
+
   // The shape we use to render the power generator.
-  sf::CircleShape m_shape;
+  sf::Sprite m_shape;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(Asteroid);
 };
