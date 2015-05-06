@@ -51,12 +51,8 @@ void Bullet::tick(float adjustment) {
 
   // Check if we collided with a structure.
   std::vector<Object*> possibles;
-  m_universe->findObjectsInRadius(ObjectType::CommandCenter, m_pos, 10.f,
-                                  &possibles);
-  m_universe->findObjectsInRadius(ObjectType::PowerGenerator, m_pos, 10.f,
-                                  &possibles);
-  m_universe->findObjectsInRadius(ObjectType::Miner, m_pos, 10.f, &possibles);
-  m_universe->findObjectsInRadius(ObjectType::Turret, m_pos, 10.f, &possibles);
+  m_universe->findObjectsInRadius(Object::objectTypesForStructures(), m_pos,
+                                  10.f, &possibles);
   if (!possibles.empty()) {
     // Just collide with the first one.
     possibles[0]->shot(this);

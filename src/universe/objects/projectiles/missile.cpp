@@ -108,8 +108,8 @@ void Missile::tick(float adjustment) {
 
     // See if we collided with any enemy ships.
     std::vector<Object*> enemyShips;
-    m_universe->findObjectsInRadius(ObjectType::EnemyShip, m_pos, 10.f,
-                                    &enemyShips);
+    m_universe->findObjectsInRadius(std::set<ObjectType>{ObjectType::EnemyShip},
+                                    m_pos, 10.f, &enemyShips);
     if (!enemyShips.empty()) {
       m_target->shot(this);
       shouldRemove = true;

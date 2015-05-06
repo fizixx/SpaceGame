@@ -14,6 +14,7 @@
 
 #include "universe/universe_view.h"
 
+#include "universe/link.h"
 #include "universe/objects/object.h"
 #include "universe/objects/structures/miner.h"
 #include "universe/objects/structures/turret.h"
@@ -217,6 +218,11 @@ void UniverseView::draw(sf::RenderTarget& target,
 
   // Set the new view to our camera view.
   target.setView(m_camera.getView());
+
+  // Render all the links in the universe.
+  for (const auto& link : m_universe->m_links) {
+    target.draw(*link, states);
+  }
 
   // Render the objects.
   for (const auto& object : m_universe->m_objects) {

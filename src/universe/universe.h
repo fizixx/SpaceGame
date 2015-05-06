@@ -16,6 +16,7 @@
 #define UNIVERSE_UNIVERSE_H_
 
 #include <memory>
+#include <set>
 #include <vector>
 
 #include <nucleus/macros.h>
@@ -25,6 +26,7 @@
 #include "universe/camera.h"
 #include "universe/objects/object.h"
 
+class Link;
 class Object;
 
 class Universe {
@@ -48,14 +50,17 @@ public:
 
   // Find a list of objects with in a radius to the origin with the specified
   // type.
-  void findObjectsInRadius(ObjectType objectType, const sf::Vector2f& origin,
-                           float radius,
+  void findObjectsInRadius(const std::set<ObjectType>& objectTypes,
+                           const sf::Vector2f& origin, float radius,
                            std::vector<Object*>* objectsOut) const;
 
   // Find the closest object to the given position of the specified type.
   Object* findClosestObjectOfType(
       const sf::Vector2f& pos, ObjectType objectType,
       float maxRange = std::numeric_limits<float>::max());
+
+  // Create links for the specified object.  This will only create links in one direction.
+  void createLinksFor(Object* object);
 
   // Power
   int32_t getPower() const { return m_totalPower; }
@@ -103,6 +108,9 @@ private:
 
   // A list used for all objects that need to be deleted.
   std::vector<Object*> m_incomingRemoveObjects;
+
+  // All the links that exist in the universe.
+  std::vector<Link*> m_links;
 
   // Whether we are in the destructor or not.  If we are in the destructor, we
   // don't add or remove any more objects.

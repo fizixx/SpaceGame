@@ -257,7 +257,7 @@ Object* EnemyShip::selectBestTarget() {
   }
 
   bestTarget =
-      m_universe->findClosestObjectOfType(m_pos, ObjectType::PowerGenerator);
+      m_universe->findClosestObjectOfType(m_pos, ObjectType::PowerRelay);
   if (bestTarget) {
     return bestTarget;
   }

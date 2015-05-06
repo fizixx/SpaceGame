@@ -25,6 +25,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 
+#include "universe/link.h"
 #include "universe/objects/asteroid.h"
 #include "universe/objects/structures/command_center.h"
 #include "universe/objects/structures/power_relay.h"
@@ -91,13 +92,13 @@ Object* Universe::findObjectAt(const sf::Vector2f& pos) const {
   return nullptr;
 }
 
-void Universe::findObjectsInRadius(ObjectType objectType,
+void Universe::findObjectsInRadius(const std::set<ObjectType>& objectTypes,
                                    const sf::Vector2f& origin, float radius,
                                    std::vector<Object*>* objectsOut) const {
-  // DCHECK(objectsOut);
+  DCHECK(objectsOut);
 
   for (const auto& object : m_objects) {
-    if (objectType != object->getType()) {
+    if (!objectTypes.count(object->getType())) {
       continue;
     }
 
@@ -134,6 +135,56 @@ Object* Universe::findClosestObjectOfType(const sf::Vector2f& pos,
   return bestObject;
 }
 
+void Universe::createLinksFor(Object* object) {
+  if (!Object::isStructure(object)) {
+    return;
+  }
+
+  std::vector<Object*> objectsToLinkTo;
+
+  if (object->getType() == ObjectType::PowerRelay) {
+    // If we are creating links from a power relay, we create a link between us
+    // and every other power relay in range.
+    findObjectsInRadius(Object::objectTypesForStructures(), object->getPos(),
+                        1500.f, &objectsToLinkTo);
+  } else {
+    // If we are a normal structure, we create links between us and the closest
+    // power relay.
+    Object* linkTo = findClosestObjectOfType(object->getPos(),
+                                             ObjectType::PowerRelay, 1500.f);
+    if (linkTo) {
+      objectsToLinkTo.emplace_back(linkTo);
+    }
+  }
+
+  for (auto& linkTo : objectsToLinkTo) {
+    // Can't link to ourselves.
+    if (linkTo == object) {
+      continue;
+    }
+
+    if (linkTo->getType() == ObjectType::PowerRelay) {
+      // Make sure there isn't a link between object and linkTo already.
+      auto it = std::find_if(std::begin(m_links), std::end(m_links),
+                             [&object, &linkTo](Link* link) {
+                               return link->getSource() == object &&
+                                      link->getDestination() == linkTo;
+                             });
+      if (it != std::end(m_links)) {
+        // We already have a link between these objects, so continue to the
+        // next.
+        continue;
+      }
+
+      // Add the new link.
+      m_links.push_back(new Link{this, object, linkTo});
+    }
+
+    // We also create links the other way.
+    createLinksFor(linkTo);
+  }
+}
+
 void Universe::adjustPower(int32_t amount) {
   m_totalPower += amount;
 }
@@ -151,6 +202,11 @@ void Universe::tick(float adjustment) {
   // Update each object.
   for (auto& object : m_objects) {
     object->tick(adjustment);
+  }
+
+  // Update all the links.
+  for (auto& link : m_links) {
+    link->tick(adjustment);
   }
 
   m_useIncomingObjectList = false;
@@ -180,6 +236,9 @@ void Universe::addObjectInternal(Object* object) {
 
   // Insert the new object.
   m_objects.insert(it, object);
+
+  // Create links for the newly added object.
+  createLinksFor(object);
 }
 
 void Universe::createAsteroids(const sf::Vector2f& origin, float minRadius,
