@@ -25,7 +25,7 @@
 
 class Asteroid;
 
-class Miner : public Structure, public RemoveObjectObserver {
+class Miner : public Structure {
   DECLARE_STRUCTURE(Miner);
 
 public:
@@ -38,10 +38,6 @@ public:
   void tick(float adjustment) override;
   void draw(sf::RenderTarget& target,
                     sf::RenderStates states) const override;
-
-  // Override: RemoveObjectObserver
-  void onRemovingObject(Object* object) override;
-  void onObjectRemoved(Object* object) override;
 
 private:
   // A class representing a laser to an asteroid.
@@ -72,6 +68,9 @@ private:
     DISALLOW_IMPLICIT_CONSTRUCTORS(Laser);
   };
 
+  // Called when the universe removed an object.
+  void onObjectRemoved(Object* object);
+
   // Recreate all the lasers pointing to valid minable asteroids.
   void recreateLasers();
 
@@ -83,6 +82,9 @@ private:
 
   // Lasers to asteroids.
   std::vector<std::unique_ptr<Laser>> m_lasers;
+
+  // Id for the removed object slot.
+  size_t m_removedObjectId;
 
   // The shape we use to render the power generator.
   sf::CircleShape m_shape;

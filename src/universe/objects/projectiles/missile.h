@@ -21,7 +21,7 @@
 
 #include "universe/observers.h"
 
-class Missile : public Projectile, public RemoveObjectObserver {
+class Missile : public Projectile {
 public:
   Missile(Universe* universe, sf::Vector2f& pos, float direction);
   ~Missile() override;
@@ -41,10 +41,6 @@ public:
   void tick(float adjustment) override;
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-  // Override: RemoveObjectObserver
-  void onRemovingObject(Object* object) override;
-  void onObjectRemoved(Object* object) override;
-
 private:
   enum class Task {
     Idle,
@@ -52,6 +48,9 @@ private:
     Tracking,
     Exploding,
   };
+
+  // Called when the universe removed an object.
+  void onObjectRemoved(Object* object);
 
   // The direction we are currently travelling.
   float m_direction;
@@ -67,6 +66,9 @@ private:
 
   // The time that has passed since we were launched.
   float m_timeSinceLaunch{0.f};
+
+  // Id for the ObjectRemoved slot.
+  size_t m_objectRemovedSlotId;
 
   // The shape we use to render the missile.
   sf::VertexArray m_shape;

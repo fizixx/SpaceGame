@@ -25,7 +25,7 @@
 
 class Missile;
 
-class Turret : public Structure, public RemoveObjectObserver {
+class Turret : public Structure {
   DECLARE_STRUCTURE(Turret);
 
 public:
@@ -37,12 +37,7 @@ public:
   void moveTo(const sf::Vector2f& pos) override;
   sf::FloatRect getBounds() const override;
   void tick(float adjustment) override;
-  void draw(sf::RenderTarget& target,
-                    sf::RenderStates states) const override;
-
-  // Override: RemoveObjectObserver
-  void onRemovingObject(Object* object) override;
-  void onObjectRemoved(Object* object) override;
+  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
   enum class Task {
@@ -59,6 +54,9 @@ private:
   // Shoot the gun.
   void shoot();
 
+  // Called when the universe removed an object.
+  void onObjectRemoved(Object* object);
+
   // The direction the turret is facing.
   float m_turretDirection{0.f};
 
@@ -73,6 +71,9 @@ private:
 
   // We have 3 missiles.
   std::array<Missile*, 3> m_missiles;
+
+  // The RemovedObject slot id.
+  size_t m_removedObjectSlotId;
 
   // The shape we use to render the base of the turret.
   sf::CircleShape m_baseShape;

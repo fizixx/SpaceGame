@@ -36,11 +36,13 @@ Missile::Missile(Universe* universe, sf::Vector2f& pos, float direction)
   m_shape.append(
       sf::Vertex{sf::Vector2f{-10.f, -5.f}, sf::Color{255, 0, 0, 255}});
 
-  m_universe->addRemoveObjectObserver(this);
+  m_objectRemovedSlotId = m_universe->getObjectRemovedSignal().connect(
+      nu::slot(&Missile::onObjectRemoved, this));
 }
 
 Missile::~Missile() {
-  m_universe->removeRemoveObjectObserver(this);
+  DCHECK(
+      m_universe->getObjectRemovedSignal().disconnect(m_objectRemovedSlotId));
 }
 
 void Missile::launchAt(Object* target) {
@@ -127,7 +129,10 @@ void Missile::tick(float adjustment) {
   }
 }
 
-void Missile::onRemovingObject(Object* object) {
+void Missile::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+  states.transform.translate(m_pos);
+  states.transform.rotate(m_direction);
+  target.draw(m_shape, states);
 }
 
 void Missile::onObjectRemoved(Object* object) {
@@ -135,10 +140,4 @@ void Missile::onObjectRemoved(Object* object) {
   if (object == m_target) {
     m_universe->removeObject(this);
   }
-}
-
-void Missile::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-  states.transform.translate(m_pos);
-  states.transform.rotate(m_direction);
-  target.draw(m_shape, states);
 }

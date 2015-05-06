@@ -29,11 +29,12 @@ Miner::Miner(Universe* universe, const sf::Vector2f& pos)
 
   recreateLasers();
 
-  m_universe->addRemoveObjectObserver(this);
+  m_removedObjectId = m_universe->getObjectRemovedSignal().connect(
+      nu::slot(&Miner::onObjectRemoved, this));
 }
 
 Miner::~Miner() {
-  m_universe->removeRemoveObjectObserver(this);
+  m_universe->getObjectRemovedSignal().disconnect(m_removedObjectId);
 }
 
 void Miner::moveTo(const sf::Vector2f& pos) {
@@ -70,15 +71,6 @@ void Miner::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   target.draw(m_shape, states);
 }
 
-void Miner::onRemovingObject(Object* object) {
-}
-
-void Miner::onObjectRemoved(Object* object) {
-  // We just blindly recreate the lasers to handle the fact that one of our
-  // asteroids might be gone.
-  recreateLasers();
-}
-
 Miner::Laser::Laser(Universe* universe, Miner* miner, Asteroid* asteroid)
   : m_universe(universe), m_miner(miner), m_asteroid(asteroid) {
   // Set up the shape to point to the right thing.
@@ -105,6 +97,12 @@ Miner::Laser::~Laser() {
 void Miner::Laser::draw(sf::RenderTarget& target,
                         sf::RenderStates states) const {
   target.draw(m_shape, states);
+}
+
+void Miner::onObjectRemoved(Object* object) {
+  // We just blindly recreate the lasers to handle the fact that one of our
+  // asteroids might be gone.
+  recreateLasers();
 }
 
 void Miner::recreateLasers() {

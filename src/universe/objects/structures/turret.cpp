@@ -52,11 +52,12 @@ Turret::Turret(Universe* universe, const sf::Vector2f& pos)
         std::make_unique<Missile>(m_universe, m_pos, m_turretDirection)));
   }
 
-  m_universe->addRemoveObjectObserver(this);
+  m_removedObjectSlotId = m_universe->getObjectRemovedSignal().connect(
+      nu::slot(&Turret::onObjectRemoved, this));
 }
 
 Turret::~Turret() {
-  m_universe->removeRemoveObjectObserver(this);
+  m_universe->getObjectRemovedSignal().disconnect(m_removedObjectSlotId);
 
   // If we die and we have missiles on the rail, then our missiles die too.
   for (auto& missile : m_missiles) {
@@ -122,29 +123,6 @@ void Turret::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   target.draw(m_launcherRailShape, states);
 }
 
-void Turret::onRemovingObject(Object* object) {
-}
-
-void Turret::onObjectRemoved(Object* object) {
-  // If the object is one of our missiles, then we should create a missile in
-  // it's place.
-  for (size_t i = 0; i < m_missiles.size(); ++i) {
-    if (m_missiles[i] == object) {
-      m_missiles[i] = static_cast<Missile*>(m_universe->addObject(
-          std::make_unique<Missile>(m_universe, m_pos, m_turretDirection)));
-    }
-  }
-
-  // If the object that is about to removed is our target, then we need a new
-  // target.
-  if (object == m_target) {
-    m_target = nullptr;
-
-    // Go back to idle so that we can select a new target.
-    m_task = Task::Idle;
-  }
-}
-
 Object* Turret::findBestTarget() {
   // Just find the closest enemy ship for now.
   return m_universe->findClosestObjectOfType(m_pos, ObjectType::EnemyShip,
@@ -185,5 +163,25 @@ void Turret::shoot() {
 
   if (ready) {
     ready->launchAt(m_target);
+  }
+}
+
+void Turret::onObjectRemoved(Object* object) {
+  // If the object is one of our missiles, then we should create a missile in
+  // it's place.
+  for (size_t i = 0; i < m_missiles.size(); ++i) {
+    if (m_missiles[i] == object) {
+      m_missiles[i] = static_cast<Missile*>(m_universe->addObject(
+          std::make_unique<Missile>(m_universe, m_pos, m_turretDirection)));
+    }
+  }
+
+  // If the object that is about to removed is our target, then we need a new
+  // target.
+  if (object == m_target) {
+    m_target = nullptr;
+
+    // Go back to idle so that we can select a new target.
+    m_task = Task::Idle;
   }
 }

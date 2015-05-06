@@ -19,17 +19,18 @@
 #include <vector>
 
 #include <nucleus/macros.h>
-#include <nucleus/utils/observer_list.h>
+#include <nucleus/utils/signals.h>
 
 #include "game/resource_manager.h"
 #include "universe/camera.h"
 #include "universe/objects/object.h"
-#include "universe/observers.h"
 
 class Object;
 
 class Universe {
 public:
+  using ObjectRemovedSignal = nu::Signal<void(Object*)>;
+
   // Construct the universe with the specified viewport size.
   explicit Universe(ResourceManager* resourceManager);
   ~Universe();
@@ -71,14 +72,16 @@ public:
   // Update the entire universe.  This should run at 60fps.
   void tick(float adjustment);
 
-  // RemoveObjectObserver
-  void addRemoveObjectObserver(RemoveObjectObserver* observer);
-  void removeRemoveObjectObserver(RemoveObjectObserver* observer);
+  // Signal that will let slots know that we removed an object.
+  ObjectRemovedSignal& getObjectRemovedSignal() {
+    return m_objectRemovedSignal;
+  }
 
 private:
   friend class UniverseView;
 
-  // Add an object internally.  This keeps the list of objects sorted in the correct order.
+  // Add an object internally.  This keeps the list of objects sorted in the
+  // correct order.
   void addObjectInternal(Object* object);
 
   // Create count number of asteroids within the given radius around the given
@@ -115,9 +118,8 @@ private:
   // The total amount of minerals in the universe.
   int32_t m_totalMinerals{5000};
 
-  // A list of observers that is interested in when objects are removed from the
-  // universe.
-  nu::ObserverList<RemoveObjectObserver, true> m_removeObjectObservers;
+  // Signal that is emitted when an object is removed from the universe.
+  ObjectRemovedSignal m_objectRemovedSignal;
 
   DISALLOW_COPY_AND_ASSIGN(Universe);
 };

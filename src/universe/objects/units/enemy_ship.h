@@ -23,9 +23,8 @@
 #include <SFML/Graphics/VertexArray.hpp>
 
 #include "particles/particle_emitter.h"
-#include "universe/observers.h"
 
-class EnemyShip : public Unit, public RemoveObjectObserver {
+class EnemyShip : public Unit {
 public:
   EnemyShip(Universe* universe, const sf::Vector2f& pos);
   ~EnemyShip() override;
@@ -38,10 +37,6 @@ public:
   sf::FloatRect getBounds() const override;
   void tick(float adjustment) override;
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-
-  // Override: RemoveObjectObserver
-  void onRemovingObject(Object* object) override;
-  void onObjectRemoved(Object* object) override;
 
 private:
   enum class Task {
@@ -59,6 +54,9 @@ private:
 
   // Shoot a projectile at the target.
   void shoot();
+
+  // Called when the universe removed an object.
+  void onObjectRemoved(Object* object);
 
   // Factory function to create a smoke particle.
   Particle* createSmokeParticle(ParticleEmitter* emitter,
@@ -97,6 +95,8 @@ private:
 #endif  // BUILD(DEBUG)
 
   int stepper{0};
+
+  size_t objectRemovedId;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(EnemyShip);
 };

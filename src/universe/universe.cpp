@@ -192,14 +192,6 @@ void Universe::tick(float adjustment) {
   }
 }
 
-void Universe::addRemoveObjectObserver(RemoveObjectObserver* observer) {
-  m_removeObjectObservers.addObserver(observer);
-}
-
-void Universe::removeRemoveObjectObserver(RemoveObjectObserver* observer) {
-  m_removeObjectObservers.removeObserver(observer);
-}
-
 void Universe::addObjectInternal(Object* object) {
   // Find the place where we have to insert the new object.
   auto it = std::lower_bound(std::begin(m_objects), std::end(m_objects), object,
@@ -243,14 +235,9 @@ void Universe::removeObjectInternal(Object* object) {
     return;
   }
 
-  // Let all the observers know that this object is about to be removed.
-  FOR_EACH_OBSERVER(RemoveObjectObserver, m_removeObjectObservers,
-                    onRemovingObject(object));
-
   delete *it;
   m_objects.erase(it);
 
-  // Let all the observers know that this object has been removed.
-  FOR_EACH_OBSERVER(RemoveObjectObserver, m_removeObjectObservers,
-                    onObjectRemoved(object));
+  // Emit the signal that the specified object has been removed.
+  m_objectRemovedSignal.emit(object);
 }

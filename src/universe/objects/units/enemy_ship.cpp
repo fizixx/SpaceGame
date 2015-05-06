@@ -62,12 +62,12 @@ EnemyShip::EnemyShip(Universe* universe, const sf::Vector2f& pos)
 
   createEngagementRangeShape();
 
-  // We want to know when objects are removed from the universe.
-  m_universe->addRemoveObjectObserver(this);
+  objectRemovedId = m_universe->getObjectRemovedSignal().connect(
+      nu::slot(&EnemyShip::onObjectRemoved, this));
 }
 
 EnemyShip::~EnemyShip() {
-  m_universe->removeRemoveObjectObserver(this);
+  m_universe->getObjectRemovedSignal().disconnect(objectRemovedId);
 }
 
 void EnemyShip::setTarget(Object* target) {
@@ -246,17 +246,6 @@ void EnemyShip::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 #endif
 }
 
-void EnemyShip::onRemovingObject(Object* object) {
-  // If our target was removed, then we should do something else.
-  if (object == m_target) {
-    m_target = nullptr;
-    m_task = Task::Nothing;
-  }
-}
-
-void EnemyShip::onObjectRemoved(Object* object) {
-}
-
 Object* EnemyShip::selectBestTarget() {
   Object* bestTarget = nullptr;
 
@@ -311,6 +300,14 @@ void EnemyShip::shoot() {
   auto bullet =
       std::make_unique<Bullet>(m_universe, m_pos, m_direction, m_speed * 2.f);
   m_universe->addObject(std::move(bullet));
+}
+
+void EnemyShip::onObjectRemoved(Object* object) {
+  // If our target was removed, then we should do something else.
+  if (object == m_target) {
+    m_target = nullptr;
+    m_task = Task::Nothing;
+  }
 }
 
 Particle* EnemyShip::createSmokeParticle(ParticleEmitter* emitter,
