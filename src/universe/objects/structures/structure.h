@@ -40,7 +40,6 @@ public:
   ~Structure() override;
 
   // Override: Object
-  bool canLink() const { return true; }
   void tick(float adjustment) override;
 
 private:

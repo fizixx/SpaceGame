@@ -74,9 +74,6 @@ public:
   // This is called when we are shot by the specified projectile.
   virtual void shot(Projectile* projectile);
 
-  // Return true if we can link to this object.  Default is false.
-  virtual bool canLink() const;
-
   // Move the object to the specified coordinates.
   virtual void moveTo(const sf::Vector2f& pos);
 

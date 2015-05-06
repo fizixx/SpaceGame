@@ -80,27 +80,6 @@ void Universe::removeObject(Object* object) {
   }
 }
 
-Object* Universe::getClosestLinkObject(const sf::Vector2f& pos) const {
-  // Go through each object and calculate the distance to the pos, overriding
-  // the best one as we go.
-  float bestDistance = std::numeric_limits<float>::max();
-  Object* bestObject = nullptr;
-
-  for (const auto& object : m_objects) {
-    if (!object->canLink()) {
-      continue;
-    }
-
-    float distance = object->calculateDistanceFrom(pos);
-    if (distance < bestDistance) {
-      bestDistance = distance;
-      bestObject = object;
-    }
-  }
-
-  return bestObject;
-}
-
 Object* Universe::findObjectAt(const sf::Vector2f& pos) const {
   for (size_t i = m_objects.size() - 1; i != -1; --i) {
     if (m_objects[i] && m_objects[i]->getBounds().contains(pos)) {

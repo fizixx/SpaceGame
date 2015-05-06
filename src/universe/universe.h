@@ -42,10 +42,6 @@ public:
   Object* addObject(std::unique_ptr<Object> object);
   void removeObject(Object* object);
 
-  // Given a position, find the closest object that can be linked to.  Returns
-  // null if no point could be found.
-  Object* getClosestLinkObject(const sf::Vector2f& pos) const;
-
   // Find the object that is at the specified location.  This function takes
   // z-order into account for objects that might be overlapping.
   Object* findObjectAt(const sf::Vector2f& pos) const;

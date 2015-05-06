@@ -74,10 +74,6 @@ void Object::shot(Projectile* projectile) {
   // By default we do nothing when we are shot.
 }
 
-bool Object::canLink() const {
-  return false;
-}
-
 void Object::moveTo(const sf::Vector2f& pos) {
   m_pos = pos;
 }
