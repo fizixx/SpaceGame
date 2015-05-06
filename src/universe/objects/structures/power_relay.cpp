@@ -12,40 +12,39 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "universe/objects/structures/power_generator.h"
+#include "universe/objects/structures/power_relay.h"
 
 #include <SFML/Graphics/RenderTarget.hpp>
 
 #include "universe/universe.h"
 
-DEFINE_STRUCTURE(PowerGenerator, "Power Generator", 500, 1000);
+DEFINE_STRUCTURE(PowerRelay, "Power Relay", 500, 1000);
 
-PowerGenerator::PowerGenerator(Universe* universe, const sf::Vector2f& pos)
+PowerRelay::PowerRelay(Universe* universe, const sf::Vector2f& pos)
   : Structure(universe, ObjectType::PowerGenerator, pos, 500), m_shape(50.f) {
   m_shape.setFillColor(sf::Color{255, 255, 0, 255});
   m_shape.setOrigin(m_shape.getGlobalBounds().width / 2.f,
                     m_shape.getGlobalBounds().height / 2.f);
 }
 
-PowerGenerator::~PowerGenerator() {
+PowerRelay::~PowerRelay() {
 }
 
-void PowerGenerator::shot(Projectile* projectile) {
+void PowerRelay::shot(Projectile* projectile) {
   Structure::shot(projectile);
 
   m_shape.setFillColor(
       sf::Color{255, 255, 0, static_cast<sf::Uint8>(255 * m_hitPoints / 500)});
 }
 
-sf::FloatRect PowerGenerator::getBounds() const {
+sf::FloatRect PowerRelay::getBounds() const {
   sf::FloatRect bounds = m_shape.getGlobalBounds();
   bounds.left += m_pos.x;
   bounds.top += m_pos.y;
   return bounds;
 }
 
-void PowerGenerator::draw(sf::RenderTarget& target,
-                          sf::RenderStates states) const {
+void PowerRelay::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   states.transform.translate(m_pos);
   target.draw(m_shape, states);
 }

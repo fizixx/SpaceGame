@@ -27,7 +27,7 @@
 
 #include "universe/objects/asteroid.h"
 #include "universe/objects/structures/command_center.h"
-#include "universe/objects/structures/power_generator.h"
+#include "universe/objects/structures/power_relay.h"
 #include "utils/math.h"
 
 Universe::Universe(ResourceManager* resourceManager)

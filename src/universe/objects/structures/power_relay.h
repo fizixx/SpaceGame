@@ -12,31 +12,30 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef UNIVERSE_OBJECTS_STRUCTURES_POWER_GENERATOR_H_
-#define UNIVERSE_OBJECTS_STRUCTURES_POWER_GENERATOR_H_
+#ifndef UNIVERSE_OBJECTS_STRUCTURES_POWER_RELAY_H_
+#define UNIVERSE_OBJECTS_STRUCTURES_POWER_RELAY_H_
 
 #include <SFML/Graphics/CircleShape.hpp>
 
 #include "universe/objects/structures/structure.h"
 
-class PowerGenerator : public Structure {
-  DECLARE_STRUCTURE(PowerGenerator);
+class PowerRelay : public Structure {
+  DECLARE_STRUCTURE(PowerRelay);
 
 public:
-  PowerGenerator(Universe* universe, const sf::Vector2f& pos);
-  ~PowerGenerator() override;
+  PowerRelay(Universe* universe, const sf::Vector2f& pos);
+  ~PowerRelay() override;
 
   // Override: Object
   void shot(Projectile* projectile) override;
   sf::FloatRect getBounds() const override;
-  void draw(sf::RenderTarget& target,
-                    sf::RenderStates states) const override;
+  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
   // The shape we use to render the power generator.
   sf::CircleShape m_shape;
 
-  DISALLOW_IMPLICIT_CONSTRUCTORS(PowerGenerator);
+  DISALLOW_IMPLICIT_CONSTRUCTORS(PowerRelay);
 };
 
-#endif  // UNIVERSE_OBJECTS_STRUCTURES_POWER_GENERATOR_H_
+#endif  // UNIVERSE_OBJECTS_STRUCTURES_POWER_RELAY_H_

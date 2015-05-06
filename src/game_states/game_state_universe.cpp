@@ -19,7 +19,7 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 
 #include "universe/objects/structures/miner.h"
-#include "universe/objects/structures/power_generator.h"
+#include "universe/objects/structures/power_relay.h"
 #include "universe/objects/structures/turret.h"
 #include "universe/universe_view.h"
 
@@ -64,7 +64,7 @@ void GameStateUniverse::tick(float adjustment) {
 void GameStateUniverse::onButtonClicked(el::ButtonView* sender) {
   if (sender == m_createPowerGeneratorButton) {
     // Create the power generator.
-    m_universeView->startPlacingObject(std::make_unique<PowerGenerator>(
+    m_universeView->startPlacingObject(std::make_unique<PowerRelay>(
         m_universe.get(), sf::Vector2f{0.f, 0.f}));
     return;
   }
@@ -130,7 +130,7 @@ void GameStateUniverse::createUserInterface(el::Context* context,
   buttonContainer->setProportion(1);
 
   m_createPowerGeneratorButton =
-      new el::ButtonView(context, buttonLabelForObject<PowerGenerator>(), this);
+      new el::ButtonView(context, buttonLabelForObject<PowerRelay>(), this);
   m_createPowerGeneratorButton->setName("createPowerGenerator");
   m_createPowerGeneratorButton->setMinSize(sf::Vector2i{300, 0});
   buttonContainer->addChild(m_createPowerGeneratorButton);
