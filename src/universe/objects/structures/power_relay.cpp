@@ -21,7 +21,7 @@
 DEFINE_STRUCTURE(PowerRelay, "Power Relay", 500, 1000);
 
 PowerRelay::PowerRelay(Universe* universe, const sf::Vector2f& pos)
-  : Structure(universe, ObjectType::PowerGenerator, pos, 500), m_shape(50.f) {
+  : Structure(universe, ObjectType::PowerRelay, pos, 500), m_shape(50.f) {
   m_shape.setFillColor(sf::Color{255, 255, 0, 255});
   m_shape.setOrigin(m_shape.getGlobalBounds().width / 2.f,
                     m_shape.getGlobalBounds().height / 2.f);

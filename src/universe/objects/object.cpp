@@ -20,6 +20,11 @@
 
 DEFINE_OBJECT(Object, "Object");
 
+std::set<ObjectType> Object::objectTypesForStructures() {
+  return std::set<ObjectType>{ObjectType::CommandCenter, ObjectType::PowerRelay,
+                              ObjectType::Miner, ObjectType::Turret};
+}
+
 // static
 bool Object::isAsteroid(Object* object) {
   return object->getType() == ObjectType::Asteroid;
@@ -29,7 +34,7 @@ bool Object::isAsteroid(Object* object) {
 bool Object::isStructure(Object* object) {
   switch (object->getType()) {
     case ObjectType::CommandCenter:
-    case ObjectType::PowerGenerator:
+    case ObjectType::PowerRelay:
     case ObjectType::Miner:
     case ObjectType::Turret:
       return true;

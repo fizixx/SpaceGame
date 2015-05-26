@@ -111,8 +111,8 @@ void Miner::recreateLasers() {
 
   // Find a list of all the astroids in our range.
   std::vector<Object*> asteroids;
-  m_universe->findObjectsInRadius(ObjectType::Asteroid, m_pos, 500.f,
-                                  &asteroids);
+  m_universe->findObjectsInRadius(std::set<ObjectType>{ObjectType::Asteroid},
+                                  m_pos, 500.f, &asteroids);
   if (asteroids.empty()) {
     return;
   }

@@ -16,6 +16,7 @@
 #define UNIVERSE_OBJECTS_OBJECT_H_
 
 #include <cstdint>
+#include <set>
 
 #include <nucleus/macros.h>
 #include <SFML/Graphics/Drawable.hpp>
@@ -38,7 +39,7 @@ enum class ObjectType {
 
   // Structures
   CommandCenter,
-  PowerGenerator,
+  PowerRelay,
   Miner,
   Turret,
 
@@ -54,6 +55,8 @@ class Object : public sf::Drawable {
   DECLARE_OBJECT(Object);
 
 public:
+  static std::set<ObjectType> objectTypesForStructures();
+
   static bool isAsteroid(Object* object);
   static bool isStructure(Object* object);
   static bool isProjectile(Object* object);
