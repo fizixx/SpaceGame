@@ -14,18 +14,18 @@
 
 #include "universe/objects/structures/miner.h"
 
-#include <SFML/Graphics/RenderTarget.hpp>
-
 #include "universe/universe.h"
 #include "universe/objects/asteroid.h"
 
 DEFINE_STRUCTURE(Miner, "Miner", -750, 1500);
 
-Miner::Miner(Universe* universe, const sf::Vector2f& pos)
-  : Structure(universe, ObjectType::Miner, pos, 1500), m_shape(75.f) {
+Miner::Miner(Universe* universe, const ca::Vec2& pos)
+  : Structure(universe, ObjectType::Miner, pos, 1500) {
+#if 0
   m_shape.setFillColor(sf::Color{0, 255, 255, 255});
   m_shape.setOrigin(m_shape.getGlobalBounds().width / 2.f,
                     m_shape.getGlobalBounds().height / 2.f);
+#endif  // 0
 
   recreateLasers();
 
@@ -37,17 +37,22 @@ Miner::~Miner() {
   m_universe->getObjectRemovedSignal().disconnect(m_removedObjectId);
 }
 
-void Miner::moveTo(const sf::Vector2f& pos) {
+void Miner::moveTo(const ca::Vec2& pos) {
   Structure::moveTo(pos);
 
+#if 0
   m_shape.setPosition(pos);
+#endif  // 0
 
   // We have move position, so recreate all our lasers.
   recreateLasers();
 }
 
-sf::FloatRect Miner::getBounds() const {
+ca::Rect<f32> Miner::getBounds() const {
+#if 0
   return m_shape.getGlobalBounds();
+#endif  // 0
+  return ca::Rect<f32>{};
 }
 
 void Miner::tick(float adjustment) {
@@ -61,7 +66,8 @@ void Miner::tick(float adjustment) {
   }
 }
 
-void Miner::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+void Miner::render(ca::Canvas* canvas) const {
+#if 0
   // Draw all the lasers
   for (const auto& laser : m_lasers) {
     target.draw(*laser, states);
@@ -69,6 +75,7 @@ void Miner::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 
   // Draw the miner itself.
   target.draw(m_shape, states);
+#endif  // 0
 }
 
 Miner::Laser::Laser(Universe* universe, Miner* miner, Asteroid* asteroid)
@@ -85,18 +92,21 @@ Miner::Laser::Laser(Universe* universe, Miner* miner, Asteroid* asteroid)
   // Calculate the angle between the source and destination.
   float angle = std::atan2(yd, xd) * 180.f / 3.1415f;
 
+#if 0
   m_shape.setPosition(m_miner->getPos());
   m_shape.setSize(sf::Vector2f{kLaserWidth, distance});
   m_shape.setOrigin(sf::Vector2f{kLaserWidth / 2.f, 0.f});
   m_shape.setRotation(angle - 90.f);
+#endif  // 0
 }
 
 Miner::Laser::~Laser() {
 }
 
-void Miner::Laser::draw(sf::RenderTarget& target,
-                        sf::RenderStates states) const {
+void Miner::Laser::render(ca::Canvas* canvas) const {
+#if 0
   target.draw(m_shape, states);
+#endif  // 0
 }
 
 void Miner::onObjectRemoved(Object* object) {

@@ -15,25 +15,25 @@
 #ifndef UNIVERSE_OBJECTS_STRUCTURES_POWER_RELAY_H_
 #define UNIVERSE_OBJECTS_STRUCTURES_POWER_RELAY_H_
 
-#include <SFML/Graphics/CircleShape.hpp>
-
 #include "universe/objects/structures/structure.h"
 
 class PowerRelay : public Structure {
   DECLARE_STRUCTURE(PowerRelay);
 
 public:
-  PowerRelay(Universe* universe, const sf::Vector2f& pos);
+  PowerRelay(Universe* universe, const ca::Vec2& pos);
   ~PowerRelay() override;
 
   // Override: Object
   void shot(Projectile* projectile) override;
-  sf::FloatRect getBounds() const override;
-  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+  ca::Rect<f32> getBounds() const override;
+  void render(ca::Canvas* canvas) const override;
 
 private:
   // The shape we use to render the power generator.
+#if 0
   sf::CircleShape m_shape;
+#endif  // 0
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(PowerRelay);
 };

@@ -15,20 +15,20 @@
 #ifndef PARTICLES_PARTICLE_H_
 #define PARTICLES_PARTICLE_H_
 
-#include <nucleus/macros.h>
-#include <SFML/Graphics/CircleShape.hpp>
-#include <SFML/Graphics/Drawable.hpp>
+#include "canvas/math/vec2.h"
+#include "canvas/rendering/canvas.h"
+#include "nucleus/macros.h"
 
 class ParticleEmitter;
 
-class Particle : public sf::Drawable {
+class Particle {
 public:
-  Particle(ParticleEmitter* emitter, const sf::Vector2f& pos);
+  Particle(ParticleEmitter* emitter, const ca::Vec2& pos);
   ~Particle();
 
   // Get/set position.
-  const sf::Vector2f& getPos() const { return m_pos; }
-  void setPos(const sf::Vector2f& pos);
+  const ca::Vec2& getPos() const { return m_pos; }
+  void setPos(const ca::Vec2& pos);
 
   // Returns true if the particle is dead and should be removed.
   bool isDead() const { return m_life <= 0; }
@@ -37,14 +37,14 @@ public:
   virtual void tick(float adjustment);
 
   // Override: sf::Drawable
-  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+  void render(ca::Canvas* canvas) const;
 
 private:
   // The emitter that created us.
   ParticleEmitter* m_emitter;
 
   // Our position.
-  sf::Vector2f m_pos;
+  ca::Vec2 m_pos;
 
   // The lifetime of the particle.
   float m_lifeTime{100.f};
@@ -53,7 +53,9 @@ private:
   float m_life{m_lifeTime};
 
   // The shape we use to render the particle.
+#if 0
   sf::CircleShape m_shape;
+#endif  // 0
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(Particle);
 };

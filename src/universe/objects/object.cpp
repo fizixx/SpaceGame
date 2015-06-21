@@ -67,8 +67,7 @@ bool Object::isUnit(Object* object) {
   }
 }
 
-Object::Object(Universe* universe, ObjectType objectType,
-               const sf::Vector2f& pos)
+Object::Object(Universe* universe, ObjectType objectType, const ca::Vec2& pos)
   : m_universe(universe), m_objectType(objectType), m_pos(pos) {
 }
 
@@ -79,10 +78,10 @@ void Object::shot(Projectile* projectile) {
   // By default we do nothing when we are shot.
 }
 
-void Object::moveTo(const sf::Vector2f& pos) {
+void Object::moveTo(const ca::Vec2& pos) {
   m_pos = pos;
 }
 
-float Object::calculateDistanceFrom(const sf::Vector2f& pos) const {
+float Object::calculateDistanceFrom(const ca::Vec2& pos) const {
   return distanceBetween(m_pos, pos);
 }

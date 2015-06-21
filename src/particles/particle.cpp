@@ -16,27 +16,30 @@
 
 #include <cmath>
 
-#include <SFML/Graphics/RenderTarget.hpp>
-
-Particle::Particle(ParticleEmitter* emitter, const sf::Vector2f& pos)
+Particle::Particle(ParticleEmitter* emitter, const ca::Vec2& pos)
   : m_emitter(emitter), m_pos(pos) {
   // Set up the particle shape.
+#if 0
   m_shape.setRadius(15.f);
   m_shape.setFillColor(sf::Color{255, 255, 255});
   sf::FloatRect bounds = m_shape.getLocalBounds();
   m_shape.setOrigin(sf::Vector2f{bounds.width / 2.f, bounds.height / 2.f});
   m_shape.setPosition(m_pos);
+#endif  // 0
 }
 
 Particle::~Particle() {
 }
 
-void Particle::setPos(const sf::Vector2f& pos) {
+void Particle::setPos(const ca::Vec2& pos) {
   m_pos = pos;
+#if 0
   m_shape.setPosition(pos);
+#endif  // 0
 }
 
 void Particle::tick(float adjustment) {
+#if 0
   // Adjust the color of the particle.
   sf::Uint8 alpha =
       static_cast<sf::Uint8>(std::round(255.f * m_life / m_lifeTime));
@@ -48,8 +51,11 @@ void Particle::tick(float adjustment) {
 
   // Adjust the life of the particle.
   m_life -= m_lifeTime / 20.f;
+#endif  // 0
 }
 
-void Particle::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+void Particle::render(ca::Canvas* canvas) const {
+#if 0
   target.draw(m_shape);
+#endif  // 0
 }

@@ -15,7 +15,7 @@
 #ifndef UTILS_MATH_H_
 #define UTILS_MATH_H_
 
-#include <SFML/System/Vector2.hpp>
+#include "canvas/math/vec2.h"
 
 extern const float kPi;
 
@@ -41,9 +41,9 @@ inline T wrap(T value, T min, T max) {
 }
 
 // Calculate the distance between two points.
-float distanceBetween(const sf::Vector2f& p1, const sf::Vector2f& p2);
+float distanceBetween(const ca::Vec2& p1, const ca::Vec2& p2);
 
 // Calculate the direction between two points.
-float directionBetween(const sf::Vector2f& p1, const sf::Vector2f& p2);
+float directionBetween(const ca::Vec2& p1, const ca::Vec2& p2);
 
 #endif  // UTILS_MATH_H_

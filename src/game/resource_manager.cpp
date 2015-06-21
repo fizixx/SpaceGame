@@ -22,13 +22,16 @@ namespace {
 
 static const struct {
   ResourceManager::Texture texture;
-  const char* filename;
+  nu::FilePath::CharType* fileName;
 } kTextures[] = {
     {ResourceManager::Texture::CommandCenter,
-     "images\\objects\\command_center.png"},
-    {ResourceManager::Texture::Asteroid1, "images\\objects\\asteroid_1.png"},
-    {ResourceManager::Texture::Asteroid2, "images\\objects\\asteroid_2.png"},
-    {ResourceManager::Texture::Asteroid3, "images\\objects\\asteroid_3.png"},
+     FILE_PATH_LITERAL("images\\objects\\command_center.png")},
+    {ResourceManager::Texture::Asteroid1,
+     FILE_PATH_LITERAL("images\\objects\\asteroid_1.png")},
+    {ResourceManager::Texture::Asteroid2,
+     FILE_PATH_LITERAL("images\\objects\\asteroid_2.png")},
+    {ResourceManager::Texture::Asteroid3,
+     FILE_PATH_LITERAL("images\\objects\\asteroid_3.png")},
 };
 
 }  // namespace
@@ -39,18 +42,19 @@ ResourceManager::ResourceManager() {
 ResourceManager::~ResourceManager() {
 }
 
-bool ResourceManager::loadAll(const std::string& root) {
-  if (!m_fontStore.load(Font::Default, loaders::fromFile<sf::Font>(
-                                           root + "fonts\\arial.ttf"))) {
+bool ResourceManager::loadAll(const nu::FilePath& root) {
+  if (!m_fontStore.load(Font::Default,
+                        loaders::fromFile<ca::Font>(root.append(
+                            FILE_PATH_LITERAL("fonts\\arial.ttf"))))) {
     LOG(Error) << "Could not load default font.";
     return false;
   }
 
   for (size_t i = 0; i < ARRAY_SIZE(kTextures); ++i) {
     if (!m_textureStore.load(kTextures[i].texture,
-                             loaders::fromFile<sf::Texture>(
-                                 root + std::string(kTextures[i].filename)))) {
-      LOG(Error) << "Could not load texture. (" << kTextures[i].filename << ")";
+                             loaders::fromFile<ca::Texture>(
+                                 root.append(kTextures[i].fileName)))) {
+      LOG(Error) << "Could not load texture. (" << kTextures[i].fileName << ")";
       return false;
     }
   }
@@ -58,10 +62,10 @@ bool ResourceManager::loadAll(const std::string& root) {
   return true;
 }
 
-sf::Font* ResourceManager::getFont(Font font) {
+ca::Font* ResourceManager::getFont(Font font) {
   return m_fontStore.get(font);
 }
 
-sf::Texture* ResourceManager::getTexture(Texture texture) {
+ca::Texture* ResourceManager::getTexture(Texture texture) {
   return m_textureStore.get(texture);
 }

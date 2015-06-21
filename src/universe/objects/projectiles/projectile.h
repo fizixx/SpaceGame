@@ -19,8 +19,7 @@
 
 class Projectile : public Object {
 public:
-  Projectile(Universe* universe, ObjectType objectType,
-             const sf::Vector2f& pos);
+  Projectile(Universe* universe, ObjectType objectType, const ca::Vec2& pos);
   ~Projectile() override;
 
   virtual int32_t getDamageAmount() const = 0;

@@ -15,9 +15,8 @@
 #ifndef UNIVERSE_HUD_H_
 #define UNIVERSE_HUD_H_
 
-#include <nucleus/macros.h>
-
-#include <SFML/Graphics/RectangleShape.hpp>
+#include "canvas/math/vec2.h"
+#include "nucleus/macros.h"
 
 #include "utils/component.h"
 
@@ -31,7 +30,7 @@ public:
   ~Hud() override;
 
   // Called from the UniverseView whenever the mouse position has changed.
-  void updateUniverseMousePos(const sf::Vector2f& universeMousePos);
+  void updateUniverseMousePos(const ca::Vec2& universeMousePos);
 
   // Set the object that the mouse is currently hovering over.
   void setHoverObject(Object* object);
@@ -41,12 +40,14 @@ public:
 
   // Override: Component
   void tick(float adjustment) override;
-  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+  void render(ca::Canvas* canvas) const override;
 
 private:
   // Shapes the given rectangle around the give object.
+#if 0
   void adjustShapeOverObject(Object* object, sf::RectangleShape* shape,
                              int borderSize = 4);
+#endif  // 0
 
   // The universe we're operating on.
   UniverseView* m_universeView;
@@ -55,21 +56,25 @@ private:
   Universe* m_universe;
 
   // The current position of the mouse inside the universe.
-  sf::Vector2f m_universeMousePos;
+  ca::Vec2 m_universeMousePos;
 
   // The object currently under the mouse pointer at any given time.  null if
   // there are no objects under the mouse.
   Object* m_hoverObject{nullptr};
 
   // The shape used to render over the hover object.
+#if 0
   sf::RectangleShape m_hoverShape;
+#endif  // 0
 
   // The object that is currently selected.  null if no object is currently
   // selected.
   Object* m_selectedObject{nullptr};
 
   // The shape used to render over the selected object.
+#if 0
   sf::RectangleShape m_selectedShape;
+#endif  // 0
 
   // The object that we mouse down'd on.
   Object* m_mouseDownObject{nullptr};

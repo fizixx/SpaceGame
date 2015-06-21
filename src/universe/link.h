@@ -15,14 +15,13 @@
 #ifndef UNIVERSE_LINK_H_
 #define UNIVERSE_LINK_H_
 
-#include <nucleus/macros.h>
-#include <SFML/Graphics/Drawable.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
+#include "canvas/rendering/canvas.h"
+#include "nucleus/macros.h"
 
 class Object;
 class Universe;
 
-class Link : public sf::Drawable {
+class Link {
 public:
   Link(Universe* universe, Object* source, Object* destination);
   ~Link();
@@ -34,7 +33,7 @@ public:
   void tick(float adjustment);
 
   // Override: sf::Drawable
-  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+  void render(ca::Canvas* canvas) const;
 
 private:
   // The universe we belong to.
@@ -47,7 +46,9 @@ private:
   Object* m_destination;
 
   // The shape we use to render the link.
+#if 0
   sf::RectangleShape m_shape;
+#endif  // 0
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(Link);
 };

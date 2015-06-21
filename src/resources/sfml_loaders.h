@@ -15,7 +15,8 @@
 #ifndef RESOURCES_SFML_LOADERS_H_
 #define RESOURCES_SFML_LOADERS_H_
 
-#include <elastic/resources/resource_loader.h>
+#include "elastic/resources/resource_loader.h"
+#include "nucleus/streams/file_input_stream.h"
 
 namespace loaders {
 
@@ -41,19 +42,27 @@ el::ResourceLoader<ResourceType> makeResourceLoader(Func func,
 
 template <typename ResourceType>
 // ResourceType: The type of resource we load.
-el::ResourceLoader<ResourceType> fromFile(const std::string& filename) {
+el::ResourceLoader<ResourceType> fromFile(const nu::FilePath& fileName) {
+  std::string path(fileName.getPath().begin(), fileName.getPath().end());
   return detail::makeResourceLoader<ResourceType>([=](ResourceType& resource) {
-    return resource.loadFromFile(filename);
-  }, filename);
+    nu::FileInputStream stream{fileName};
+    return resource.loadFromStream(&stream);
+  }, path);
 }
 
 template <>
-el::ResourceLoader<sf::Texture> fromFile(const std::string& filename) {
-  return detail::makeResourceLoader<sf::Texture>([=](sf::Texture& texture) {
-    bool success = texture.loadFromFile(filename);
-    texture.setSmooth(true);
+el::ResourceLoader<ca::Texture> fromFile(const nu::FilePath& fileName) {
+  std::string path(fileName.getPath().begin(), fileName.getPath().end());
+  return detail::makeResourceLoader<ca::Texture>([=](ca::Texture& texture) {
+    nu::FileInputStream stream(fileName);
+
+    ca::Image image;
+    image.loadFromStream(&stream);
+
+    bool success = texture.createFromImage(image);
+
     return success;
-  }, filename);
+  }, path);
 }
 
 }  // namespace loaders

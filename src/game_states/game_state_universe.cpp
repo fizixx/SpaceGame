@@ -14,9 +14,8 @@
 
 #include "game_states/game_state_universe.h"
 
-#include <elastic/views/button_view.h>
-#include <elastic/views/linear_sizer_view.h>
-#include <SFML/Graphics/RenderTarget.hpp>
+#include "elastic/views/button_view.h"
+#include "elastic/views/linear_sizer_view.h"
 
 #include "universe/objects/structures/miner.h"
 #include "universe/objects/structures/power_relay.h"
@@ -64,22 +63,22 @@ void GameStateUniverse::tick(float adjustment) {
 void GameStateUniverse::onButtonClicked(el::ButtonView* sender) {
   if (sender == m_createPowerGeneratorButton) {
     // Create the power generator.
-    m_universeView->startPlacingObject(std::make_unique<PowerRelay>(
-        m_universe.get(), sf::Vector2f{0.f, 0.f}));
+    m_universeView->startPlacingObject(
+        std::make_unique<PowerRelay>(m_universe.get(), ca::Vec2{0.f, 0.f}));
     return;
   }
 
   if (sender == m_createMinerButton) {
     // Create the Miner.
     m_universeView->startPlacingObject(
-        std::make_unique<Miner>(m_universe.get(), sf::Vector2f{0.f, 0.f}));
+        std::make_unique<Miner>(m_universe.get(), ca::Vec2{0.f, 0.f}));
     return;
   }
 
   if (sender == m_createTurretButton) {
     // Create the Turret.
     m_universeView->startPlacingObject(
-        std::make_unique<Turret>(m_universe.get(), sf::Vector2f{0.f, 0.f}));
+        std::make_unique<Turret>(m_universe.get(), ca::Vec2{0.f, 0.f}));
     return;
   }
 }
@@ -110,7 +109,7 @@ void GameStateUniverse::createUserInterface(el::Context* context,
   infoBar->addChild(m_totalPowerText);
 
   auto spacer1 = new el::View(context);
-  spacer1->setMinSize(sf::Vector2i{50, 0});
+  spacer1->setMinSize(ca::Size<i32>{50, 0});
   infoBar->addChild(spacer1);
 
   m_totalMineralsText = new el::TextView(context);
@@ -132,19 +131,19 @@ void GameStateUniverse::createUserInterface(el::Context* context,
   m_createPowerGeneratorButton =
       new el::ButtonView(context, buttonLabelForObject<PowerRelay>(), this);
   m_createPowerGeneratorButton->setName("createPowerGenerator");
-  m_createPowerGeneratorButton->setMinSize(sf::Vector2i{300, 0});
+  m_createPowerGeneratorButton->setMinSize(ca::Size<i32>{300, 0});
   buttonContainer->addChild(m_createPowerGeneratorButton);
 
   m_createMinerButton =
       new el::ButtonView(context, buttonLabelForObject<Miner>(), this);
   m_createMinerButton->setName("createMinerButton");
-  m_createMinerButton->setMinSize(sf::Vector2i{300, 0});
+  m_createMinerButton->setMinSize(ca::Size<i32>{300, 0});
   buttonContainer->addChild(m_createMinerButton);
 
   m_createTurretButton =
       new el::ButtonView(context, buttonLabelForObject<Turret>(), this);
   m_createTurretButton->setName("createTurretButton");
-  m_createTurretButton->setMinSize(sf::Vector2i{300, 0});
+  m_createTurretButton->setMinSize(ca::Size<i32>{300, 0});
   buttonContainer->addChild(m_createTurretButton);
 
   mainSizer->addChild(buttonContainer);

@@ -46,20 +46,21 @@ public:
 
   // Find the object that is at the specified location.  This function takes
   // z-order into account for objects that might be overlapping.
-  Object* findObjectAt(const sf::Vector2f& pos) const;
+  Object* findObjectAt(const ca::Vec2& pos) const;
 
   // Find a list of objects with in a radius to the origin with the specified
   // type.
   void findObjectsInRadius(const std::set<ObjectType>& objectTypes,
-                           const sf::Vector2f& origin, float radius,
+                           const ca::Vec2& origin, float radius,
                            std::vector<Object*>* objectsOut) const;
 
   // Find the closest object to the given position of the specified type.
   Object* findClosestObjectOfType(
-      const sf::Vector2f& pos, ObjectType objectType,
+      const ca::Vec2& pos, ObjectType objectType,
       float maxRange = std::numeric_limits<float>::max());
 
-  // Create links for the specified object.  This will only create links in one direction.
+  // Create links for the specified object.  This will only create links in one
+  // direction.
   void createLinksFor(Object* object);
 
   // Power
@@ -87,8 +88,8 @@ private:
 
   // Create count number of asteroids within the given radius around the given
   // origin.
-  void createAsteroids(const sf::Vector2f& origin, float minRadius,
-                       float maxRadius, size_t count);
+  void createAsteroids(const ca::Vec2& origin, float minRadius, float maxRadius,
+                       size_t count);
 
   // Do the actual work of deleting an object.
   void removeObjectInternal(Object* object);

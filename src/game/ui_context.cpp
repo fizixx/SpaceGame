@@ -21,7 +21,7 @@ UiContext::UiContext(ResourceManager* resourceManager)
 UiContext::~UiContext() {
 }
 
-sf::Font* UiContext::getFont(const std::string& name) {
+ca::Font* UiContext::getFont(const std::string& name) {
   if (name == "default") {
     return m_resourceManager->getFont(ResourceManager::Font::Default);
   }

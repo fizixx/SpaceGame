@@ -18,38 +18,39 @@
 #include <functional>
 #include <vector>
 
-#include <nucleus/macros.h>
-#include <SFML/Graphics/Drawable.hpp>
+#include "canvas/math/vec2.h"
+#include "canvas/rendering/canvas.h"
+#include "nucleus/macros.h"
 
 class Particle;
 
-class ParticleEmitter : public sf::Drawable {
+class ParticleEmitter {
 public:
   using ParticleFactory =
-      std::function<Particle*(ParticleEmitter*, const sf::Vector2f&)>;
+      std::function<Particle*(ParticleEmitter*, const ca::Vec2&)>;
 
   explicit ParticleEmitter(const ParticleFactory& factory);
   ~ParticleEmitter();
 
   // Get/set our position.
-  const sf::Vector2f& getPos() const { return m_pos; }
-  void setPos(const sf::Vector2f& pos);
+  const ca::Vec2& getPos() const { return m_pos; }
+  void setPos(const ca::Vec2& pos);
 
   // Tick the emitter.
   void tick(float adjustment);
 
   // Override: sf::Drawable
-  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+  void render(ca::Canvas* canvas) const;
 
 private:
   // Creates a new particle and add it to our list of particles.
-  void createParticle(const sf::Vector2f& pos);
+  void createParticle(const ca::Vec2& pos);
   
   // The factory function we use to create particles.
   ParticleFactory m_factory;
 
   // Our position.
-  sf::Vector2f m_pos;
+  ca::Vec2 m_pos;
 
   // The time since the last particle was emitted.
   float m_timeSinceLastParticle{0.f};

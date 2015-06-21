@@ -17,17 +17,22 @@
 GameState::GameState(el::Context* context) : m_uiContext(context) {
 }
 
-GameState::~GameState() {
+void GameState::onMouseMoved(const ca::MouseEvent& event) {
+  m_uiContext->onMouseMoved(event);
 }
 
-void GameState::handleInput(sf::Event& event) {
-  m_uiContext->handleInput(event);
+void GameState::onMousePressed(const ca::MouseEvent& event) {
+  m_uiContext->onMousePressed(event);
+}
+
+void GameState::onMouseReleased(const ca::MouseEvent& event) {
+  m_uiContext->onMouseReleased(event);
 }
 
 void GameState::tick(float adjustment) {
   m_uiContext->tick(adjustment);
 }
 
-void GameState::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-  m_uiContext->draw(target, states);
+void GameState::render(ca::Canvas* canvas) const {
+  m_uiContext->render(canvas);
 }

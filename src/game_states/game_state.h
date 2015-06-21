@@ -17,21 +17,23 @@
 
 #include <memory>
 
-#include <elastic/context.h>
-#include <nucleus/macros.h>
-#include <SFML/Window/Event.hpp>
+#include "elastic/context.h"
+#include "nucleus/macros.h"
+#include "canvas/windows/event.h"
 
 #include "utils/component.h"
 
 class GameState : public InputComponent {
 public:
   explicit GameState(el::Context* context);
-  virtual ~GameState() override;
+  ~GameState() override = default;
 
   // Override: Component
-  void handleInput(sf::Event& event) override;
+  void onMouseMoved(const ca::MouseEvent& event) override;
+  void onMousePressed(const ca::MouseEvent& event) override;
+  void onMouseReleased(const ca::MouseEvent& event) override;
   void tick(float adjustment) override;
-  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+  void render(ca::Canvas* canvas) const override;
 
 protected:
   // Every game state has a UI component.

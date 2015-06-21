@@ -17,12 +17,10 @@
 
 #include <cstdint>
 
-#include <nucleus/config.h>
-#include <nucleus/macros.h>
-#include <SFML/Graphics/CircleShape.hpp>
-#include <SFML/Graphics/Drawable.hpp>
-#include <SFML/Graphics/View.hpp>
-#include <SFML/Window/Event.hpp>
+#include "canvas/math/mat4.h"
+#include "canvas/utils/rect.h"
+#include "nucleus/config.h"
+#include "nucleus/macros.h"
 
 #include "utils/component.h"
 
@@ -36,46 +34,45 @@ public:
   ~Camera();
 
   // Return our current view.
-  const sf::View& getView() const { return m_view; }
+  const ca::Mat4& getView() const { return m_view; }
 
   // Given a mouse position in the viewport, return the universe position.
-  sf::Vector2f mousePosToUniversePos(const sf::Vector2i& mousePos) const;
+  ca::Vec2 mousePosToUniversePos(const ca::Pos<i32>& mousePos) const;
 
   // Given a universe position, convert it to a position in the camera (view).
-  sf::Vector2i universePosToMousePos(const sf::Vector2f& universePos) const;
+  ca::Pos<i32> universePosToMousePos(const ca::Vec2& universePos) const;
 
   // Adjust the camera position by the delta given.
-  void adjustPosition(const sf::Vector2i& delta);
+  void adjustPosition(const ca::Pos<i32>& delta);
 
   // Adjust the camera zoom level.
-  void adjustZoom(int32_t delta);
+  void adjustZoom(i32 delta);
 
   // Set the camera dimensions.
-  void layout(const sf::IntRect& rect);
+  void layout(const ca::Rect<i32>& rect);
 
   // Override: sf::Drawable
   void tick(float adjustment) override;
-  void draw(sf::RenderTarget& target,
-                    sf::RenderStates states) const override;
+  void render(ca::Canvas* canvas) const override;
 
 private:
   // Calculate a view taking the position and zoom level into account.
   void updateView();
 
   // The size of the viewport we're looking into.
-  sf::Vector2f m_viewportSize;
+  ca::Vec2 m_viewportSize;
 
   // This is set to true if we are currently dragging the viewport around.
   bool m_isDraggingView{false};
 
   // This is the position where we started to drag the view from.
-  sf::Vector2f m_startDragViewPos;
+  ca::Vec2 m_startDragViewPos;
 
   // The current position of the camera.
-  sf::Vector2f m_cameraPos;
+  ca::Vec2 m_cameraPos;
 
   // The location where we want the camera to animate to.
-  sf::Vector2f m_cameraTarget;
+  ca::Vec2 m_cameraTarget;
 
   // The current zoom level of the camera.
   float m_zoomLevel{1.f};
@@ -83,8 +80,8 @@ private:
   // The target zoom level for the camera.
   float m_targetZoomLevel{1.f};
 
-  // The final calculated view we use to translate everything.
-  sf::View m_view;
+  // The final calculated transform we use to translate everything.
+  ca::Mat4 m_view;
 
 #if SHOW_CAMERA_TARGET
   // A circle we use to render the camera target.

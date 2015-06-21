@@ -20,7 +20,7 @@
 class DestructibleObject : public Object {
 public:
   DestructibleObject(Universe* universe, ObjectType type,
-                     const sf::Vector2f& pos, int32_t hitPoints);
+                     const ca::Vec2& pos, i32 hitPoints);
   ~DestructibleObject() override;
 
   // Override: Object
@@ -28,7 +28,7 @@ public:
 
 protected:
   // Our hitpoints.
-  int32_t m_hitPoints;
+  i32 m_hitPoints;
 
 private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(DestructibleObject);

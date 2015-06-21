@@ -14,8 +14,6 @@
 
 #include "universe/camera.h"
 
-#include <SFML/Graphics/RenderTarget.hpp>
-
 Camera::Camera() {
 #if SHOW_CAMERA_TARGET
   // Adjust some values on the camera target shape.
@@ -29,7 +27,8 @@ Camera::Camera() {
 Camera::~Camera() {
 }
 
-sf::Vector2f Camera::mousePosToUniversePos(const sf::Vector2i& mousePos) const {
+ca::Vec2 Camera::mousePosToUniversePos(const ca::Pos<i32>& mousePos) const {
+#if 0
   const float width = static_cast<float>(m_viewportSize.x);
   const float height = static_cast<float>(m_viewportSize.y);
   const sf::FloatRect& viewport = m_view.getViewport();
@@ -46,10 +45,13 @@ sf::Vector2f Camera::mousePosToUniversePos(const sf::Vector2i& mousePos) const {
 
   // Then transform by the inverse of the view matrix
   return m_view.getInverseTransform().transformPoint(normalized);
+#endif  // 0
+  return ca::Vec2{};
 }
 
-sf::Vector2i Camera::universePosToMousePos(
-    const sf::Vector2f& universePos) const {
+ca::Pos<i32> Camera::universePosToMousePos(
+    const ca::Vec2& universePos) const {
+#if 0
   const float width = static_cast<float>(m_viewportSize.x);
   const float height = static_cast<float>(m_viewportSize.y);
 
@@ -71,12 +73,17 @@ sf::Vector2i Camera::universePosToMousePos(
                        adjViewport.top)};
 
   return result;
+#endif  // 0
+
+  return ca::Pos<i32>{};
 }
 
-void Camera::adjustPosition(const sf::Vector2i& delta) {
+void Camera::adjustPosition(const ca::Pos<i32>& delta) {
+#if 0
   m_cameraTarget -=
       sf::Vector2f{static_cast<float>(delta.x), static_cast<float>(delta.y)} *
       m_zoomLevel;
+#endif  // 0
 }
 
 void Camera::adjustZoom(int32_t delta) {
@@ -91,9 +98,9 @@ void Camera::adjustZoom(int32_t delta) {
   }
 }
 
-void Camera::layout(const sf::IntRect& rect) {
-  m_viewportSize.x = static_cast<float>(rect.width);
-  m_viewportSize.y = static_cast<float>(rect.height);
+void Camera::layout(const ca::Rect<i32>& rect) {
+  m_viewportSize.x = static_cast<float>(rect.size.width);
+  m_viewportSize.y = static_cast<float>(rect.size.height);
 
   updateView();
 }
@@ -114,20 +121,22 @@ void Camera::tick(float adjustment) {
   updateView();
 }
 
-void Camera::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+void Camera::render(ca::Canvas* canvas) const {
 #if SHOW_CAMERA_TARGET
   target.draw(m_cameraTargetShape);
 #endif
 }
 
 void Camera::updateView() {
+#if 0
   // Adjust the viewport size.
   float ratio = 1080.f / m_viewportSize.y;
 
-  sf::Vector2f size{m_viewportSize.x * ratio, m_viewportSize.y * ratio};
+  ca::Vec2 size{m_viewportSize.x * ratio, m_viewportSize.y * ratio};
 
   sf::View result{m_cameraPos, size};
   result.zoom(m_zoomLevel);
 
   m_view = result;
+#endif  // 0
 }

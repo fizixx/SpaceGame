@@ -17,7 +17,7 @@
 
 #include <vector>
 
-#include <SFML/Graphics/Sprite.hpp>
+#include "canvas/rendering/sprite.h"
 
 #include "universe/objects/object.h"
 
@@ -25,8 +25,7 @@ class Asteroid : public Object {
   DECLARE_OBJECT(Asteroid);
 
 public:
-  Asteroid(Universe* universe, const sf::Vector2f& pos,
-           int32_t startingMinerals);
+  Asteroid(Universe* universe, const ca::Vec2& pos, int32_t startingMinerals);
   ~Asteroid() override;
 
   int32_t getMineralCount() const { return m_minerals; }
@@ -36,9 +35,9 @@ public:
   int32_t mine(int32_t amount);
 
   // Override: Object
-  sf::FloatRect getBounds() const override;
+  ca::Rect<f32> getBounds() const override;
   void tick(float adjustment) override;
-  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+  void render(ca::Canvas* canvas) const override;
 
 private:
   // The amount of minerals we have.
@@ -48,10 +47,10 @@ private:
   float m_rotationSpeed;
 
   // The texture we use to render the asteroid.
-  sf::Texture* m_texture;
+  ca::Texture* m_texture;
 
   // The shape we use to render the power generator.
-  sf::Sprite m_shape;
+  ca::Sprite m_shape;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(Asteroid);
 };

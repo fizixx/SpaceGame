@@ -17,9 +17,6 @@
 
 #include <array>
 
-#include <SFML/Graphics/CircleShape.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
-
 #include "universe/objects/structures/structure.h"
 #include "universe/observers.h"
 
@@ -29,15 +26,15 @@ class Turret : public Structure {
   DECLARE_STRUCTURE(Turret);
 
 public:
-  Turret(Universe* universe, const sf::Vector2f& pos);
+  Turret(Universe* universe, const ca::Vec2& pos);
   ~Turret() override;
 
   // Override: Object
   void shot(Projectile* projectile) override;
-  void moveTo(const sf::Vector2f& pos) override;
-  sf::FloatRect getBounds() const override;
+  void moveTo(const ca::Vec2& pos) override;
+  ca::Rect<f32> getBounds() const override;
   void tick(float adjustment) override;
-  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+  void render(ca::Canvas* canvas) const override;
 
 private:
   enum class Task {
@@ -76,10 +73,14 @@ private:
   size_t m_removedObjectSlotId;
 
   // The shape we use to render the base of the turret.
+#if 0
   sf::CircleShape m_baseShape;
+#endif  // 0
 
   // The shape we use to render the turret.
+#if 0
   sf::RectangleShape m_launcherRailShape;
+#endif  // 0
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(Turret);
 };

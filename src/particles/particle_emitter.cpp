@@ -14,7 +14,7 @@
 
 #include "particles/particle_emitter.h"
 
-#include <SFML/Graphics/RenderTarget.hpp>
+#include <algorithm>
 
 #include "particles/particle.h"
 
@@ -25,7 +25,7 @@ ParticleEmitter::ParticleEmitter(const ParticleFactory& factory)
 ParticleEmitter::~ParticleEmitter() {
 }
 
-void ParticleEmitter::setPos(const sf::Vector2f& pos) {
+void ParticleEmitter::setPos(const ca::Vec2& pos) {
   m_pos = pos;
 }
 
@@ -50,14 +50,13 @@ void ParticleEmitter::tick(float adjustment) {
       std::end(m_particles));
 }
 
-void ParticleEmitter::draw(sf::RenderTarget& target,
-                           sf::RenderStates states) const {
+void ParticleEmitter::render(ca::Canvas* canvas) const {
   for (const auto& particle : m_particles) {
-    target.draw(*particle, states);
+    particle->render(canvas);
   }
 }
 
-void ParticleEmitter::createParticle(const sf::Vector2f& pos) {
+void ParticleEmitter::createParticle(const ca::Vec2& pos) {
   Particle* p = m_factory(this, pos);
   m_particles.push_back(p);
 }

@@ -21,9 +21,7 @@
 #include <limits>
 #include <memory>
 
-#include <nucleus/logging.h>
-#include <SFML/Graphics/RectangleShape.hpp>
-#include <SFML/Graphics/RenderTarget.hpp>
+#include "nucleus/logging.h"
 
 #include "universe/link.h"
 #include "universe/objects/asteroid.h"
@@ -35,11 +33,13 @@ Universe::Universe(ResourceManager* resourceManager)
   : m_resourceManager(resourceManager) {
   // Create a dummy universe.
 
-  addObject(std::make_unique<CommandCenter>(this, sf::Vector2f{0.f, 0.f}));
-  // addObject(std::make_unique<PowerGenerator>(this, sf::Vector2f{500.f, 250.f}));
-  // addObject(std::make_unique<PowerGenerator>(this, sf::Vector2f{-450.f, 50.f}));
+  addObject(std::make_unique<CommandCenter>(this, ca::Vec2{0.f, 0.f}));
+  // addObject(std::make_unique<PowerGenerator>(this, sf::Vector2f{500.f,
+  // 250.f}));
+  // addObject(std::make_unique<PowerGenerator>(this, sf::Vector2f{-450.f,
+  // 50.f}));
 
-  createAsteroids(sf::Vector2f{0.f, 0.f}, 500.f, 5000.f, 100);
+  createAsteroids(ca::Vec2{0.f, 0.f}, 500.f, 5000.f, 100);
 }
 
 Universe::~Universe() {
@@ -81,9 +81,10 @@ void Universe::removeObject(Object* object) {
   }
 }
 
-Object* Universe::findObjectAt(const sf::Vector2f& pos) const {
+Object* Universe::findObjectAt(const ca::Vec2& pos) const {
   for (size_t i = m_objects.size() - 1; i != -1; --i) {
-    if (m_objects[i] && m_objects[i]->getBounds().contains(pos)) {
+    if (m_objects[i] &&
+        m_objects[i]->getBounds().contains(ca::Pos<f32>{pos.x, pos.y})) {
       return m_objects[i];
     }
   }
@@ -93,7 +94,7 @@ Object* Universe::findObjectAt(const sf::Vector2f& pos) const {
 }
 
 void Universe::findObjectsInRadius(const std::set<ObjectType>& objectTypes,
-                                   const sf::Vector2f& origin, float radius,
+                                   const ca::Vec2& origin, float radius,
                                    std::vector<Object*>* objectsOut) const {
   DCHECK(objectsOut);
 
@@ -109,7 +110,7 @@ void Universe::findObjectsInRadius(const std::set<ObjectType>& objectTypes,
   }
 }
 
-Object* Universe::findClosestObjectOfType(const sf::Vector2f& pos,
+Object* Universe::findClosestObjectOfType(const ca::Vec2& pos,
                                           ObjectType objectType,
                                           float maxRange) {
   float bestDistance{std::numeric_limits<float>::max()};
@@ -241,7 +242,7 @@ void Universe::addObjectInternal(Object* object) {
   createLinksFor(object);
 }
 
-void Universe::createAsteroids(const sf::Vector2f& origin, float minRadius,
+void Universe::createAsteroids(const ca::Vec2& origin, float minRadius,
                                float maxRadius, size_t count) {
   const float kPi = 3.1415f;
 
@@ -258,8 +259,8 @@ void Universe::createAsteroids(const sf::Vector2f& origin, float minRadius,
     // Get a random starting amount.
     int32_t mineralCount = (std::rand() % 1000) + 100;
 
-    sf::Vector2f pos{origin.x + randRadius * std::cosf(randDirection),
-                     origin.y + randRadius * std::sinf(randDirection)};
+    ca::Vec2 pos{origin.x + randRadius * std::cosf(randDirection),
+                 origin.y + randRadius * std::sinf(randDirection)};
     addObject(std::make_unique<Asteroid>(this, pos, mineralCount));
   }
 }

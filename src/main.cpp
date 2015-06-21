@@ -13,16 +13,16 @@
 // PERFORMANCE OF THIS SOFTWARE.
 
 #include <cstdlib>
+#include <ctime>
 #include <chrono>
 
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Window/Event.hpp>
 #include <nucleus/logging.h>
 
 #include "game/resource_manager.h"
 #include "game/ui_context.h"
 #include "game_states/game_state_universe.h"
 
+#if 0
 int main() {
   LOG(Info) << "Starting SpaceGame";
 
@@ -85,3 +85,4 @@ int main() {
 
   return 0;
 }
+#endif  // 0

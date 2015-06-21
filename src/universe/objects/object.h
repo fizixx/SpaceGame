@@ -18,8 +18,10 @@
 #include <cstdint>
 #include <set>
 
-#include <nucleus/macros.h>
-#include <SFML/Graphics/Drawable.hpp>
+#include "canvas/math/vec2.h"
+#include "canvas/rendering/canvas.h"
+#include "canvas/utils/rect.h"
+#include "nucleus/macros.h"
 
 class Projectile;
 class Universe;
@@ -51,7 +53,7 @@ enum class ObjectType {
   Missile,
 };
 
-class Object : public sf::Drawable {
+class Object {
   DECLARE_OBJECT(Object);
 
 public:
@@ -62,29 +64,32 @@ public:
   static bool isProjectile(Object* object);
   static bool isUnit(Object* object);
 
-  Object(Universe* universe, ObjectType type, const sf::Vector2f& pos);
+  Object(Universe* universe, ObjectType type, const ca::Vec2& pos);
   virtual ~Object();
 
   // objectType
   ObjectType getType() const { return m_objectType; }
 
   // pos
-  const sf::Vector2f& getPos() const { return m_pos; }
+  const ca::Vec2& getPos() const { return m_pos; }
 
   // Calculate the distance from pos to this object.
-  float calculateDistanceFrom(const sf::Vector2f& pos) const;
+  float calculateDistanceFrom(const ca::Vec2& pos) const;
 
   // This is called when we are shot by the specified projectile.
   virtual void shot(Projectile* projectile);
 
   // Move the object to the specified coordinates.
-  virtual void moveTo(const sf::Vector2f& pos);
+  virtual void moveTo(const ca::Vec2& pos);
 
   // Return the bounds of the object.
-  virtual sf::FloatRect getBounds() const = 0;
+  virtual ca::Rect<f32> getBounds() const = 0;
 
   // Tick the object.
   virtual void tick(float adjustment) = 0;
+
+  // Render the object.
+  virtual void render(ca::Canvas* canvas) const = 0;
 
 protected:
   // The universe we belong to.
@@ -94,7 +99,7 @@ protected:
   ObjectType m_objectType;
 
   // The position of the object in universe coordinates.
-  sf::Vector2f m_pos;
+  ca::Vec2 m_pos;
 
 private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(Object);

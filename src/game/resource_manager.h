@@ -15,9 +15,11 @@
 #ifndef GAME_RESOURCE_MANAGER_H_
 #define GAME_RESOURCE_MANAGER_H_
 
-#include <elastic/resources/resource_store.h>
-#include <nucleus/macros.h>
-#include <SFML/Graphics/Font.hpp>
+#include "canvas/rendering/font.h"
+#include "canvas/rendering/texture.h"
+#include "elastic/resources/resource_store.h"
+#include "nucleus/files/file_path.h"
+#include "nucleus/macros.h"
 
 class ResourceManager {
 public:
@@ -36,17 +38,17 @@ public:
   ~ResourceManager();
 
   // Load all resources.
-  bool loadAll(const std::string& root);
+  bool loadAll(const nu::FilePath& root);
 
   // Return the requested font.
-  sf::Font* getFont(Font font);
+  ca::Font* getFont(Font font);
 
   // Return the requested texture.
-  sf::Texture* getTexture(Texture texture);
+  ca::Texture* getTexture(Texture texture);
 
 private:
-  el::ResourceStore<sf::Font, Font> m_fontStore;
-  el::ResourceStore<sf::Texture, Texture> m_textureStore;
+  el::ResourceStore<ca::Font, Font> m_fontStore;
+  el::ResourceStore<ca::Texture, Texture> m_textureStore;
 
   DISALLOW_COPY_AND_ASSIGN(ResourceManager);
 };

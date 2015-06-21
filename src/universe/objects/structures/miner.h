@@ -16,9 +16,7 @@
 #define UNIVERSE_OBJECTS_STRUCTURES_MINER_H_
 
 #include <memory>
-
-#include <SFML/Graphics/CircleShape.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
+#include <vector>
 
 #include "universe/objects/structures/structure.h"
 #include "universe/observers.h"
@@ -29,19 +27,18 @@ class Miner : public Structure {
   DECLARE_STRUCTURE(Miner);
 
 public:
-  Miner(Universe* universe, const sf::Vector2f& pos);
+  Miner(Universe* universe, const ca::Vec2& pos);
   virtual ~Miner() override;
 
   // Override: Object
-  void moveTo(const sf::Vector2f& pos) override;
-  sf::FloatRect getBounds() const override;
+  void moveTo(const ca::Vec2& pos) override;
+  ca::Rect<f32> getBounds() const override;
   void tick(float adjustment) override;
-  void draw(sf::RenderTarget& target,
-                    sf::RenderStates states) const override;
+  void render(ca::Canvas* canvas) const override;
 
 private:
   // A class representing a laser to an asteroid.
-  class Laser : public sf::Drawable {
+  class Laser {
   public:
     Laser(Universe* universe, Miner* miner, Asteroid* asteroid);
     ~Laser();
@@ -50,7 +47,7 @@ private:
     Asteroid* getAsteroid() const { return m_asteroid; }
 
     // Override: sf::Drawable
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+    void render(ca::Canvas* canvas) const;
 
   private:
     // The universe we belong in.
@@ -63,7 +60,9 @@ private:
     Asteroid* m_asteroid;
 
     // The shape we use to render the laser.
+#if 0
     sf::RectangleShape m_shape;
+#endif  // 0
 
     DISALLOW_IMPLICIT_CONSTRUCTORS(Laser);
   };
@@ -87,7 +86,9 @@ private:
   size_t m_removedObjectId;
 
   // The shape we use to render the power generator.
+#if 0
   sf::CircleShape m_shape;
+#endif  // 0
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(Miner);
 };

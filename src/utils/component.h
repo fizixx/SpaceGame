@@ -15,15 +15,18 @@
 #ifndef UTILS_COMPONENT_H_
 #define UTILS_COMPONENT_H_
 
-#include <SFML/Graphics/Drawable.hpp>
-#include <SFML/Window/Event.hpp>
+#include "canvas/rendering/canvas.h"
+#include "canvas/windows/event.h"
 
-class Component : public sf::Drawable {
+class Component {
 public:
   virtual ~Component();
 
   // Tick the component with the supplied adjustment to make a smooth 60fps.
   virtual void tick(float adjustment) = 0;
+
+  // Render the component.
+  virtual void render(ca::Canvas* canavs) const = 0;
 };
 
 class InputComponent : public Component {
@@ -31,7 +34,9 @@ public:
   ~InputComponent() override;
 
   // Handle input on the component.
-  virtual void handleInput(sf::Event& event) = 0;
+  virtual void onMouseMoved(const ca::MouseEvent& event) = 0;
+  virtual void onMousePressed(const ca::MouseEvent& event) = 0;
+  virtual void onMouseReleased(const ca::MouseEvent& event) = 0;
 };
 
 #endif  // UTILS_COMPONENT_H_

@@ -14,8 +14,6 @@
 
 #include "universe/link.h"
 
-#include <SFML/Graphics/RenderTarget.hpp>
-
 #include "universe/objects/object.h"
 #include "utils/math.h"
 
@@ -29,19 +27,23 @@ Link::~Link() {
 void Link::tick(float adjustment) {
   // Calculate the geometry of the shape.
   // Get the positions of the objects.
-  sf::Vector2f sourcePos{m_source->getPos()};
-  sf::Vector2f destinationPos{m_destination->getPos()};
+  ca::Vec2 sourcePos{m_source->getPos()};
+  ca::Vec2 destinationPos{m_destination->getPos()};
 
   // Get the direction and distance.
   float directionToDestination = directionBetween(sourcePos, destinationPos);
   float distanceToDestination = distanceBetween(sourcePos, destinationPos);
 
+#if 0
   m_shape.setSize(sf::Vector2f{distanceToDestination, 5.f});
   m_shape.setOrigin(sf::Vector2f{0.f, -10.f});
   m_shape.setRotation(directionToDestination);
+#endif  // 0
 }
 
-void Link::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+void Link::render(ca::Canvas* canvas) const {
+#if 0
   states.transform.translate(m_source->getPos());
   target.draw(m_shape, states);
+#endif  // 0
 }

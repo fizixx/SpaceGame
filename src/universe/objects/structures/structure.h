@@ -35,7 +35,7 @@ class Structure : public DestructibleObject {
   DECLARE_STRUCTURE(Structure);
 
 public:
-  Structure(Universe* universe, ObjectType objectType, const sf::Vector2f& pos,
+  Structure(Universe* universe, ObjectType objectType, const ca::Vec2& pos,
             int32_t hitPoints);
   ~Structure() override;
 

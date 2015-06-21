@@ -25,12 +25,14 @@ UniverseView::UniverseView(el::Context* context, Universe* universe)
   : el::View(context), m_universe(universe), m_hud{this} {
 // Set up the mouse position shape.
 
+#if 0
 #if SHOW_UNIVERSE_MOUSE_POS
   m_mousePosShape.setRadius(25.f);
   m_mousePosShape.setOrigin(m_mousePosShape.getGlobalBounds().width / 2.f,
                             m_mousePosShape.getGlobalBounds().height / 2.f);
   m_mousePosShape.setFillColor(sf::Color{0, 0, 255, 255});
 #endif  // SHOW_UNIVERSE_MOUSE_POS
+#endif  // 0
 }
 
 UniverseView::~UniverseView() {
@@ -48,9 +50,10 @@ void UniverseView::stopPlacingObject(bool place) {
   }
 }
 
-bool UniverseView::onMousePressed(sf::Event& event) {
+bool UniverseView::onMousePressed(const ca::MouseEvent& event) {
   el::View::onMousePressed(event);
 
+#if 0
   // We only handle left mouse presses for now.
   if (event.mouseButton.button != sf::Mouse::Left) {
     return false;
@@ -73,12 +76,16 @@ bool UniverseView::onMousePressed(sf::Event& event) {
   // If we didn't press on an object, then we pressed on the background which
   // means we're not controlling the camera.
   m_mouseHandler = MouseHandler::Camera;
+
+#endif  // 0
+
   return true;
 }
 
-bool UniverseView::onMouseDragged(sf::Event& event) {
+bool UniverseView::onMouseDragged(const ca::MouseEvent& event) {
   el::View::onMouseDragged(event);
 
+#if 0
   // Update the last mouse position.
   m_viewMousePos = sf::Vector2i{event.mouseMove.x, event.mouseMove.y};
 
@@ -115,13 +122,15 @@ bool UniverseView::onMouseDragged(sf::Event& event) {
 
   // When the mouse is dragged, we update any possible ghost objects.
   updateGhostPosition(universeMousePos);
+#endif  // 0
 
   return true;
 }
 
-void UniverseView::onMouseMoved(sf::Event& event) {
+void UniverseView::onMouseMoved(const ca::MouseEvent& event) {
   el::View::onMouseMoved(event);
 
+#if 0
   // Update the last mouse position.
   m_viewMousePos = sf::Vector2i{event.mouseMove.x, event.mouseMove.y};
 
@@ -137,11 +146,13 @@ void UniverseView::onMouseMoved(sf::Event& event) {
 
   // Update any ghost objects that we might have.
   updateGhostPosition(universeMousePos);
+#endif  // 0
 }
 
-void UniverseView::onMouseReleased(sf::Event& event) {
+void UniverseView::onMouseReleased(const ca::MouseEvent& event) {
   el::View::onMouseReleased(event);
 
+#if 0
   // If we pressed the mouse on an object, then we check to see if we are still
   // over the same object, and if it is, select that object.
   if (m_mouseHandler == MouseHandler::Object) {
@@ -170,15 +181,19 @@ void UniverseView::onMouseReleased(sf::Event& event) {
   }
 
   m_mouseHandler = MouseHandler::None;
+#endif  // 0
 }
 
-void UniverseView::onMouseWheel(sf::Event& event) {
+void UniverseView::onMouseWheel(const ca::MouseEvent& event) {
   el::View::onMouseWheel(event);
 
+#if 0
   // Adjust the camera zoom level.
   m_camera.adjustZoom(event.mouseWheel.delta);
+#endif  // 0
 }
 
+#if 0
 void UniverseView::onKeyPressed(sf::Event& event) {
 }
 
@@ -193,26 +208,29 @@ void UniverseView::onKeyReleased(sf::Event& event) {
       m_universe, m_camera.mousePosToUniversePos(m_viewMousePos)));
   }
 }
+#endif  // 0
 
 void UniverseView::tick(float adjustment) {
   m_camera.tick(adjustment);
   m_hud.tick(adjustment);
 
 // Update the location of the mouse within the universe.
+#if 0
 #if SHOW_UNIVERSE_MOUSE_POS
   sf::Vector2f universeMousePos{m_camera.mousePosToUniversePos(m_viewMousePos)};
   m_mousePosShape.setPosition(universeMousePos);
 #endif
+#endif  // 0
 }
 
-void UniverseView::layout(const sf::IntRect& rect) {
+void UniverseView::layout(const ca::Rect<i32>& rect) {
   View::layout(rect);
 
   m_camera.layout(rect);
 }
 
-void UniverseView::draw(sf::RenderTarget& target,
-                        sf::RenderStates states) const {
+void UniverseView::render(ca::Canvas* canvas) const {
+#if 0
   // Store the original view state.
   sf::View origView = target.getView();
 
@@ -249,15 +267,16 @@ void UniverseView::draw(sf::RenderTarget& target,
 
   // Render the hud after we reset the view.
   target.draw(m_hud, states);
+#endif  // 0
 }
 
-void UniverseView::updateGhostPosition(const sf::Vector2f& universeMousePos) {
+void UniverseView::updateGhostPosition(const ca::Vec2& universeMousePos) {
   // Move the ghost object to the new mouse position.
   if (m_ghostObject) {
     m_ghostObject->moveTo(universeMousePos);
   }
 }
 
-void UniverseView::placeEnemyShip(const sf::Vector2f& pos) {
+void UniverseView::placeEnemyShip(const ca::Vec2& pos) {
   m_universe->addObject(std::make_unique<EnemyShip>(m_universe, pos));
 }

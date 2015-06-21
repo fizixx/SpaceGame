@@ -14,13 +14,11 @@
 
 #include "universe/objects/asteroid.h"
 
-#include <SFML/Graphics/RenderTarget.hpp>
-
 #include "universe/universe.h"
 
 DEFINE_OBJECT(Asteroid, "Power Generator");
 
-Asteroid::Asteroid(Universe* universe, const sf::Vector2f& pos,
+Asteroid::Asteroid(Universe* universe, const ca::Vec2& pos,
                    int32_t initialMinerals)
   : Object(universe, ObjectType::Asteroid, pos), m_minerals(initialMinerals) {
   // Set the rotation speed.

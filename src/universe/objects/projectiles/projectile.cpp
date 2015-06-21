@@ -19,7 +19,7 @@
 #include "utils/math.h"
 
 Projectile::Projectile(Universe* universe, ObjectType objectType,
-                       const sf::Vector2f& pos)
+                       const ca::Vec2& pos)
   : Object(universe, objectType, pos) {
 }
 

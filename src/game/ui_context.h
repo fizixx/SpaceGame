@@ -27,7 +27,7 @@ public:
   ~UiContext();
 
   // Override: ui::Context
-  sf::Font* getFont(const std::string& name) override;
+  ca::Font* getFont(const std::string& name) override;
 
 private:
   // The resource manager we use to serve resources to the UI.

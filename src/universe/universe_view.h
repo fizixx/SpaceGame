@@ -51,16 +51,18 @@ public:
 
   // Override: ui::View
   bool handlesInput() const { return true; }
-  bool onMousePressed(sf::Event& event) override;
-  bool onMouseDragged(sf::Event& event) override;
-  void onMouseMoved(sf::Event& event) override;
-  void onMouseReleased(sf::Event& event) override;
-  void onMouseWheel(sf::Event& event) override;
-  void onKeyPressed(sf::Event& event) override;
-  void onKeyReleased(sf::Event& event) override;
+  bool onMousePressed(const ca::MouseEvent& event) override;
+  bool onMouseDragged(const ca::MouseEvent& event) override;
+  void onMouseMoved(const ca::MouseEvent& event) override;
+  void onMouseReleased(const ca::MouseEvent& event) override;
+  void onMouseWheel(const ca::MouseEvent& event) override;
+#if 0
+  void onKeyPressed(const ca::MouseEvent& event) override;
+  void onKeyReleased(const ca::MouseEvent& event) override;
+#endif  // 0
   void tick(float adjustment) override;
-  void layout(const sf::IntRect& rect) override;
-  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+  void layout(const ca::Rect<i32>& rect) override;
+  void render(ca::Canvas* canvas) const override;
 
 private:
   enum class MouseHandler {
@@ -72,10 +74,10 @@ private:
 
   // Make the needed changes to the view if the perceived mouse position
   // changed.
-  void updateGhostPosition(const sf::Vector2f& universeMousePos);
+  void updateGhostPosition(const ca::Vec2& universeMousePos);
 
   // Place an enemy ship at the given universe location.
-  void placeEnemyShip(const sf::Vector2f& pos);
+  void placeEnemyShip(const ca::Vec2& pos);
 
   // The universe we are looking at.
   Universe* m_universe;
@@ -90,7 +92,7 @@ private:
   MouseHandler m_mouseHandler{MouseHandler::None};
 
   // The position in view coordinates where we started to drag.
-  sf::Vector2i m_mouseStartDragPos;
+  ca::Pos<i32> m_mouseStartDragPos;
 
   // The object that we pressed the mouse on.
   Object* m_mousePressedObject{nullptr};
@@ -99,16 +101,18 @@ private:
   bool m_cameraMovedPastThreshold{false};
 
   // The last postition where the mouse cursor was in view coordinates.
-  sf::Vector2i m_viewMousePos;
+  ca::Pos<i32> m_viewMousePos;
 
   // The current ghost object.  We own this pointer as it's not part of the
   // universe yet.
   std::unique_ptr<Object> m_ghostObject;
 
+#if 0
 #if SHOW_UNIVERSE_MOUSE_POS
   // A shape to show where the current mouse position is in the universe.
   sf::CircleShape m_mousePosShape;
 #endif
+#endif  // 0
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(UniverseView);
 };

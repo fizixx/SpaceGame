@@ -21,20 +21,24 @@
 Hud::Hud(UniverseView* universeView)
   : m_universeView(universeView), m_universe(universeView->getUniverse()) {
   // Set up the hover shape.
+#if 0
   m_hoverShape.setFillColor(sf::Color{0, 0, 0, 0});
   m_hoverShape.setOutlineThickness(2);
   m_hoverShape.setOutlineColor(sf::Color{0, 255, 0, 255});
+#endif  // 0
 
   // Set up the selected shape.
+#if 0
   m_selectedShape.setFillColor(sf::Color{0, 0, 0, 0});
   m_selectedShape.setOutlineThickness(2);
   m_selectedShape.setOutlineColor(sf::Color{255, 0, 0, 255});
+#endif  // 0
 }
 
 Hud::~Hud() {
 }
 
-void Hud::updateUniverseMousePos(const sf::Vector2f& universeMousePos) {
+void Hud::updateUniverseMousePos(const ca::Vec2& universeMousePos) {
   // Update our internal location of the mouse position.
   m_universeMousePos = universeMousePos;
 
@@ -52,17 +56,22 @@ void Hud::setSelectedObject(Object* object) {
 
 void Hud::tick(float adjustment) {
   // Update the hover shape.
+#if 0
   if (m_hoverObject) {
     adjustShapeOverObject(m_hoverObject, &m_hoverShape, 4);
   }
+#endif  // 0
 
   // Update the selected shape.
+#if 0
   if (m_selectedObject) {
     adjustShapeOverObject(m_selectedObject, &m_selectedShape, 4);
   }
+#endif  // 0
 }
 
-void Hud::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+void Hud::render(ca::Canvas* canvas) const {
+#if 0
   // Draw the shape over the hover object if the hover object is not the same
   // object as the selected object.
   if (m_hoverObject && m_hoverObject != m_selectedObject) {
@@ -72,8 +81,10 @@ void Hud::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   if (m_selectedObject) {
     target.draw(m_selectedShape, states);
   }
+#endif  // 0
 }
 
+#if 0
 void Hud::adjustShapeOverObject(Object* object, sf::RectangleShape* shape,
                                 int borderSize) {
   const Camera& camera = m_universeView->getCamera();
@@ -93,3 +104,4 @@ void Hud::adjustShapeOverObject(Object* object, sf::RectangleShape* shape,
   shape->setPosition(sf::Vector2f{static_cast<float>(topLeft.x) - borderSize,
                                   static_cast<float>(topLeft.y) - borderSize});
 }
+#endif  // 0
