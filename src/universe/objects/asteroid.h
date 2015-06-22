@@ -25,14 +25,14 @@ class Asteroid : public Object {
   DECLARE_OBJECT(Asteroid);
 
 public:
-  Asteroid(Universe* universe, const ca::Vec2& pos, int32_t startingMinerals);
+  Asteroid(Universe* universe, const ca::Vec2& pos, i32 startingMinerals);
   ~Asteroid() override;
 
-  int32_t getMineralCount() const { return m_minerals; }
-  void setMiniralCount(int32_t mineralCount);
+  i32 getMineralCount() const { return m_minerals; }
+  void setMiniralCount(i32 mineralCount);
 
   // Mine the asteroid.
-  int32_t mine(int32_t amount);
+  i32 mine(i32 amount);
 
   // Override: Object
   ca::Rect<f32> getBounds() const override;
@@ -41,10 +41,10 @@ public:
 
 private:
   // The amount of minerals we have.
-  int32_t m_minerals;
+  i32 m_minerals;
 
   // The speed we are rotating.
-  float m_rotationSpeed;
+  f32 m_rotationSpeed;
 
   // The texture we use to render the asteroid.
   ca::Texture* m_texture;

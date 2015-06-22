@@ -16,73 +16,58 @@
 #include <ctime>
 #include <chrono>
 
-#include <nucleus/logging.h>
+#include "canvas/app.h"
+#include "nucleus/logging.h"
 
 #include "game/resource_manager.h"
 #include "game/ui_context.h"
 #include "game_states/game_state_universe.h"
 
-#if 0
-int main() {
-  LOG(Info) << "Starting SpaceGame";
+class SpaceGame : public ca::WindowDelegate {
+public:
+  SpaceGame() = default;
 
-  // Seed the random number generator.
-  std::srand(static_cast<unsigned int>(std::time(nullptr)));
+  // Override: ca::WindowDelegate
+  bool onWindowCreated() override {
+    LOG(Info) << "Starting SpaceGame";
+    // Seed the random number generator.
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
-  sf::ContextSettings settings{32, 0, 4};
-  sf::RenderWindow window{sf::VideoMode{1600, 900, 32}, "SpaceGame",
-                          sf::Style::Default, settings};
-  window.setVerticalSyncEnabled(true);
-  window.setKeyRepeatEnabled(false);
-
-  // Initialize the resource manager.
-  ResourceManager resourceManager;
-  if (!resourceManager.loadAll("C:\\Workspace\\SpaceGame\\res\\")) {
-    return 1;
-  }
-
-  // Create a user interface context for the universe game state.
-  auto context = std::make_unique<UiContext>(&resourceManager);
-
-  // Construct the universe game state.
-  std::unique_ptr<GameState> gameState =
-      std::make_unique<GameStateUniverse>(&resourceManager, context.get());
-
-  using Clock = std::chrono::high_resolution_clock;
-  auto lastTick = Clock::now();
-
-  while (window.isOpen()) {
-    sf::Event evt;
-    if (window.pollEvent(evt)) {
-      switch (evt.type) {
-        case sf::Event::Closed:
-          window.close();
-          break;
-      }
-
-      // Let the universe also handle events.
-      gameState->handleInput(evt);
+    // Initialize the resource manager.
+    ResourceManager resourceManager;
+    if (!resourceManager.loadAll(nu::FilePath(
+            FILE_PATH_LITERAL("C:\\Workspace\\SpaceGame\\res\\")))) {
+      return false;
     }
 
-    // We expect that 16.666ms went by since the last tick.  (60fps)
-    auto now = Clock::now();
-    std::chrono::duration<float, std::chrono::milliseconds::period> timePassed =
-        std::chrono::duration_cast<std::chrono::microseconds>(now - lastTick);
-    lastTick = now;
+    // Create a user interface context for the universe game state.
+    m_uiContext = std::make_unique<UiContext>(&resourceManager);
 
-    // We calculate the adjust we must make to get a smooth 60fps tick.
-    float adjustment = timePassed.count() * 60.f / 1000.f;
-    gameState->tick(adjustment);
+    // Construct the universe game state.
+    m_gameState = std::make_unique<GameStateUniverse>(&resourceManager,
+                                                      m_uiContext.get());
 
-    // Clear the viewport with black.
-    window.clear(sf::Color(31, 31, 31, 255));
+    using Clock = std::chrono::high_resolution_clock;
+    auto lastTick = Clock::now();
 
-    // Draw the universe.
-    window.draw(*gameState);
-
-    window.display();
+    return ca::WindowDelegate::onWindowCreated();
   }
 
-  return 0;
-}
-#endif  // 0
+  void onPaint(ca::Canvas* canvas) override {
+    m_gameState->tick(1.f);
+
+    // Clear the viewport with black.
+    canvas->clear(ca::Color{31, 63, 95, 255});
+
+    // Draw the universe.
+    m_gameState->render(canvas);
+  }
+
+private:
+  std::unique_ptr<el::Context> m_uiContext;
+  std::unique_ptr<GameStateUniverse> m_gameState;
+
+  DISALLOW_COPY_AND_ASSIGN(SpaceGame);
+};
+
+CANVAS_APP(SpaceGame);

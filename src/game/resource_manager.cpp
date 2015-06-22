@@ -14,7 +14,8 @@
 
 #include "game/resource_manager.h"
 
-#include <nucleus/logging.h>
+#include "nucleus/files/file_path.h"
+#include "nucleus/logging.h"
 
 #include "resources/sfml_loaders.h"
 

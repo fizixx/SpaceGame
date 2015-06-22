@@ -5,3 +5,4 @@ if(NOT CANVAS_ROOT_DIR)
 endif()
 
 add_subdirectory("${CANVAS_ROOT_DIR}" "canvas")
+target_include_directories("canvas" PUBLIC "${CANVAS_SOURCE_DIR}/include")

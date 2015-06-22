@@ -18,8 +18,7 @@
 #include "universe/universe.h"
 
 DestructibleObject::DestructibleObject(Universe* universe, ObjectType type,
-                                       const sf::Vector2f& pos,
-                                       int32_t hitPoints)
+                                       const ca::Vec2& pos, i32 hitPoints)
   : Object(universe, type, pos), m_hitPoints(hitPoints) {
 }
 

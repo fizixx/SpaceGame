@@ -17,13 +17,11 @@
 
 #include "universe/objects/projectiles/projectile.h"
 
-#include <SFML/Graphics/VertexArray.hpp>
-
 #include "universe/observers.h"
 
 class Missile : public Projectile {
 public:
-  Missile(Universe* universe, sf::Vector2f& pos, float direction);
+  Missile(Universe* universe, const ca::Vec2& pos, f32 direction);
   ~Missile() override;
 
   // Returns true if the missile has been launched and is in flight.
@@ -36,10 +34,10 @@ public:
   void setDirection(float direction);
 
   // Override: Projectile
-  int32_t getDamageAmount() const override;
-  sf::FloatRect getBounds() const override;
+  i32 getDamageAmount() const override;
+  ca::Rect<f32> getBounds() const override;
   void tick(float adjustment) override;
-  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+  void render(ca::Canvas* canvas) const override;
 
 private:
   enum class Task {
@@ -71,7 +69,9 @@ private:
   size_t m_objectRemovedSlotId;
 
   // The shape we use to render the missile.
+#if 0
   sf::VertexArray m_shape;
+#endif  // 0
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(Missile);
 };

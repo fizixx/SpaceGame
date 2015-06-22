@@ -17,8 +17,7 @@
 #include <functional>
 #include <sstream>
 
-#include <nucleus/logging.h>
-#include <SFML/Graphics/RenderTarget.hpp>
+#include "nucleus/logging.h"
 
 #include "universe/objects/projectiles/bullet.h"
 #include "universe/universe.h"
@@ -35,11 +34,12 @@ const float kMaxEngagementRange = 750.f;
 
 }  // namespace
 
-EnemyShip::EnemyShip(Universe* universe, const sf::Vector2f& pos)
+EnemyShip::EnemyShip(Universe* universe, const ca::Vec2& pos)
   : Unit(universe, ObjectType::EnemyShip, pos, 250),
     m_smokeEmitter(std::bind(&EnemyShip::createSmokeParticle, this,
                              std::placeholders::_1, std::placeholders::_2)) {
-  // Set up the shape of the ship.
+// Set up the shape of the ship.
+#if 0
   m_shape.setPrimitiveType(sf::Triangles);
   m_shape.append(
       sf::Vertex{sf::Vector2f{0.f, -25.f}, sf::Color{255, 0, 0, 255}});
@@ -47,8 +47,9 @@ EnemyShip::EnemyShip(Universe* universe, const sf::Vector2f& pos)
       sf::Vertex{sf::Vector2f{75.f, 0.f}, sf::Color{255, 0, 0, 255}});
   m_shape.append(
       sf::Vertex{sf::Vector2f{0.f, 25.f}, sf::Color{255, 0, 0, 255}});
+#endif  // 0
 
-#if BUILD(DEBUG)
+#if BUILD(DEBUG) && 0
   // Set up the info text.
   sf::Font* font =
       universe->getResourceManager()->getFont(ResourceManager::Font::Default);
@@ -79,8 +80,11 @@ void EnemyShip::shot(Projectile* projectile) {
   Unit::shot(projectile);
 }
 
-sf::FloatRect EnemyShip::getBounds() const {
+ca::Rect<f32> EnemyShip::getBounds() const {
+#if 0
   return m_shape.getBounds();
+#endif  // 0
+  return ca::Rect<f32>{};
 }
 
 void EnemyShip::tick(float adjustment) {
@@ -140,8 +144,8 @@ void EnemyShip::tick(float adjustment) {
     m_speed = kMaxTravelSpeed;
 
     // If we have speed, update our position.
-    m_pos = sf::Vector2f{m_pos.x + std::cos(degToRad(m_direction)) * m_speed,
-                         m_pos.y + std::sin(degToRad(m_direction)) * m_speed};
+    m_pos = ca::Vec2{m_pos.x + std::cos(degToRad(m_direction)) * m_speed,
+                     m_pos.y + std::sin(degToRad(m_direction)) * m_speed};
 
     // If we are heading directly towards the target and the target comes into
     // range, then we start our attack run.
@@ -169,8 +173,8 @@ void EnemyShip::tick(float adjustment) {
     m_speed = kMaxAttackSpeed;
 
     // If we have speed, update our position.
-    m_pos = sf::Vector2f{m_pos.x + std::cos(degToRad(m_direction)) * m_speed,
-                         m_pos.y + std::sin(degToRad(m_direction)) * m_speed};
+    m_pos = ca::Vec2{m_pos.x + std::cos(degToRad(m_direction)) * m_speed,
+                     m_pos.y + std::sin(degToRad(m_direction)) * m_speed};
 
     const float directionToTarget = directionBetween(m_pos, m_travelTargetPos);
     if (std::abs(directionToTarget - m_direction) > kMaxTurnRadius) {
@@ -183,8 +187,8 @@ void EnemyShip::tick(float adjustment) {
     m_speed = kMaxTravelSpeed;
     m_direction = wrap(m_direction -= kMaxTurnRadius / 3.f, 0.f, 360.f);
     // If we have speed, update our position.
-    m_pos = sf::Vector2f{m_pos.x + std::cos(degToRad(m_direction)) * m_speed,
-                         m_pos.y + std::sin(degToRad(m_direction)) * m_speed};
+    m_pos = ca::Vec2{m_pos.x + std::cos(degToRad(m_direction)) * m_speed,
+                     m_pos.y + std::sin(degToRad(m_direction)) * m_speed};
 
     const float distanceToTarget = distanceBetween(m_pos, m_travelTargetPos);
     if (distanceToTarget > kMaxEngagementRange * 1.5f) {
@@ -222,15 +226,18 @@ void EnemyShip::tick(float adjustment) {
        << directionBetween(m_pos, m_travelTargetPos) << ")\n"
        << distanceBetween(m_pos, m_travelTargetPos);
 
+#if 0
     m_infoText.setString(ss.str());
     m_infoText.setPosition(m_pos);
     sf::FloatRect bounds{m_infoText.getLocalBounds()};
     m_infoText.setOrigin(sf::Vector2f{bounds.width / 2.f, bounds.height / 2.f});
+#endif  // 0
   }
 #endif
 }
 
-void EnemyShip::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+void EnemyShip::render(ca::Canvas* canvas) const {
+#if 0
   sf::RenderStates originalStates{states};
 
   // Draw the particles first.
@@ -244,6 +251,7 @@ void EnemyShip::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 #if BUILD(DEBUG)
   target.draw(m_infoText, originalStates);
 #endif
+#endif  // 0
 }
 
 Object* EnemyShip::selectBestTarget() {
@@ -276,8 +284,9 @@ Object* EnemyShip::selectBestTarget() {
 void EnemyShip::createEngagementRangeShape() {
   const float kSpread = 45.f;
   const int kSteps = 9;
-  static const sf::Color color{255, 0, 0, 127};
+  static const ca::Color color{255, 0, 0, 127};
 
+#if 0
   m_engagementRangeShape.setPrimitiveType(sf::TrianglesFan);
   m_engagementRangeShape.resize(2 + kSteps);
 
@@ -294,6 +303,7 @@ void EnemyShip::createEngagementRangeShape() {
         std::sin(degToRad(half + degrees)) * kMaxEngagementRange;
     m_engagementRangeShape[i].color = color;
   }
+#endif  // 0
 }
 
 void EnemyShip::shoot() {
@@ -311,7 +321,7 @@ void EnemyShip::onObjectRemoved(Object* object) {
 }
 
 Particle* EnemyShip::createSmokeParticle(ParticleEmitter* emitter,
-                                         const sf::Vector2f& pos) {
+                                         const ca::Vec2& pos) {
   auto particle = std::make_unique<Particle>(emitter, pos);
   return particle.release();
 }

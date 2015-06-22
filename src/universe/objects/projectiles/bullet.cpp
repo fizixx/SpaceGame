@@ -14,37 +14,40 @@
 
 #include "universe/objects/projectiles/bullet.h"
 
-#include <SFML/Graphics/RenderTarget.hpp>
-
 #include "universe/universe.h"
 #include "utils/math.h"
 #include "utils/stream_operators.h"
 
-Bullet::Bullet(Universe* universe, const sf::Vector2f& pos, float direction,
-               float speed)
+Bullet::Bullet(Universe* universe, const ca::Vec2& pos, f32 direction,
+               f32 speed)
   : Projectile(universe, ObjectType::Bullet, pos), m_direction(direction),
     m_speed(speed), m_originalPos(pos) {
   // Set up the circle shape.
+#if 0
   m_shape.setFillColor(sf::Color{255, 0, 0, 255});
   m_shape.setSize(sf::Vector2f{25.f, 5.f});
   m_shape.setOrigin(sf::Vector2f{-15.f, 2.5f});
   m_shape.setRotation(direction);
+#endif  // 0
 }
 
 Bullet::~Bullet() {
 }
 
-sf::FloatRect Bullet::getBounds() const {
+ca::Rect<f32> Bullet::getBounds() const {
+#if 0
   sf::FloatRect bounds = m_shape.getGlobalBounds();
   bounds.left += m_pos.x;
   bounds.top += m_pos.y;
   return bounds;
+#endif  // 0
+  return ca::Rect<f32>{};
 }
 
 void Bullet::tick(float adjustment) {
   // Advance the bullet by it's speed in the direction it's travelling.
-  m_pos = sf::Vector2f{m_pos.x + std::cos(degToRad(m_direction)) * m_speed,
-                       m_pos.y + std::sin(degToRad(m_direction)) * m_speed};
+  m_pos = ca::Vec2{m_pos.x + std::cos(degToRad(m_direction)) * m_speed,
+                   m_pos.y + std::sin(degToRad(m_direction)) * m_speed};
 
   // Show the bullet die after this update?
   bool shouldDie = false;
@@ -70,7 +73,9 @@ void Bullet::tick(float adjustment) {
   }
 }
 
-void Bullet::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+void Bullet::render(ca::Canvas* canvas) const {
+#if 0
   states.transform.translate(m_pos);
   target.draw(m_shape, states);
+#endif  // 0
 }

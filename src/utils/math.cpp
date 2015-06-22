@@ -18,13 +18,13 @@
 
 const float kPi = 3.1415f;
 
-float distanceBetween(const sf::Vector2f& p1, const sf::Vector2f& p2) {
+float distanceBetween(const ca::Vec2& p1, const ca::Vec2& p2) {
   float xd = p2.x - p1.x;
   float yd = p2.y - p1.y;
   return std::sqrtf(xd * xd + yd * yd);
 }
 
-float directionBetween(const sf::Vector2f& p1, const sf::Vector2f& p2) {
+float directionBetween(const ca::Vec2& p1, const ca::Vec2& p2) {
   float dx = p2.x - p1.x;
   float dy = p2.y - p1.y;
   float direction = radToDeg(std::atan2(dy, dx));

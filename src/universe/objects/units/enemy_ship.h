@@ -17,16 +17,14 @@
 
 #include "universe/objects/units/unit.h"
 
-#include <nucleus/config.h>
-
-#include <SFML/Graphics/Text.hpp>
-#include <SFML/Graphics/VertexArray.hpp>
+#include "canvas/rendering/text.h"
+#include "nucleus/config.h"
 
 #include "particles/particle_emitter.h"
 
 class EnemyShip : public Unit {
 public:
-  EnemyShip(Universe* universe, const sf::Vector2f& pos);
+  EnemyShip(Universe* universe, const ca::Vec2& pos);
   ~EnemyShip() override;
 
   // Set the current target for the ship.
@@ -34,9 +32,9 @@ public:
 
   // Override: Unit
   void shot(Projectile* projectile) override;
-  sf::FloatRect getBounds() const override;
+  ca::Rect<f32> getBounds() const override;
   void tick(float adjustment) override;
-  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+  void render(ca::Canvas* canvas) const override;
 
 private:
   enum class Task {
@@ -59,14 +57,17 @@ private:
   void onObjectRemoved(Object* object);
 
   // Factory function to create a smoke particle.
-  Particle* createSmokeParticle(ParticleEmitter* emitter,
-                                const sf::Vector2f& pos);
+  Particle* createSmokeParticle(ParticleEmitter* emitter, const ca::Vec2& pos);
 
-  // The shape we use to render the ship.
+// The shape we use to render the ship.
+#if 0
   sf::VertexArray m_shape;
+#endif  // 0
 
-  // A shape used to show the engagement envelope of the ship.
+// A shape used to show the engagement envelope of the ship.
+#if 0
   sf::VertexArray m_engagementRangeShape;
+#endif  // 0
 
   // Particle emitter to render the smoke trail.
   ParticleEmitter m_smokeEmitter;
@@ -84,14 +85,14 @@ private:
   Object* m_target;
 
   // The current target that we are travelling towards.
-  sf::Vector2f m_travelTargetPos;
+  ca::Vec2 m_travelTargetPos;
 
   // Ticks since the last time we fired a shot.
   float m_timeSinceLastShot{0.f};
 
 #if BUILD(DEBUG)
   // Info text that we print out with the ship.
-  sf::Text m_infoText;
+  ca::Text m_infoText;
 #endif  // BUILD(DEBUG)
 
   int stepper{0};

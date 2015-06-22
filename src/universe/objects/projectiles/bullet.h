@@ -17,19 +17,16 @@
 
 #include "universe/objects/projectiles/projectile.h"
 
-#include <SFML/Graphics/RectangleShape.hpp>
-
 class Bullet : public Projectile {
 public:
-  Bullet(Universe* universe, const sf::Vector2f& pos, float direction,
-         float speed);
+  Bullet(Universe* universe, const ca::Vec2& pos, f32 direction, f32 speed);
   ~Bullet() override;
 
   // Override: Projectile
-  int32_t getDamageAmount() const override { return 50; }
-  sf::FloatRect getBounds() const override;
+  i32 getDamageAmount() const override { return 50; }
+  ca::Rect<f32> getBounds() const override;
   void tick(float adjustment) override;
-  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+  void render(ca::Canvas* canvas) const override;
 
 private:
   // The direction we are traveling in.
@@ -39,10 +36,12 @@ private:
   float m_speed{0.f};
 
   // The original position we started to travel from.
-  sf::Vector2f m_originalPos;
+  ca::Vec2 m_originalPos;
 
   // The shape we use to represent the bullet.
+#if 0
   sf::RectangleShape m_shape;
+#endif  // 0
 
   DISALLOW_COPY_AND_ASSIGN(Bullet);
 };

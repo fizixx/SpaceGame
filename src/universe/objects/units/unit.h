@@ -19,8 +19,8 @@
 
 class Unit : public DestructibleObject {
 public:
-  Unit(Universe* universe, ObjectType objectType, const sf::Vector2f& pos,
-       int32_t hitPoints);
+  Unit(Universe* universe, ObjectType objectType, const ca::Vec2& pos,
+       i32 hitPoints);
   ~Unit() override;
 
 private:

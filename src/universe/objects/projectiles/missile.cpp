@@ -14,8 +14,6 @@
 
 #include "universe/objects/projectiles/missile.h"
 
-#include <SFML/Graphics/RenderTarget.hpp>
-
 #include "universe/universe.h"
 #include "utils/math.h"
 
@@ -26,15 +24,17 @@ static const float kMaxSpeed = 10.f;
 
 }  // namespace
 
-Missile::Missile(Universe* universe, sf::Vector2f& pos, float direction)
+Missile::Missile(Universe* universe, const ca::Vec2& pos, float direction)
   : Projectile(universe, ObjectType::Missile, pos), m_direction(direction) {
   // Set up the shape.
+#if 0
   m_shape.setPrimitiveType(sf::Triangles);
   m_shape.append(sf::Vertex{sf::Vector2f{0.f, 0.f}, sf::Color{255, 0, 0, 255}});
   m_shape.append(
       sf::Vertex{sf::Vector2f{-10.f, 5.f}, sf::Color{255, 0, 0, 255}});
   m_shape.append(
       sf::Vertex{sf::Vector2f{-10.f, -5.f}, sf::Color{255, 0, 0, 255}});
+#endif  // 0
 
   m_objectRemovedSlotId = m_universe->getObjectRemovedSignal().connect(
       nu::slot(&Missile::onObjectRemoved, this));
@@ -61,8 +61,11 @@ int32_t Missile::getDamageAmount() const {
   return 50;
 }
 
-sf::FloatRect Missile::getBounds() const {
+ca::Rect<f32> Missile::getBounds() const {
+#if 0
   return m_shape.getBounds();
+#endif  // 0
+  return ca::Rect<f32>{};
 }
 
 void Missile::tick(float adjustment) {
@@ -100,8 +103,8 @@ void Missile::tick(float adjustment) {
     m_speed = kMaxSpeed;
 
     // Adjust the position of the missile accordingly.
-    sf::Vector2f delta{std::cos(degToRad(m_direction)) * m_speed,
-                       std::sin(degToRad(m_direction)) * m_speed};
+    ca::Vec2 delta{std::cos(degToRad(m_direction)) * m_speed,
+                   std::sin(degToRad(m_direction)) * m_speed};
     m_pos += delta;
 
     bool shouldRemove = false;
@@ -129,10 +132,12 @@ void Missile::tick(float adjustment) {
   }
 }
 
-void Missile::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+void Missile::render(ca::Canvas* canvas) const {
+#if 0
   states.transform.translate(m_pos);
   states.transform.rotate(m_direction);
   target.draw(m_shape, states);
+#endif  // 0
 }
 
 void Missile::onObjectRemoved(Object* object) {

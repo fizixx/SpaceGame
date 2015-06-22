@@ -20,15 +20,15 @@
 #define DECLARE_STRUCTURE(ClassName)                                           \
   \
 public:                                                                        \
-  static const int32_t powerCost;                                              \
-  static const int32_t mineralCost;                                            \
-  virtual int32_t getPowerCost() { return ClassName::powerCost; }              \
-  virtual int32_t getMineralCost() { return ClassName::mineralCost; }          \
+  static const i32 powerCost;                                                  \
+  static const i32 mineralCost;                                                \
+  virtual i32 getPowerCost() { return ClassName::powerCost; }                  \
+  virtual i32 getMineralCost() { return ClassName::mineralCost; }              \
   DECLARE_OBJECT(ClassName);
 
 #define DEFINE_STRUCTURE(ClassName, Label, PowerCost, MineralCost)             \
-  const int32_t ClassName::powerCost = PowerCost;                              \
-  const int32_t ClassName::mineralCost = MineralCost;                          \
+  const i32 ClassName::powerCost = PowerCost;                                  \
+  const i32 ClassName::mineralCost = MineralCost;                              \
   DEFINE_OBJECT(ClassName, Label)
 
 class Structure : public DestructibleObject {
@@ -36,7 +36,7 @@ class Structure : public DestructibleObject {
 
 public:
   Structure(Universe* universe, ObjectType objectType, const ca::Vec2& pos,
-            int32_t hitPoints);
+            i32 hitPoints);
   ~Structure() override;
 
   // Override: Object

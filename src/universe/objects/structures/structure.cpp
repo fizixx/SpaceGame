@@ -20,7 +20,7 @@
 DEFINE_STRUCTURE(Structure, "Structure", 0, 0);
 
 Structure::Structure(Universe* universe, ObjectType objectType,
-                     const sf::Vector2f& pos, int32_t hitPoints)
+                     const ca::Vec2& pos, i32 hitPoints)
   : DestructibleObject(universe, objectType, pos, hitPoints) {
 }
 

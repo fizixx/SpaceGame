@@ -14,17 +14,16 @@
 
 #include "universe/objects/structures/command_center.h"
 
-#include <SFML/Graphics/RenderTarget.hpp>
-
 #include "universe/universe.h"
 
 DEFINE_STRUCTURE(CommandCenter, "Command Center", 2000, 0);
 
-CommandCenter::CommandCenter(Universe* universe, const sf::Vector2f& pos)
+CommandCenter::CommandCenter(Universe* universe, const ca::Vec2& pos)
   : Structure(universe, ObjectType::CommandCenter, pos, 5000) {
   m_texture = m_universe->getResourceManager()->getTexture(
       ResourceManager::Texture::CommandCenter);
 
+#if 0
   if (m_texture) {
     m_texture->setSmooth(false);
     m_shape.setTexture(*m_texture);
@@ -32,24 +31,29 @@ CommandCenter::CommandCenter(Universe* universe, const sf::Vector2f& pos)
     sf::FloatRect bounds = m_shape.getLocalBounds();
     m_shape.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
   }
+#endif  // 0
 }
 
 CommandCenter::~CommandCenter() {
 }
 
-sf::FloatRect CommandCenter::getBounds() const {
+ca::Rect<f32> CommandCenter::getBounds() const {
+#if 0
   sf::FloatRect bounds = m_shape.getGlobalBounds();
   bounds.left += m_pos.x;
   bounds.top += m_pos.y;
   return bounds;
+#endif  // 0
+  return ca::Rect<f32>{};
 }
 
 void CommandCenter::tick(float adjustment) {
   m_universe->adjustPower(1000);
 }
 
-void CommandCenter::draw(sf::RenderTarget& target,
-                         sf::RenderStates states) const {
+void CommandCenter::render(ca::Canvas* canvas) const {
+#if 0
   states.transform.translate(m_pos);
   target.draw(m_shape, states);
+#endif  // 0
 }

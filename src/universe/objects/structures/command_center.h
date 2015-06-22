@@ -15,7 +15,7 @@
 #ifndef UNIVERSE_OBJECTS_STRUCTURES_COMMAND_CENTER_H_
 #define UNIVERSE_OBJECTS_STRUCTURES_COMMAND_CENTER_H_
 
-#include <SFML/Graphics/Sprite.hpp>
+#include "canvas/rendering/texture.h"
 
 #include "universe/objects/structures/structure.h"
 
@@ -23,20 +23,22 @@ class CommandCenter : public Structure {
   DECLARE_STRUCTURE(CommandCenter);
 
 public:
-  CommandCenter(Universe* universe, const sf::Vector2f& pos);
+  CommandCenter(Universe* universe, const ca::Vec2& pos);
   virtual ~CommandCenter() override;
 
   // Override: Object
-  sf::FloatRect getBounds() const override;
+  ca::Rect<f32> getBounds() const override;
   void tick(float adjustment) override;
-  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+  void render(ca::Canvas* canvas) const override;
 
 private:
   // The texture to render the command center.
-  sf::Texture* m_texture;
+  ca::Texture* m_texture;
 
   // the shape we use to render the command center.
+#if 0
   sf::Sprite m_shape;
+#endif  // 0
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(CommandCenter);
 };

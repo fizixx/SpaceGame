@@ -14,7 +14,9 @@
 
 #include "utils/stream_operators.h"
 
+#if 0
 std::ostream& operator<<(std::ostream& os, const sf::Vector2f& vector) {
   os << vector.x << ", " << vector.y;
   return os;
 }
+#endif  // 0

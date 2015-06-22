@@ -17,8 +17,10 @@
 
 #include <ostream>
 
+#if 0
 #include <SFML/System/Vector2.hpp>
 
 std::ostream& operator<<(std::ostream& os, const sf::Vector2f& vector);
+#endif  // 0
 
 #endif  // UTILS_STREAM_OPERATORS_H_
