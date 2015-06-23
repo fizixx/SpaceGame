@@ -229,7 +229,7 @@ void UniverseView::layout(const ca::Rect<i32>& rect) {
   m_camera.layout(rect);
 }
 
-void UniverseView::render(ca::Canvas* canvas) const {
+void UniverseView::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
 #if 0
   // Store the original view state.
   sf::View origView = target.getView();

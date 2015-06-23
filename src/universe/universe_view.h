@@ -62,7 +62,7 @@ public:
 #endif  // 0
   void tick(float adjustment) override;
   void layout(const ca::Rect<i32>& rect) override;
-  void render(ca::Canvas* canvas) const override;
+  void render(ca::Canvas* canvas, const ca::Mat4& transform) const override;
 
 private:
   enum class MouseHandler {
