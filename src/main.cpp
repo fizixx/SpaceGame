@@ -34,17 +34,16 @@ public:
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
     // Initialize the resource manager.
-    ResourceManager resourceManager;
-    if (!resourceManager.loadAll(nu::FilePath(
+    if (!m_resourceManager.loadAll(nu::FilePath(
             FILE_PATH_LITERAL("C:\\Workspace\\SpaceGame\\res\\")))) {
       return false;
     }
 
     // Create a user interface context for the universe game state.
-    m_uiContext = std::make_unique<UiContext>(&resourceManager);
+    m_uiContext = std::make_unique<UiContext>(&m_resourceManager);
 
     // Construct the universe game state.
-    m_gameState = std::make_unique<GameStateUniverse>(&resourceManager,
+    m_gameState = std::make_unique<GameStateUniverse>(&m_resourceManager,
                                                       m_uiContext.get());
 
     using Clock = std::chrono::high_resolution_clock;
@@ -64,6 +63,7 @@ public:
   }
 
 private:
+  ResourceManager m_resourceManager;
   std::unique_ptr<el::Context> m_uiContext;
   std::unique_ptr<GameStateUniverse> m_gameState;
 
