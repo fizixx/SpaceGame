@@ -40,7 +40,8 @@ public:
 
 private:
   // Create the user interface and add it to the parent ui specified.
-  void createUserInterface(el::Context* context, el::GroupView* parent);
+  void createUserInterface(el::Context* context,
+                           ResourceManager* resourceManager);
 
   // The universe for this game state.
   std::unique_ptr<Universe> m_universe;

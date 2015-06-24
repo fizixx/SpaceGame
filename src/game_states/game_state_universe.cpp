@@ -16,6 +16,7 @@
 
 #include "elastic/views/button_view.h"
 #include "elastic/views/linear_sizer_view.h"
+#include "elastic/views/image_view.h"
 
 #include "universe/objects/structures/miner.h"
 #include "universe/objects/structures/power_relay.h"
@@ -41,7 +42,7 @@ GameStateUniverse::GameStateUniverse(ResourceManager* resourceManager,
   : GameState(context),
     m_universe(std::make_unique<Universe>(resourceManager)) {
   // Add the user interface to the UI tree.
-  createUserInterface(m_uiContext, m_uiContext->getRoot());
+  createUserInterface(m_uiContext, resourceManager);
 }
 
 GameStateUniverse::~GameStateUniverse() {
@@ -54,10 +55,10 @@ void GameStateUniverse::tick(float adjustment) {
   m_universe->tick(adjustment);
 
   // Update the total power label.
-  m_totalPowerText->setLabel(std::to_string(m_universe->getPower()));
+  // m_totalPowerText->setLabel(std::to_string(m_universe->getPower()));
 
   // Update the total minerals label.
-  m_totalMineralsText->setLabel(std::to_string(m_universe->getMinerals()));
+  // m_totalMineralsText->setLabel(std::to_string(m_universe->getMinerals()));
 }
 
 void GameStateUniverse::onButtonClicked(el::ButtonView* sender) {
@@ -84,12 +85,16 @@ void GameStateUniverse::onButtonClicked(el::ButtonView* sender) {
 }
 
 void GameStateUniverse::createUserInterface(el::Context* context,
-                                            el::GroupView* parent) {
+                                            ResourceManager* resourceManager) {
+  ca::Font* defaultFont = context->getFont("default");
+
+  el::GroupView* root = context->getRoot();
+
   // Add the universe view.
   m_universeView = new UniverseView(context, m_universe.get());
   m_universeView->setName("universe");
   m_universeView->setExpand(el::View::ExpandBoth);
-  parent->addChild(m_universeView);
+  root->addChild(m_universeView);
 
   // Create a vertical linear sizer to hold the game title and the button
   // container.
@@ -100,22 +105,17 @@ void GameStateUniverse::createUserInterface(el::Context* context,
   // Create the info bar.
   auto infoBar = new el::LinearSizerView{
       context, el::LinearSizerView::OrientationHorizontal};
-  infoBar->setExpand(el::View::ExpandHorizontal);
 
-  m_totalPowerText = new el::TextView(context);
+  m_totalPowerText = new el::TextView(context, defaultFont, "0");
   m_totalPowerText->setName("totalPowerText");
-  m_totalPowerText->setHorizontalAlign(el::View::AlignRight);
-  m_totalPowerText->setProportion(1);
   infoBar->addChild(m_totalPowerText);
 
   auto spacer1 = new el::View(context);
   spacer1->setMinSize(ca::Size<i32>{50, 0});
   infoBar->addChild(spacer1);
 
-  m_totalMineralsText = new el::TextView(context);
+  m_totalMineralsText = new el::TextView(context, defaultFont, "0");
   m_totalMineralsText->setName("totalMineralsText");
-  m_totalMineralsText->setHorizontalAlign(el::View::AlignLeft);
-  m_totalMineralsText->setProportion(1);
   infoBar->addChild(m_totalMineralsText);
 
   mainSizer->addChild(infoBar);
@@ -148,7 +148,7 @@ void GameStateUniverse::createUserInterface(el::Context* context,
 
   mainSizer->addChild(buttonContainer);
 
-  parent->addChild(mainSizer);
+  root->addChild(mainSizer);
 
   // Set the universe view as the view that receives keyboard focus.
   m_uiContext->setFocusView(m_universeView);

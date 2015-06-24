@@ -27,6 +27,7 @@ public:
   ~UiContext();
 
   // Override: ui::Context
+  ca::Texture* getTexture(const std::string& name) override;
   ca::Font* getFont(const std::string& name) override;
 
 private:

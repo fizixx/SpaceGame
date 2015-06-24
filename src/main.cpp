@@ -52,6 +52,18 @@ public:
     return ca::WindowDelegate::onWindowCreated();
   }
 
+  void onMouseMoved(const ca::MouseEvent& evt) override {
+    m_gameState->onMouseMoved(evt);
+  }
+
+  void onMousePressed(const ca::MouseEvent& evt) override {
+    m_gameState->onMousePressed(evt);
+  }
+
+  void onMouseReleased(const ca::MouseEvent& evt) override {
+    m_gameState->onMouseReleased(evt);
+  }
+
   void onPaint(ca::Canvas* canvas) override {
     m_gameState->tick(1.f);
 
