@@ -22,6 +22,10 @@ UiContext::~UiContext() {
 }
 
 ca::Texture* UiContext::getTexture(const std::string& name) {
+  if (name == "mouse_cursor") {
+    return m_resourceManager->getTexture(ResourceManager::Texture::MouseCursor);
+  }
+
   return nullptr;
 }
 

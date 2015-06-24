@@ -14,6 +14,9 @@
 
 #include "universe/universe_view.h"
 
+#include "canvas/math/transform.h"
+#include "elastic/context.h"
+
 #include "universe/link.h"
 #include "universe/objects/object.h"
 #include "universe/objects/structures/miner.h"
@@ -25,14 +28,9 @@ UniverseView::UniverseView(el::Context* context, Universe* universe)
   : el::View(context), m_universe(universe), m_hud{this} {
 // Set up the mouse position shape.
 
-#if 0
 #if SHOW_UNIVERSE_MOUSE_POS
-  m_mousePosShape.setRadius(25.f);
-  m_mousePosShape.setOrigin(m_mousePosShape.getGlobalBounds().width / 2.f,
-                            m_mousePosShape.getGlobalBounds().height / 2.f);
-  m_mousePosShape.setFillColor(sf::Color{0, 0, 255, 255});
-#endif  // SHOW_UNIVERSE_MOUSE_POS
-#endif  // 0
+  m_mousePosSprite.setTexture(context->getTexture("mouse_cursor"));
+#endif
 }
 
 UniverseView::~UniverseView() {
@@ -85,17 +83,13 @@ bool UniverseView::onMousePressed(const ca::MouseEvent& event) {
 bool UniverseView::onMouseDragged(const ca::MouseEvent& event) {
   el::View::onMouseDragged(event);
 
-#if 0
   // Update the last mouse position.
-  m_viewMousePos = sf::Vector2i{event.mouseMove.x, event.mouseMove.y};
+  m_viewMousePos = event.pos;
 
   // Get the universe position.
-  sf::Vector2f universeMousePos{m_camera.mousePosToUniversePos(m_viewMousePos)};
+  m_universeMousePos = m_camera.mousePosToUniversePos(m_viewMousePos);
 
-#if SHOW_UNIVERSE_MOUSE_POS
-  m_mousePosShape.setPosition(universeMousePos);
-#endif
-
+#if 0
   // If we are controlling the camera, then adjust the camera when we dragged
   // somewhere.
   if (m_mouseHandler == MouseHandler::Camera) {
@@ -130,23 +124,17 @@ bool UniverseView::onMouseDragged(const ca::MouseEvent& event) {
 void UniverseView::onMouseMoved(const ca::MouseEvent& event) {
   el::View::onMouseMoved(event);
 
-#if 0
   // Update the last mouse position.
-  m_viewMousePos = sf::Vector2i{event.mouseMove.x, event.mouseMove.y};
+  m_viewMousePos = event.pos;
 
   // Get the universe position.
-  sf::Vector2f universeMousePos{m_camera.mousePosToUniversePos(m_viewMousePos)};
+  m_universeMousePos = m_camera.mousePosToUniversePos(m_viewMousePos);
 
   // The hud wants to know if we moved the mouse.
-  m_hud.updateUniverseMousePos(universeMousePos);
-
-#if SHOW_UNIVERSE_MOUSE_POS
-  m_mousePosShape.setPosition(universeMousePos);
-#endif
+  m_hud.updateUniverseMousePos(m_universeMousePos);
 
   // Update any ghost objects that we might have.
-  updateGhostPosition(universeMousePos);
-#endif  // 0
+  updateGhostPosition(m_universeMousePos);
 }
 
 void UniverseView::onMouseReleased(const ca::MouseEvent& event) {
@@ -215,12 +203,9 @@ void UniverseView::tick(float adjustment) {
   m_hud.tick(adjustment);
 
 // Update the location of the mouse within the universe.
-#if 0
 #if SHOW_UNIVERSE_MOUSE_POS
-  sf::Vector2f universeMousePos{m_camera.mousePosToUniversePos(m_viewMousePos)};
-  m_mousePosShape.setPosition(universeMousePos);
+  m_universeMousePos = m_camera.mousePosToUniversePos(m_viewMousePos);
 #endif
-#endif  // 0
 }
 
 void UniverseView::layout(const ca::Rect<i32>& rect) {
@@ -256,12 +241,16 @@ void UniverseView::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
 
   // Render the camera target.
   target.draw(m_camera);
+#endif  // 0
 
 #if SHOW_UNIVERSE_MOUSE_POS
   // Draw the mouse position.
-  target.draw(m_mousePosShape);
+  m_mousePosSprite.render(canvas,
+                          transform * ca::translate(m_universeMousePos.x,
+                                                    m_universeMousePos.y, 0.f));
 #endif
 
+#if 0
   // Reset the target view.
   target.setView(origView);
 

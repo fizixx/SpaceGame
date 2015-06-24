@@ -25,6 +25,8 @@ static const struct {
   ResourceManager::Texture texture;
   nu::FilePath::CharType* fileName;
 } kTextures[] = {
+    {ResourceManager::Texture::MouseCursor,
+     FILE_PATH_LITERAL("images\\mouse_cursor.png")},
     {ResourceManager::Texture::CommandCenter,
      FILE_PATH_LITERAL("images\\objects\\command_center.png")},
     {ResourceManager::Texture::Asteroid1,

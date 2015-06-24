@@ -17,8 +17,9 @@
 
 #include <memory>
 
-#include <elastic/views/color_view.h>
-#include <nucleus/config.h>
+#include "canvas/rendering/sprite.h"
+#include "elastic/views/color_view.h"
+#include "nucleus/config.h"
 
 #include "universe/camera.h"
 #include "universe/hud.h"
@@ -103,16 +104,17 @@ private:
   // The last postition where the mouse cursor was in view coordinates.
   ca::Pos<i32> m_viewMousePos;
 
+  // The current position of the mouse in the universe.
+  ca::Vec2 m_universeMousePos;
+
   // The current ghost object.  We own this pointer as it's not part of the
   // universe yet.
   std::unique_ptr<Object> m_ghostObject;
 
-#if 0
 #if SHOW_UNIVERSE_MOUSE_POS
   // A shape to show where the current mouse position is in the universe.
-  sf::CircleShape m_mousePosShape;
+  ca::Sprite m_mousePosSprite;
 #endif
-#endif  // 0
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(UniverseView);
 };

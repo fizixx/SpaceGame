@@ -28,6 +28,7 @@ public:
   };
 
   enum class Texture {
+    MouseCursor,
     CommandCenter,
     Asteroid1,
     Asteroid2,
