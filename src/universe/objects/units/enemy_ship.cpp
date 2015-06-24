@@ -236,7 +236,7 @@ void EnemyShip::tick(float adjustment) {
 #endif
 }
 
-void EnemyShip::render(ca::Canvas* canvas) const {
+void EnemyShip::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
 #if 0
   sf::RenderStates originalStates{states};
 

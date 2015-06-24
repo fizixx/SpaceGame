@@ -66,7 +66,7 @@ void Miner::tick(float adjustment) {
   }
 }
 
-void Miner::render(ca::Canvas* canvas) const {
+void Miner::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
 #if 0
   // Draw all the lasers
   for (const auto& laser : m_lasers) {

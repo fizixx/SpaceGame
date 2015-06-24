@@ -14,6 +14,8 @@
 
 #include "universe/camera.h"
 
+#include "canvas/math/transform.h"
+
 Camera::Camera() {
 #if SHOW_CAMERA_TARGET
   // Adjust some values on the camera target shape.
@@ -27,63 +29,62 @@ Camera::Camera() {
 Camera::~Camera() {
 }
 
-ca::Vec2 Camera::mousePosToUniversePos(const ca::Pos<i32>& mousePos) const {
-#if 0
-  const float width = static_cast<float>(m_viewportSize.x);
-  const float height = static_cast<float>(m_viewportSize.y);
-  const sf::FloatRect& viewport = m_view.getViewport();
-
-  const sf::IntRect adjViewport{
-      static_cast<int>(0.5f + width * viewport.left),
-      static_cast<int>(0.5f + height * viewport.top),
-      static_cast<int>(0.5f + width * viewport.width),
-      static_cast<int>(0.5f + height * viewport.height)};
-
-  const sf::Vector2f normalized{
-      -1.f + 2.f * (mousePos.x - adjViewport.left) / adjViewport.width,
-      1.f - 2.f * (mousePos.y - adjViewport.top) / adjViewport.height};
-
-  // Then transform by the inverse of the view matrix
-  return m_view.getInverseTransform().transformPoint(normalized);
-#endif  // 0
-  return ca::Vec2{};
+void Camera::setViewportDimensions(const ca::Rect<i32>& rect) {
+  m_viewportSize = rect.size;
+  updateView();
 }
 
-ca::Pos<i32> Camera::universePosToMousePos(
-    const ca::Vec2& universePos) const {
-#if 0
-  const float width = static_cast<float>(m_viewportSize.x);
-  const float height = static_cast<float>(m_viewportSize.y);
+ca::Vec2 Camera::mousePosToUniversePos(const ca::Pos<i32>& mousePos) const {
+  const float width = static_cast<float>(m_viewportSize.width);
+  const float height = static_cast<float>(m_viewportSize.height);
+  const ca::Rect<f32> viewport{0.f, 0.f, 1.f, 1.f};
 
-  // Transform the point by the vie matrix.
-  const sf::Vector2f normalized =
-      m_view.getTransform().transformPoint(universePos);
+  const ca::Rect<i32> adjViewport{
+      static_cast<int>(0.5f + width * viewport.pos.x),
+      static_cast<int>(0.5f + height * viewport.pos.y),
+      static_cast<int>(0.5f + width * viewport.size.width),
+      static_cast<int>(0.5f + height * viewport.size.height)};
+
+  const ca::Vec4 normalized{
+      -1.f + 2.f * (mousePos.x - adjViewport.pos.x) / adjViewport.size.width,
+      1.f - 2.f * (mousePos.y - adjViewport.pos.y) / adjViewport.size.height,
+      0.f, 0.f};
+
+  // Then transform by the inverse of the view matrix
+  ca::Vec4 result = ca::inverse(m_view) * normalized;
+
+  return ca::Vec2{result.x, result.y};
+}
+
+ca::Pos<i32> Camera::universePosToMousePos(const ca::Vec2& universePos) const {
+  const float width = static_cast<float>(m_viewportSize.width);
+  const float height = static_cast<float>(m_viewportSize.height);
+
+  // Transform the point by the view matrix.
+  const ca::Vec4 normalized =
+      m_view * ca::Vec4{universePos.x, universePos.y, 0.f, 0.f};
 
   // Convert the point to viewport coordinates.
-  const sf::FloatRect& viewport = m_view.getViewport();
-  const sf::IntRect adjViewport{static_cast<int>(width * viewport.left),
-                                static_cast<int>(height * viewport.top),
-                                static_cast<int>(width * viewport.width),
-                                static_cast<int>(height * viewport.height)};
+  const ca::Rect<f32> viewport{0.f, 0.f, 1.f, 1.f};
+  const ca::Rect<i32> adjViewport{
+      static_cast<i32>(width * viewport.pos.x),
+      static_cast<i32>(height * viewport.pos.y),
+      static_cast<i32>(width * viewport.size.width),
+      static_cast<i32>(height * viewport.size.height)};
 
-  const sf::Vector2i result{
-      static_cast<int>((normalized.x + 1.f) / 2.f * adjViewport.width +
-                       adjViewport.left),
-      static_cast<int>((-normalized.y + 1.f) / 2.f * adjViewport.height +
-                       adjViewport.top)};
+  const ca::Pos<i32> result{
+      static_cast<i32>((normalized.x + 1.f) / 2.f * adjViewport.size.width +
+                       adjViewport.pos.x),
+      static_cast<i32>((-normalized.y + 1.f) / 2.f * adjViewport.size.height +
+                       adjViewport.pos.y)};
 
   return result;
-#endif  // 0
-
-  return ca::Pos<i32>{};
 }
 
 void Camera::adjustPosition(const ca::Pos<i32>& delta) {
-#if 0
   m_cameraTarget -=
-      sf::Vector2f{static_cast<float>(delta.x), static_cast<float>(delta.y)} *
+      ca::Vec2{static_cast<float>(delta.x), static_cast<float>(delta.y)} *
       m_zoomLevel;
-#endif  // 0
 }
 
 void Camera::adjustZoom(int32_t delta) {
@@ -96,13 +97,6 @@ void Camera::adjustZoom(int32_t delta) {
   if (m_targetZoomLevel > 10.f) {
     m_targetZoomLevel = 10.f;
   }
-}
-
-void Camera::layout(const ca::Rect<i32>& rect) {
-  m_viewportSize.x = static_cast<float>(rect.size.width);
-  m_viewportSize.y = static_cast<float>(rect.size.height);
-
-  updateView();
 }
 
 void Camera::tick(float adjustment) {
@@ -128,15 +122,14 @@ void Camera::render(ca::Canvas* canvas) const {
 }
 
 void Camera::updateView() {
-#if 0
-  // Adjust the viewport size.
-  float ratio = 1080.f / m_viewportSize.y;
+  const f32 ratio = 1080.f / m_viewportSize.height;
 
-  ca::Vec2 size{m_viewportSize.x * ratio, m_viewportSize.y * ratio};
+  const f32 width = static_cast<f32>(m_viewportSize.width) * ratio / 2.f;
+  const f32 height = static_cast<f32>(m_viewportSize.height) * ratio / 2.f;
 
-  sf::View result{m_cameraPos, size};
-  result.zoom(m_zoomLevel);
+  // We use an orthographic projection to render the universe.
+  m_view = ca::ortho(-width, width, -height, height);
 
-  m_view = result;
-#endif  // 0
+  // Move the camera to it's position.
+  m_view *= ca::translate(m_cameraPos.x, m_cameraPos.y, 0.f);
 }

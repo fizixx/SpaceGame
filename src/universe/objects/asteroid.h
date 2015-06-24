@@ -37,7 +37,7 @@ public:
   // Override: Object
   ca::Rect<f32> getBounds() const override;
   void tick(float adjustment) override;
-  void render(ca::Canvas* canvas) const override;
+  void render(ca::Canvas* canvas, const ca::Mat4& transform) const override;
 
 private:
   // The amount of minerals we have.

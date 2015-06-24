@@ -34,7 +34,7 @@ public:
   void shot(Projectile* projectile) override;
   ca::Rect<f32> getBounds() const override;
   void tick(float adjustment) override;
-  void render(ca::Canvas* canvas) const override;
+  void render(ca::Canvas* canvas, const ca::Mat4& transform) const override;
 
 private:
   enum class Task {

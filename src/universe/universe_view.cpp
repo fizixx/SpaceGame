@@ -56,13 +56,13 @@ bool UniverseView::onMousePressed(const ca::MouseEvent& event) {
   if (event.mouseButton.button != sf::Mouse::Left) {
     return false;
   }
+#endif  // 0
 
   // Store the position where we pressed the mouse the first time.
-  m_mouseStartDragPos.x = event.mouseButton.x;
-  m_mouseStartDragPos.y = event.mouseButton.y;
+  m_mouseStartDragPos = event.pos;
 
   // Convert the mouse position to a universe position.
-  sf::Vector2f universePos{m_camera.mousePosToUniversePos(m_mouseStartDragPos)};
+  ca::Vec2 universePos{m_camera.mousePosToUniversePos(m_mouseStartDragPos)};
 
   // See if the mouse is currently over an object.
   m_mousePressedObject = m_universe->findObjectAt(universePos);
@@ -75,8 +75,6 @@ bool UniverseView::onMousePressed(const ca::MouseEvent& event) {
   // means we're not controlling the camera.
   m_mouseHandler = MouseHandler::Camera;
 
-#endif  // 0
-
   return true;
 }
 
@@ -87,15 +85,14 @@ bool UniverseView::onMouseDragged(const ca::MouseEvent& event) {
   m_viewMousePos = event.pos;
 
   // Get the universe position.
-  m_universeMousePos = m_camera.mousePosToUniversePos(m_viewMousePos);
+  // m_universeMousePos = m_camera.mousePosToUniversePos(m_viewMousePos);
 
-#if 0
   // If we are controlling the camera, then adjust the camera when we dragged
   // somewhere.
   if (m_mouseHandler == MouseHandler::Camera) {
     // Get the delta position.
-    sf::Vector2i currentMousePos{event.mouseMove.x, event.mouseMove.y};
-    sf::Vector2i delta = currentMousePos - m_mouseStartDragPos;
+    ca::Pos<i32> currentMousePos = event.pos;
+    ca::Pos<i32> delta = currentMousePos - m_mouseStartDragPos;
 
     // If we haven't moved past the threshold yet, check to see if we haven't
     // this time.
@@ -114,6 +111,7 @@ bool UniverseView::onMouseDragged(const ca::MouseEvent& event) {
     }
   }
 
+#if 0
   // When the mouse is dragged, we update any possible ghost objects.
   updateGhostPosition(universeMousePos);
 #endif  // 0
@@ -129,6 +127,9 @@ void UniverseView::onMouseMoved(const ca::MouseEvent& event) {
 
   // Get the universe position.
   m_universeMousePos = m_camera.mousePosToUniversePos(m_viewMousePos);
+
+  ca::Vec2 pos = m_camera.mousePosToUniversePos(ca::Pos<i32>{700, 450});
+  LOG(Info) << pos.x << " : " << pos.y;
 
   // The hud wants to know if we moved the mouse.
   m_hud.updateUniverseMousePos(m_universeMousePos);
@@ -204,14 +205,14 @@ void UniverseView::tick(float adjustment) {
 
 // Update the location of the mouse within the universe.
 #if SHOW_UNIVERSE_MOUSE_POS
-  m_universeMousePos = m_camera.mousePosToUniversePos(m_viewMousePos);
+  // m_universeMousePos = m_camera.mousePosToUniversePos(m_viewMousePos);
 #endif
 }
 
 void UniverseView::layout(const ca::Rect<i32>& rect) {
   View::layout(rect);
 
-  m_camera.layout(rect);
+  m_camera.setViewportDimensions(rect);
 }
 
 void UniverseView::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
@@ -226,12 +227,16 @@ void UniverseView::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
   for (const auto& link : m_universe->m_links) {
     target.draw(*link, states);
   }
+#endif  // 0
+
+  ca::Mat4 cameraView = m_camera.getView();
 
   // Render the objects.
   for (const auto& object : m_universe->m_objects) {
-    target.draw(*object, states);
+    object->render(canvas, cameraView);
   }
 
+#if 0
   // Render the ghost object and link over the existing objects.
   if (m_ghostObject) {
     target.draw(*m_ghostObject);
@@ -245,9 +250,9 @@ void UniverseView::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
 
 #if SHOW_UNIVERSE_MOUSE_POS
   // Draw the mouse position.
-  m_mousePosSprite.render(canvas,
-                          transform * ca::translate(m_universeMousePos.x,
-                                                    m_universeMousePos.y, 0.f));
+  m_mousePosSprite.render(
+      canvas, cameraView * ca::translate(m_universeMousePos.x,
+                                         m_universeMousePos.y, 0.f));
 #endif
 
 #if 0

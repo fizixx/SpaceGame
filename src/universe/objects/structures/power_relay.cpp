@@ -49,7 +49,7 @@ ca::Rect<f32> PowerRelay::getBounds() const {
   return ca::Rect<f32>{};
 }
 
-void PowerRelay::render(ca::Canvas* canvas) const {
+void PowerRelay::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
 #if 0
   states.transform.translate(m_pos);
   target.draw(m_shape, states);

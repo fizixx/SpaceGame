@@ -19,6 +19,7 @@
 #include <set>
 
 #include "canvas/math/vec2.h"
+#include "canvas/math/mat4.h"
 #include "canvas/rendering/canvas.h"
 #include "canvas/utils/rect.h"
 #include "nucleus/macros.h"
@@ -89,7 +90,7 @@ public:
   virtual void tick(float adjustment) = 0;
 
   // Render the object.
-  virtual void render(ca::Canvas* canvas) const = 0;
+  virtual void render(ca::Canvas* canvas, const ca::Mat4& transform) const = 0;
 
 protected:
   // The universe we belong to.

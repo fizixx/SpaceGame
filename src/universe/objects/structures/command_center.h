@@ -16,6 +16,7 @@
 #define UNIVERSE_OBJECTS_STRUCTURES_COMMAND_CENTER_H_
 
 #include "canvas/rendering/texture.h"
+#include "canvas/rendering/sprite.h"
 
 #include "universe/objects/structures/structure.h"
 
@@ -29,16 +30,14 @@ public:
   // Override: Object
   ca::Rect<f32> getBounds() const override;
   void tick(float adjustment) override;
-  void render(ca::Canvas* canvas) const override;
+  void render(ca::Canvas* canvas, const ca::Mat4& transform) const override;
 
 private:
   // The texture to render the command center.
   ca::Texture* m_texture;
 
   // the shape we use to render the command center.
-#if 0
-  sf::Sprite m_shape;
-#endif  // 0
+  ca::Sprite m_sprite;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(CommandCenter);
 };

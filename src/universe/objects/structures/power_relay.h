@@ -27,7 +27,7 @@ public:
   // Override: Object
   void shot(Projectile* projectile) override;
   ca::Rect<f32> getBounds() const override;
-  void render(ca::Canvas* canvas) const override;
+  void render(ca::Canvas* canvas, const ca::Mat4& transform) const override;
 
 private:
   // The shape we use to render the power generator.

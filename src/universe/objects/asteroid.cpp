@@ -82,7 +82,7 @@ void Asteroid::tick(float adjustment) {
 #endif  // 0
 }
 
-void Asteroid::render(ca::Canvas* canvas) const {
+void Asteroid::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
 #if 0
   states.transform.translate(m_pos);
   target.draw(m_shape, states);

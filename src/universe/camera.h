@@ -33,6 +33,9 @@ public:
   Camera();
   ~Camera();
 
+  // Set the camera dimensions.
+  void setViewportDimensions(const ca::Rect<i32>& rect);
+
   // Return our current view.
   const ca::Mat4& getView() const { return m_view; }
 
@@ -48,9 +51,6 @@ public:
   // Adjust the camera zoom level.
   void adjustZoom(i32 delta);
 
-  // Set the camera dimensions.
-  void layout(const ca::Rect<i32>& rect);
-
   // Override: sf::Drawable
   void tick(float adjustment) override;
   void render(ca::Canvas* canvas) const override;
@@ -60,7 +60,7 @@ private:
   void updateView();
 
   // The size of the viewport we're looking into.
-  ca::Vec2 m_viewportSize;
+  ca::Size<i32> m_viewportSize;
 
   // This is set to true if we are currently dragging the viewport around.
   bool m_isDraggingView{false};

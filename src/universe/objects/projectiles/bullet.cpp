@@ -73,7 +73,7 @@ void Bullet::tick(float adjustment) {
   }
 }
 
-void Bullet::render(ca::Canvas* canvas) const {
+void Bullet::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
 #if 0
   states.transform.translate(m_pos);
   target.draw(m_shape, states);

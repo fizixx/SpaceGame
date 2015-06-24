@@ -132,7 +132,7 @@ void Missile::tick(float adjustment) {
   }
 }
 
-void Missile::render(ca::Canvas* canvas) const {
+void Missile::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
 #if 0
   states.transform.translate(m_pos);
   states.transform.rotate(m_direction);

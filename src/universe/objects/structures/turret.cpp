@@ -124,7 +124,7 @@ void Turret::tick(float adjustment) {
   }
 }
 
-void Turret::render(ca::Canvas* canvas) const {
+void Turret::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
 #if 0
   states.transform.translate(m_pos);
   target.draw(m_baseShape, states);
