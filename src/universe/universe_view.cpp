@@ -25,7 +25,7 @@
 #include "universe/universe.h"
 
 UniverseView::UniverseView(el::Context* context, Universe* universe)
-  : el::View(context), m_universe(universe), m_hud{this} {
+  : el::View(context), m_universe(universe), m_camera(context), m_hud{this} {
 // Set up the mouse position shape.
 
 #if SHOW_UNIVERSE_MOUSE_POS
@@ -85,7 +85,7 @@ bool UniverseView::onMouseDragged(const ca::MouseEvent& event) {
   m_viewMousePos = event.pos;
 
   // Get the universe position.
-  // m_universeMousePos = m_camera.mousePosToUniversePos(m_viewMousePos);
+  m_universeMousePos = m_camera.mousePosToUniversePos(m_viewMousePos);
 
   // If we are controlling the camera, then adjust the camera when we dragged
   // somewhere.
@@ -127,9 +127,6 @@ void UniverseView::onMouseMoved(const ca::MouseEvent& event) {
 
   // Get the universe position.
   m_universeMousePos = m_camera.mousePosToUniversePos(m_viewMousePos);
-
-  ca::Vec2 pos = m_camera.mousePosToUniversePos(ca::Pos<i32>{700, 450});
-  LOG(Info) << pos.x << " : " << pos.y;
 
   // The hud wants to know if we moved the mouse.
   m_hud.updateUniverseMousePos(m_universeMousePos);
@@ -203,6 +200,12 @@ void UniverseView::tick(float adjustment) {
   m_camera.tick(adjustment);
   m_hud.tick(adjustment);
 
+#if 0
+  m_camera.adjustPosition(ca::Pos<i32>{100, 100});
+  ca::Vec2 pos = m_camera.mousePosToUniversePos(ca::Pos<i32>{700, 450});
+  LOG(Info) << pos.x << " : " << pos.y;
+#endif  // 0
+
 // Update the location of the mouse within the universe.
 #if SHOW_UNIVERSE_MOUSE_POS
   // m_universeMousePos = m_camera.mousePosToUniversePos(m_viewMousePos);
@@ -242,11 +245,12 @@ void UniverseView::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
     target.draw(*m_ghostObject);
   }
 
+#endif  // 0
+
   // Render all the debugging stuff.
 
   // Render the camera target.
-  target.draw(m_camera);
-#endif  // 0
+  m_camera.render(canvas);
 
 #if SHOW_UNIVERSE_MOUSE_POS
   // Draw the mouse position.

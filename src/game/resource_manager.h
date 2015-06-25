@@ -29,6 +29,7 @@ public:
 
   enum class Texture {
     MouseCursor,
+    CameraTarget,
     CommandCenter,
     Asteroid1,
     Asteroid2,

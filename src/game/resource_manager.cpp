@@ -27,6 +27,8 @@ static const struct {
 } kTextures[] = {
     {ResourceManager::Texture::MouseCursor,
      FILE_PATH_LITERAL("images\\mouse_cursor.png")},
+    {ResourceManager::Texture::CameraTarget,
+     FILE_PATH_LITERAL("images\\camera_target.png")},
     {ResourceManager::Texture::CommandCenter,
      FILE_PATH_LITERAL("images\\objects\\command_center.png")},
     {ResourceManager::Texture::Asteroid1,

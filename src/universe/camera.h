@@ -18,20 +18,22 @@
 #include <cstdint>
 
 #include "canvas/math/mat4.h"
+#include "canvas/rendering/sprite.h"
 #include "canvas/utils/rect.h"
+#include "elastic/context.h"
 #include "nucleus/config.h"
 #include "nucleus/macros.h"
 
 #include "utils/component.h"
 
 #if BUILD(DEBUG)
-#define SHOW_CAMERA_TARGET 0
+#define SHOW_CAMERA_TARGET 1
 #endif
 
 class Camera : public Component {
 public:
-  Camera();
-  ~Camera();
+  explicit Camera(el::Context* context);
+  ~Camera() = default;
 
   // Set the camera dimensions.
   void setViewportDimensions(const ca::Rect<i32>& rect);
@@ -85,7 +87,7 @@ private:
 
 #if SHOW_CAMERA_TARGET
   // A circle we use to render the camera target.
-  sf::CircleShape m_cameraTargetShape;
+  ca::Sprite m_cameraTargetSprite;
 #endif
 
   DISALLOW_COPY_AND_ASSIGN(Camera);

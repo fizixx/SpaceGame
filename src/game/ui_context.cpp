@@ -26,6 +26,10 @@ ca::Texture* UiContext::getTexture(const std::string& name) {
     return m_resourceManager->getTexture(ResourceManager::Texture::MouseCursor);
   }
 
+  if (name == "camera_target") {
+    return m_resourceManager->getTexture(ResourceManager::Texture::CameraTarget);
+  }
+
   return nullptr;
 }
 

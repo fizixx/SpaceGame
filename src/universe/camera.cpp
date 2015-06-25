@@ -16,17 +16,10 @@
 
 #include "canvas/math/transform.h"
 
-Camera::Camera() {
+Camera::Camera(el::Context* context) {
 #if SHOW_CAMERA_TARGET
-  // Adjust some values on the camera target shape.
-  m_cameraTargetShape.setRadius(10.f);
-  sf::FloatRect bounds{m_cameraTargetShape.getGlobalBounds()};
-  m_cameraTargetShape.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
-  m_cameraTargetShape.setFillColor(sf::Color(255, 0, 0));
-#endif  // SHOW_CAMERA_TARGET
-}
-
-Camera::~Camera() {
+  m_cameraTargetSprite.setTexture(context->getTexture("camera_target"));
+#endif
 }
 
 void Camera::setViewportDimensions(const ca::Rect<i32>& rect) {
@@ -51,6 +44,8 @@ ca::Vec2 Camera::mousePosToUniversePos(const ca::Pos<i32>& mousePos) const {
       0.f, 0.f};
 
   // Then transform by the inverse of the view matrix
+  ca::Mat4 inv = ca::inverse(m_view);
+
   ca::Vec4 result = ca::inverse(m_view) * normalized;
 
   return ca::Vec2{result.x, result.y};
@@ -100,6 +95,9 @@ void Camera::adjustZoom(int32_t delta) {
 }
 
 void Camera::tick(float adjustment) {
+
+  LOG(Info) << m_cameraTarget.x << ":" << m_cameraTarget.y;
+
   // Adjust the current camera position towards the camera target position.
   m_cameraPos.x =
       m_cameraPos.x + (m_cameraTarget.x - m_cameraPos.x) / 10.f * adjustment;
@@ -117,7 +115,8 @@ void Camera::tick(float adjustment) {
 
 void Camera::render(ca::Canvas* canvas) const {
 #if SHOW_CAMERA_TARGET
-  target.draw(m_cameraTargetShape);
+  m_cameraTargetSprite.render(
+      canvas, m_view * ca::translate(m_cameraTarget.x, m_cameraTarget.y, 0.f));
 #endif
 }
 
@@ -128,8 +127,8 @@ void Camera::updateView() {
   const f32 height = static_cast<f32>(m_viewportSize.height) * ratio / 2.f;
 
   // We use an orthographic projection to render the universe.
-  m_view = ca::ortho(-width, width, -height, height);
+  m_view = ca::ortho(-width, width, height, -height);
 
   // Move the camera to it's position.
-  m_view *= ca::translate(m_cameraPos.x, m_cameraPos.y, 0.f);
+  m_view *= ca::translate(-m_cameraPos.x, -m_cameraPos.y, 0.f);
 }

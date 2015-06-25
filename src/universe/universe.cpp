@@ -39,7 +39,7 @@ Universe::Universe(ResourceManager* resourceManager)
   // addObject(std::make_unique<PowerGenerator>(this, sf::Vector2f{-450.f,
   // 50.f}));
 
-  createAsteroids(ca::Vec2{0.f, 0.f}, 500.f, 5000.f, 100);
+  // createAsteroids(ca::Vec2{0.f, 0.f}, 500.f, 5000.f, 100);
 }
 
 Universe::~Universe() {
