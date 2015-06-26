@@ -14,21 +14,24 @@
 
 #include "game/resource_manager.h"
 
+#include <nucleus/files/special_paths.h>
 #include <nucleus/logging.h>
 
 #include "resources/sfml_loaders.h"
 
 namespace {
-
 static const struct {
   ResourceManager::Texture texture;
-  const char* filename;
+  const nu::FilePath::CharType *filename;
 } kTextures[] = {
     {ResourceManager::Texture::CommandCenter,
-     "images\\objects\\command_center.png"},
-    {ResourceManager::Texture::Asteroid1, "images\\objects\\asteroid_1.png"},
-    {ResourceManager::Texture::Asteroid2, "images\\objects\\asteroid_2.png"},
-    {ResourceManager::Texture::Asteroid3, "images\\objects\\asteroid_3.png"},
+     FILE_PATH_LITERAL("images\\objects\\command_center.png")},
+    {ResourceManager::Texture::Asteroid1,
+     FILE_PATH_LITERAL("images\\objects\\asteroid_1.png")},
+    {ResourceManager::Texture::Asteroid2,
+     FILE_PATH_LITERAL("images\\objects\\asteroid_2.png")},
+    {ResourceManager::Texture::Asteroid3,
+     FILE_PATH_LITERAL("images\\objects\\asteroid_3.png")},
 };
 
 }  // namespace
@@ -39,17 +42,32 @@ ResourceManager::ResourceManager() {
 ResourceManager::~ResourceManager() {
 }
 
-bool ResourceManager::loadAll(const std::string& root) {
-  if (!m_fontStore.load(Font::Default, loaders::fromFile<sf::Font>(
-                                           root + "fonts\\arial.ttf"))) {
+bool ResourceManager::loadAll(const nu::FilePath &resourceDirName) {
+  // First check if we are in debug mode so that we know which path to get.
+  nu::FilePath pathToResources;
+#if BUILD(DEBUG)
+  nu::SpecialPath::get(nu::SpecialPath::SOURCE_ROOT, &pathToResources);
+  pathToResources = pathToResources.append(FILE_PATH_LITERAL("SpaceGame"));
+#else
+  nu::SpecialPath::get(nu::SpecialPath::EXE_PATH, &pathToResources);
+#endif // DEBUG
+
+  pathToResources = pathToResources.append(resourceDirName);
+
+  if (!m_fontStore.load(Font::Default,
+                        loaders::fromFile<sf::Font>(
+                            pathToResources.append(FILE_PATH_LITERAL("fonts"))
+                                .append(FILE_PATH_LITERAL("arial.ttf"))
+                                .getPath()))) {
     LOG(Error) << "Could not load default font.";
     return false;
   }
 
   for (size_t i = 0; i < ARRAY_SIZE(kTextures); ++i) {
-    if (!m_textureStore.load(kTextures[i].texture,
-                             loaders::fromFile<sf::Texture>(
-                                 root + std::string(kTextures[i].filename)))) {
+    if (!m_textureStore.load(
+            kTextures[i].texture,
+            loaders::fromFile<sf::Texture>(
+                pathToResources.append(kTextures[i].filename).getPath()))) {
       LOG(Error) << "Could not load texture. (" << kTextures[i].filename << ")";
       return false;
     }

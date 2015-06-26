@@ -16,6 +16,7 @@
 #define GAME_RESOURCE_MANAGER_H_
 
 #include <elastic/resources/resource_store.h>
+#include <nucleus/files/file_path.h>
 #include <nucleus/macros.h>
 #include <SFML/Graphics/Font.hpp>
 
@@ -35,8 +36,10 @@ public:
   ResourceManager();
   ~ResourceManager();
 
-  // Load all resources.
-  bool loadAll(const std::string& root);
+  // Load all resources. The resource directory is specified as relative to the
+  // current executable path. In debug mode, this will be relative to the source
+  // directory.
+  bool loadAll(const nu::FilePath &resourceDirName);
 
   // Return the requested font.
   sf::Font* getFont(Font font);
