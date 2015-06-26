@@ -84,7 +84,7 @@ private:
   float m_targetZoomLevel{1.f};
 
   // The final calculated view we use to translate everything.
-  sf::View m_view;
+  mutable sf::View m_view;
 
 #if SHOW_CAMERA_TARGET
   // A circle we use to render the camera target.

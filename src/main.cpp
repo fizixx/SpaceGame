@@ -17,6 +17,7 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
+#include <nucleus/files/file_path.h>
 #include <nucleus/logging.h>
 
 #include "game/resource_manager.h"
@@ -37,7 +38,8 @@ int main() {
 
   // Initialize the resource manager.
   ResourceManager resourceManager;
-  if (!resourceManager.loadAll("C:\\Workspace\\SpaceGame\\res\\")) {
+
+  if (!resourceManager.loadAll(nu::FilePath(FILE_PATH_LITERAL("res")))) {
     return 1;
   }
 

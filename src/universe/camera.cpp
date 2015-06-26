@@ -30,6 +30,7 @@ Camera::~Camera() {
 }
 
 sf::Vector2f Camera::mousePosToUniversePos(const sf::Vector2i& mousePos) const {
+
   const float width = static_cast<float>(m_viewportSize.x);
   const float height = static_cast<float>(m_viewportSize.y);
   const sf::FloatRect& viewport = m_view.getViewport();
