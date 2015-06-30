@@ -16,8 +16,6 @@
 
 #include <algorithm>
 
-#include "canvas/math/transform.h"
-
 #include "universe/universe.h"
 
 DEFINE_OBJECT(Asteroid, "Power Generator");
