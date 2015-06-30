@@ -15,6 +15,8 @@
 #ifndef UNIVERSE_OBJECTS_STRUCTURES_POWER_RELAY_H_
 #define UNIVERSE_OBJECTS_STRUCTURES_POWER_RELAY_H_
 
+#include "canvas/rendering/sprite.h"
+
 #include "universe/objects/structures/structure.h"
 
 class PowerRelay : public Structure {
@@ -30,10 +32,9 @@ public:
   void render(ca::Canvas* canvas, const ca::Mat4& transform) const override;
 
 private:
-  // The shape we use to render the power generator.
-#if 0
-  sf::CircleShape m_shape;
-#endif  // 0
+  // The texture and shape we use to render the power generator.
+  ca::Texture* m_texture;
+  ca::Sprite m_sprite;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(PowerRelay);
 };

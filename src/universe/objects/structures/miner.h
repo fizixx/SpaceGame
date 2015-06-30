@@ -18,6 +18,8 @@
 #include <memory>
 #include <vector>
 
+#include "canvas/rendering/sprite.h"
+
 #include "universe/objects/structures/structure.h"
 #include "universe/observers.h"
 
@@ -85,10 +87,9 @@ private:
   // Id for the removed object slot.
   size_t m_removedObjectId;
 
-  // The shape we use to render the power generator.
-#if 0
-  sf::CircleShape m_shape;
-#endif  // 0
+  // The texture and shape we use to render the power generator.
+  ca::Texture* m_texture;
+  ca::Sprite m_sprite;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(Miner);
 };

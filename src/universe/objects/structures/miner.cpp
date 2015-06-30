@@ -14,6 +14,8 @@
 
 #include "universe/objects/structures/miner.h"
 
+#include "canvas/math/transform.h"
+
 #include "universe/universe.h"
 #include "universe/objects/asteroid.h"
 
@@ -21,11 +23,11 @@ DEFINE_STRUCTURE(Miner, "Miner", -750, 1500);
 
 Miner::Miner(Universe* universe, const ca::Vec2& pos)
   : Structure(universe, ObjectType::Miner, pos, 1500) {
-#if 0
-  m_shape.setFillColor(sf::Color{0, 255, 255, 255});
-  m_shape.setOrigin(m_shape.getGlobalBounds().width / 2.f,
-                    m_shape.getGlobalBounds().height / 2.f);
-#endif  // 0
+  m_texture = m_universe->getResourceManager()->getTexture(
+      ResourceManager::Texture::Unknown);
+  if (m_texture) {
+    m_sprite.setTexture(m_texture);
+  }
 
   recreateLasers();
 
@@ -40,19 +42,12 @@ Miner::~Miner() {
 void Miner::moveTo(const ca::Vec2& pos) {
   Structure::moveTo(pos);
 
-#if 0
-  m_shape.setPosition(pos);
-#endif  // 0
-
   // We have move position, so recreate all our lasers.
   recreateLasers();
 }
 
 ca::Rect<f32> Miner::getBounds() const {
-#if 0
-  return m_shape.getGlobalBounds();
-#endif  // 0
-  return ca::Rect<f32>{};
+  return m_sprite.getBounds();
 }
 
 void Miner::tick(float adjustment) {
@@ -67,15 +62,17 @@ void Miner::tick(float adjustment) {
 }
 
 void Miner::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
+  const ca::Mat4 local = transform * ca::translate(m_pos.x, m_pos.y, 0.f);
+
 #if 0
   // Draw all the lasers
   for (const auto& laser : m_lasers) {
     target.draw(*laser, states);
   }
+#endif  // 0
 
   // Draw the miner itself.
-  target.draw(m_shape, states);
-#endif  // 0
+  m_sprite.render(canvas, local);
 }
 
 Miner::Laser::Laser(Universe* universe, Miner* miner, Asteroid* asteroid)

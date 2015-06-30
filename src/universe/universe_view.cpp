@@ -139,15 +139,10 @@ void UniverseView::onMouseMoved(const ca::MouseEvent& event) {
 void UniverseView::onMouseReleased(const ca::MouseEvent& event) {
   el::View::onMouseReleased(event);
 
-#if 0
   // If we pressed the mouse on an object, then we check to see if we are still
   // over the same object, and if it is, select that object.
   if (m_mouseHandler == MouseHandler::Object) {
-    // Get the universe position.
-    sf::Vector2f universePos{m_camera.mousePosToUniversePos(
-        sf::Vector2i{event.mouseButton.x, event.mouseButton.y})};
-
-    if (m_mousePressedObject == m_universe->findObjectAt(universePos)) {
+    if (m_mousePressedObject == m_universe->findObjectAt(m_universeMousePos)) {
       m_hud.setSelectedObject(m_mousePressedObject);
       m_mousePressedObject = nullptr;
     }
@@ -168,7 +163,6 @@ void UniverseView::onMouseReleased(const ca::MouseEvent& event) {
   }
 
   m_mouseHandler = MouseHandler::None;
-#endif  // 0
 }
 
 void UniverseView::onMouseWheel(const ca::MouseEvent& event) {
@@ -212,12 +206,6 @@ void UniverseView::layout(const ca::Rect<i32>& rect) {
 
 void UniverseView::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
 #if 0
-  // Store the original view state.
-  sf::View origView = target.getView();
-
-  // Set the new view to our camera view.
-  target.setView(m_camera.getView());
-
   // Render all the links in the universe.
   for (const auto& link : m_universe->m_links) {
     target.draw(*link, states);
@@ -231,13 +219,10 @@ void UniverseView::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
     object->render(canvas, cameraView);
   }
 
-#if 0
   // Render the ghost object and link over the existing objects.
   if (m_ghostObject) {
-    target.draw(*m_ghostObject);
+    m_ghostObject->render(canvas, cameraView);
   }
-
-#endif  // 0
 
   // Render all the debugging stuff.
 
@@ -250,14 +235,6 @@ void UniverseView::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
       canvas, cameraView * ca::translate(m_universeMousePos.x,
                                          m_universeMousePos.y, 0.f));
 #endif
-
-#if 0
-  // Reset the target view.
-  target.setView(origView);
-
-  // Render the hud after we reset the view.
-  target.draw(m_hud, states);
-#endif  // 0
 }
 
 void UniverseView::updateGhostPosition(const ca::Vec2& universeMousePos) {

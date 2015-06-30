@@ -28,6 +28,7 @@ public:
   };
 
   enum class Texture {
+    Unknown,
     MouseCursor,
     CameraTarget,
     CommandCenter,

@@ -25,6 +25,8 @@ static const struct {
   ResourceManager::Texture texture;
   nu::FilePath::CharType* fileName;
 } kTextures[] = {
+    {ResourceManager::Texture::Unknown,
+     FILE_PATH_LITERAL("images\\unknown.png")},
     {ResourceManager::Texture::MouseCursor,
      FILE_PATH_LITERAL("images\\mouse_cursor.png")},
     {ResourceManager::Texture::CameraTarget,
