@@ -126,6 +126,7 @@ void UniverseView::onMouseMoved(const ca::MouseEvent& event) {
   m_viewMousePos = event.pos;
 
   // Get the universe position.
+
   m_universeMousePos = m_camera.mousePosToUniversePos(m_viewMousePos);
 
   // The hud wants to know if we moved the mouse.
@@ -200,16 +201,7 @@ void UniverseView::tick(float adjustment) {
   m_camera.tick(adjustment);
   m_hud.tick(adjustment);
 
-#if 0
-  m_camera.adjustPosition(ca::Pos<i32>{100, 100});
-  ca::Vec2 pos = m_camera.mousePosToUniversePos(ca::Pos<i32>{700, 450});
-  LOG(Info) << pos.x << " : " << pos.y;
-#endif  // 0
-
-// Update the location of the mouse within the universe.
-#if SHOW_UNIVERSE_MOUSE_POS
-  // m_universeMousePos = m_camera.mousePosToUniversePos(m_viewMousePos);
-#endif
+  m_universeMousePos = m_camera.mousePosToUniversePos(m_viewMousePos);
 }
 
 void UniverseView::layout(const ca::Rect<i32>& rect) {

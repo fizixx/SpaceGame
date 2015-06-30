@@ -64,26 +64,28 @@ private:
   // The size of the viewport we're looking into.
   ca::Size<i32> m_viewportSize;
 
-  // This is set to true if we are currently dragging the viewport around.
-  bool m_isDraggingView{false};
-
-  // This is the position where we started to drag the view from.
-  ca::Vec2 m_startDragViewPos;
-
   // The current position of the camera.
   ca::Vec2 m_cameraPos;
 
-  // The location where we want the camera to animate to.
-  ca::Vec2 m_cameraTarget;
-
   // The current zoom level of the camera.
   float m_zoomLevel{1.f};
+
+  // The location where we want the camera to animate to.
+  ca::Vec2 m_cameraTarget;
 
   // The target zoom level for the camera.
   float m_targetZoomLevel{1.f};
 
   // The final calculated transform we use to translate everything.
   ca::Mat4 m_view;
+
+  // --------------
+
+  // This is set to true if we are currently dragging the viewport around.
+  bool m_isDraggingView{false};
+
+  // This is the position where we started to drag the view from.
+  ca::Vec2 m_startDragViewPos;
 
 #if SHOW_CAMERA_TARGET
   // A circle we use to render the camera target.

@@ -41,12 +41,17 @@ ca::Vec2 Camera::mousePosToUniversePos(const ca::Pos<i32>& mousePos) const {
   const ca::Vec4 normalized{
       -1.f + 2.f * (mousePos.x - adjViewport.pos.x) / adjViewport.size.width,
       1.f - 2.f * (mousePos.y - adjViewport.pos.y) / adjViewport.size.height,
-      0.f, 0.f};
+      0.f, 1.f};
 
   // Then transform by the inverse of the view matrix
   ca::Mat4 inv = ca::inverse(m_view);
 
   ca::Vec4 result = ca::inverse(m_view) * normalized;
+
+  result.w = 1.0f / result.w;
+  result.x /= result.w;
+  result.y /= result.w;
+  result.w /= result.w;
 
   return ca::Vec2{result.x, result.y};
 }
@@ -123,11 +128,11 @@ void Camera::render(ca::Canvas* canvas) const {
 void Camera::updateView() {
   const f32 ratio = 1080.f / m_viewportSize.height;
 
-  const f32 width = static_cast<f32>(m_viewportSize.width) * ratio / 2.f;
-  const f32 height = static_cast<f32>(m_viewportSize.height) * ratio / 2.f;
+  const f32 halfWidth = static_cast<f32>(m_viewportSize.width) * ratio / 2.0f;
+  const f32 halfHeight = static_cast<f32>(m_viewportSize.height) * ratio / 2.0f;
 
   // We use an orthographic projection to render the universe.
-  m_view = ca::ortho(-width, width, height, -height);
+  m_view = ca::ortho(-halfWidth, halfWidth, halfHeight, -halfHeight);
 
   // Move the camera to it's position.
   m_view *= ca::translate(-m_cameraPos.x, -m_cameraPos.y, 0.f);
