@@ -32,9 +32,7 @@ public:
 
   // Override: Unit
   void shot(Projectile* projectile) override;
-  ca::Rect<f32> getBounds() const override;
-  void tick(float adjustment) override;
-  void render(ca::Canvas* canvas, const ca::Mat4& transform) const override;
+  void tick(f32 adjustment) override;
 
 private:
   enum class Task {
@@ -58,11 +56,6 @@ private:
 
   // Factory function to create a smoke particle.
   Particle* createSmokeParticle(ParticleEmitter* emitter, const ca::Vec2& pos);
-
-// The shape we use to render the ship.
-#if 0
-  sf::VertexArray m_shape;
-#endif  // 0
 
 // A shape used to show the engagement envelope of the ship.
 #if 0

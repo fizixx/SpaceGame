@@ -99,7 +99,7 @@ void Camera::adjustZoom(i32 delta) {
   }
 }
 
-void Camera::tick(float adjustment) {
+void Camera::tick(f32 adjustment) {
   // Adjust the current camera position towards the camera target position.
   m_cameraPos.x =
       m_cameraPos.x + (m_cameraTarget.x - m_cameraPos.x) / 10.f * adjustment;

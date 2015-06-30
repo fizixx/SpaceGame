@@ -29,7 +29,7 @@ void ParticleEmitter::setPos(const ca::Vec2& pos) {
   m_pos = pos;
 }
 
-void ParticleEmitter::tick(float adjustment) {
+void ParticleEmitter::tick(f32 adjustment) {
   // Emit a particle every few moments.
   if (m_timeSinceLastParticle > 1.f) {
     createParticle(m_pos);

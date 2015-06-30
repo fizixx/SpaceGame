@@ -33,7 +33,7 @@ public:
   virtual ~GameStateUniverse() override;
 
   // Override: GameState
-  void tick(float adjustment) override;
+  void tick(f32 adjustment) override;
 
   // Override: ui::Button::OnClickListener
   void onButtonClicked(el::ButtonView* sender) override;

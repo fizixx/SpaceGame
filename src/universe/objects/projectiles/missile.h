@@ -35,7 +35,7 @@ public:
 
   // Override: Projectile
   i32 getDamageAmount() const override;
-  void tick(float adjustment) override;
+  void tick(f32 adjustment) override;
 
 private:
   enum class Task {

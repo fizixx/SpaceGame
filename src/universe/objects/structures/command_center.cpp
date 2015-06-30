@@ -29,6 +29,6 @@ CommandCenter::CommandCenter(Universe* universe, const ca::Vec2& pos)
 CommandCenter::~CommandCenter() {
 }
 
-void CommandCenter::tick(float adjustment) {
+void CommandCenter::tick(f32 adjustment) {
   m_universe->adjustPower(1000);
 }

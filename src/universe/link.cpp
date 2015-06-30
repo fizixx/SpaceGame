@@ -24,7 +24,7 @@ Link::Link(Universe* universe, Object* source, Object* destination)
 Link::~Link() {
 }
 
-void Link::tick(float adjustment) {
+void Link::tick(f32 adjustment) {
   // Calculate the geometry of the shape.
   // Get the positions of the objects.
   ca::Vec2 sourcePos{m_source->getPos()};

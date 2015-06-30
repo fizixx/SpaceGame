@@ -43,7 +43,7 @@ void Miner::moveTo(const ca::Vec2& pos) {
   recreateLasers();
 }
 
-void Miner::tick(float adjustment) {
+void Miner::tick(f32 adjustment) {
   Structure::tick(adjustment);
 
   if (m_lastMinedAsteroid > 100.f) {

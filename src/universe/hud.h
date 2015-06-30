@@ -39,7 +39,7 @@ public:
   void setSelectedObject(Object* object);
 
   // Override: Component
-  void tick(float adjustment) override;
+  void tick(f32 adjustment) override;
   void render(ca::Canvas* canvas) const override;
 
 private:

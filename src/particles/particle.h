@@ -34,7 +34,7 @@ public:
   bool isDead() const { return m_life <= 0; }
 
   // Tick the particle.
-  virtual void tick(float adjustment);
+  virtual void tick(f32 adjustment);
 
   // Override: sf::Drawable
   void render(ca::Canvas* canvas) const;

@@ -38,7 +38,7 @@ void Particle::setPos(const ca::Vec2& pos) {
 #endif  // 0
 }
 
-void Particle::tick(float adjustment) {
+void Particle::tick(f32 adjustment) {
 #if 0
   // Adjust the color of the particle.
   sf::Uint8 alpha =

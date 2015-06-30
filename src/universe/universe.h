@@ -72,7 +72,7 @@ public:
   void adjustMinerals(int32_t amount);
 
   // Update the entire universe.  This should run at 60fps.
-  void tick(float adjustment);
+  void tick(f32 adjustment);
 
   // Signal that will let slots know that we removed an object.
   ObjectRemovedSignal& getObjectRemovedSignal() {

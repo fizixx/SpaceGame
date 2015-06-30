@@ -33,7 +33,7 @@ public:
   i32 mine(i32 amount);
 
   // Override: Object
-  void tick(float adjustment) override;
+  void tick(f32 adjustment) override;
 
 private:
   // The amount of minerals we have.

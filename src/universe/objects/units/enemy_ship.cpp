@@ -38,16 +38,8 @@ EnemyShip::EnemyShip(Universe* universe, const ca::Vec2& pos)
   : Unit(universe, ObjectType::EnemyShip, pos, 250),
     m_smokeEmitter(std::bind(&EnemyShip::createSmokeParticle, this,
                              std::placeholders::_1, std::placeholders::_2)) {
-// Set up the shape of the ship.
-#if 0
-  m_shape.setPrimitiveType(sf::Triangles);
-  m_shape.append(
-      sf::Vertex{sf::Vector2f{0.f, -25.f}, sf::Color{255, 0, 0, 255}});
-  m_shape.append(
-      sf::Vertex{sf::Vector2f{75.f, 0.f}, sf::Color{255, 0, 0, 255}});
-  m_shape.append(
-      sf::Vertex{sf::Vector2f{0.f, 25.f}, sf::Color{255, 0, 0, 255}});
-#endif  // 0
+  m_renderComponent = std::make_unique<SpriteRenderComponent>(
+      universe->getResourceManager(), ResourceManager::Texture::Unknown);
 
 #if BUILD(DEBUG) && 0
   // Set up the info text.
@@ -80,21 +72,7 @@ void EnemyShip::shot(Projectile* projectile) {
   Unit::shot(projectile);
 }
 
-ca::Rect<f32> EnemyShip::getBounds() const {
-#if 0
-  return m_shape.getBounds();
-#endif  // 0
-  return ca::Rect<f32>{};
-}
-
-void EnemyShip::tick(float adjustment) {
-#if 0
-  stepper++;
-  if (stepper % 10 != 0) {
-    return;
-  }
-#endif  // 0
-
+void EnemyShip::tick(f32 adjustment) {
   // Move the emitter into place and tick it.
   m_smokeEmitter.setPos(m_pos);
   m_smokeEmitter.tick(adjustment);
@@ -234,24 +212,6 @@ void EnemyShip::tick(float adjustment) {
 #endif  // 0
   }
 #endif
-}
-
-void EnemyShip::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
-#if 0
-  sf::RenderStates originalStates{states};
-
-  // Draw the particles first.
-  target.draw(m_smokeEmitter, states);
-
-  states.transform.translate(m_pos);
-  states.transform.rotate(m_direction);
-  // target.draw(m_engagementRangeShape, states);
-  target.draw(m_shape, states);
-
-#if BUILD(DEBUG)
-  target.draw(m_infoText, originalStates);
-#endif
-#endif  // 0
 }
 
 Object* EnemyShip::selectBestTarget() {

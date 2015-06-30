@@ -195,7 +195,7 @@ void UniverseView::onKeyReleased(const ca::KeyEvent& evt) {
   }
 }
 
-void UniverseView::tick(float adjustment) {
+void UniverseView::tick(f32 adjustment) {
   m_camera.tick(adjustment);
   m_hud.tick(adjustment);
 

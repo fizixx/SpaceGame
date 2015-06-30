@@ -63,7 +63,7 @@ void Turret::moveTo(const ca::Vec2& pos) {
   }
 }
 
-void Turret::tick(float adjustment) {
+void Turret::tick(f32 adjustment) {
   Structure::tick(adjustment);
 
   if (m_task == Task::Idle) {

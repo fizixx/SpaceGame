@@ -89,7 +89,7 @@ public:
   virtual ca::Rect<f32> getBounds() const;
 
   // Tick the object.
-  virtual void tick(float adjustment) = 0;
+  virtual void tick(f32 adjustment) = 0;
 
   // Render the object.
   virtual void render(ca::Canvas* canvas, const ca::Mat4& transform) const;

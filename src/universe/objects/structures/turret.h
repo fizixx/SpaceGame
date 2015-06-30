@@ -32,7 +32,7 @@ public:
   // Override: Object
   void shot(Projectile* projectile) override;
   void moveTo(const ca::Vec2& pos) override;
-  void tick(float adjustment) override;
+  void tick(f32 adjustment) override;
 
 private:
   enum class Task {

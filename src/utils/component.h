@@ -23,7 +23,7 @@ public:
   virtual ~Component();
 
   // Tick the component with the supplied adjustment to make a smooth 60fps.
-  virtual void tick(float adjustment) = 0;
+  virtual void tick(f32 adjustment) = 0;
 
   // Render the component.
   virtual void render(ca::Canvas* canavs) const = 0;

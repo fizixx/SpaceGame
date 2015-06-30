@@ -54,7 +54,7 @@ void Hud::setSelectedObject(Object* object) {
   m_selectedObject = object;
 }
 
-void Hud::tick(float adjustment) {
+void Hud::tick(f32 adjustment) {
   // Update the hover shape.
 #if 0
   if (m_hoverObject) {

@@ -37,7 +37,7 @@ public:
   void setPos(const ca::Vec2& pos);
 
   // Tick the emitter.
-  void tick(float adjustment);
+  void tick(f32 adjustment);
 
   // Override: sf::Drawable
   void render(ca::Canvas* canvas) const;

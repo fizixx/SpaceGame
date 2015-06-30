@@ -24,9 +24,7 @@ public:
 
   // Override: Projectile
   i32 getDamageAmount() const override { return 50; }
-  ca::Rect<f32> getBounds() const override;
-  void tick(float adjustment) override;
-  void render(ca::Canvas* canvas, const ca::Mat4& transform) const override;
+  void tick(f32 adjustment) override;
 
 private:
   // The direction we are traveling in.
@@ -37,11 +35,6 @@ private:
 
   // The original position we started to travel from.
   ca::Vec2 m_originalPos;
-
-  // The shape we use to represent the bullet.
-#if 0
-  sf::RectangleShape m_shape;
-#endif  // 0
 
   DISALLOW_COPY_AND_ASSIGN(Bullet);
 };

@@ -32,7 +32,7 @@ public:
 
   // Override: Object
   void moveTo(const ca::Vec2& pos) override;
-  void tick(float adjustment) override;
+  void tick(f32 adjustment) override;
   void render(ca::Canvas* canvas, const ca::Mat4& transform) const override;
 
 private:

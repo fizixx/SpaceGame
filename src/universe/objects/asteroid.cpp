@@ -56,7 +56,7 @@ i32 Asteroid::mine(i32 amount) {
   return amountMined;
 }
 
-void Asteroid::tick(float adjustment) {
+void Asteroid::tick(f32 adjustment) {
   // TODO(tiaanl): Add rotation to the astroid to make it appear as if it's
   //               floating.
 }

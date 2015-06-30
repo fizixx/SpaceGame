@@ -41,7 +41,7 @@ void GameState::onKeyReleased(const ca::KeyEvent& evt) {
   m_uiContext->onKeyReleased(evt);
 }
 
-void GameState::tick(float adjustment) {
+void GameState::tick(f32 adjustment) {
   m_uiContext->tick(adjustment);
 }
 

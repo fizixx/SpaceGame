@@ -48,7 +48,7 @@ GameStateUniverse::GameStateUniverse(ResourceManager* resourceManager,
 GameStateUniverse::~GameStateUniverse() {
 }
 
-void GameStateUniverse::tick(float adjustment) {
+void GameStateUniverse::tick(f32 adjustment) {
   GameState::tick(adjustment);
 
   // Forward the tick to the universe as well.

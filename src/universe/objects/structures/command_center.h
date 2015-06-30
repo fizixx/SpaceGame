@@ -28,7 +28,7 @@ public:
   ~CommandCenter() override;
 
   // Override: Object
-  void tick(float adjustment) override;
+  void tick(f32 adjustment) override;
 
 private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(CommandCenter);

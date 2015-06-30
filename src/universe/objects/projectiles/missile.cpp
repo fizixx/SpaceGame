@@ -54,7 +54,7 @@ int32_t Missile::getDamageAmount() const {
   return 50;
 }
 
-void Missile::tick(float adjustment) {
+void Missile::tick(f32 adjustment) {
   // For now if we're launching, then just go to tracking immediately.
   if (m_task == Task::Launching) {
     m_task = Task::Tracking;

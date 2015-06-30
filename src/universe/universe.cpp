@@ -194,7 +194,7 @@ void Universe::adjustMinerals(int32_t amount) {
   m_totalMinerals += amount;
 }
 
-void Universe::tick(float adjustment) {
+void Universe::tick(f32 adjustment) {
   // We start with 0 power so that we can calculate the total.
   m_totalPower = 0;
 

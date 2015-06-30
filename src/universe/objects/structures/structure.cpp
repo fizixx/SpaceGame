@@ -27,6 +27,6 @@ Structure::Structure(Universe* universe, ObjectType objectType,
 Structure::~Structure() {
 }
 
-void Structure::tick(float adjustment) {
+void Structure::tick(f32 adjustment) {
   m_universe->adjustPower(getPowerCost());
 }

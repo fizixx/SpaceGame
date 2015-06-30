@@ -30,7 +30,7 @@ public:
   Object* getSource() const { return m_source; }
   Object* getDestination() const { return m_destination; }
 
-  void tick(float adjustment);
+  void tick(f32 adjustment);
 
   // Override: sf::Drawable
   void render(ca::Canvas* canvas) const;

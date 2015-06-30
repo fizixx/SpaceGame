@@ -54,7 +54,7 @@ public:
   void adjustZoom(i32 delta);
 
   // Override: sf::Drawable
-  void tick(float adjustment) override;
+  void tick(f32 adjustment) override;
   void render(ca::Canvas* canvas) const override;
 
 private:
