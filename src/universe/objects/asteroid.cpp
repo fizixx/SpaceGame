@@ -16,6 +16,8 @@
 
 #include <algorithm>
 
+#include "canvas/math/transform.h"
+
 #include "universe/universe.h"
 
 DEFINE_OBJECT(Asteroid, "Power Generator");
@@ -36,11 +38,7 @@ Asteroid::Asteroid(Universe* universe, const ca::Vec2& pos,
   m_texture = universe->getResourceManager()->getTexture(texture);
 
   if (m_texture) {
-#if 0
-    m_shape.setTexture(*m_texture);
-    sf::FloatRect bounds = m_shape.getLocalBounds();
-    m_shape.setOrigin(sf::Vector2f{bounds.width / 2.f, bounds.height / 2.f});
-#endif  // 0
+    m_sprite.setTexture(m_texture);
   }
 }
 
@@ -67,24 +65,15 @@ i32 Asteroid::mine(i32 amount) {
 }
 
 ca::Rect<f32> Asteroid::getBounds() const {
-#if 0
-  ca::Rect<f32> bounds = m_shape.getGlobalBounds();
-  bounds.left += m_pos.x;
-  bounds.top += m_pos.y;
-  return bounds;
-#endif  // 0
-  return ca::Rect<f32>{};
+  return m_sprite.getBounds();
 }
 
 void Asteroid::tick(float adjustment) {
-#if 0
-  m_shape.rotate(m_rotationSpeed);
-#endif  // 0
+  // TODO(tiaanl): Add rotation to the astroid to make it appear as if it's
+  //               floating.
 }
 
 void Asteroid::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
-#if 0
-  states.transform.translate(m_pos);
-  target.draw(m_shape, states);
-#endif  // 0
+  ca::Mat4 local = transform * ca::translate(m_pos.x, m_pos.y, 0.f);
+  m_sprite.render(canvas, local);
 }

@@ -50,7 +50,7 @@ private:
   ca::Texture* m_texture;
 
   // The shape we use to render the power generator.
-  ca::Sprite m_shape;
+  ca::Sprite m_sprite;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(Asteroid);
 };

@@ -14,6 +14,8 @@
 
 #include "universe/objects/structures/command_center.h"
 
+#include "canvas/math/transform.h"
+
 #include "universe/universe.h"
 
 DEFINE_STRUCTURE(CommandCenter, "Command Center", 2000, 0);
@@ -40,5 +42,6 @@ void CommandCenter::tick(float adjustment) {
 
 void CommandCenter::render(ca::Canvas* canvas,
                            const ca::Mat4& transform) const {
-  m_sprite.render(canvas, transform);
+  ca::Mat4 local = transform * ca::translate(m_pos.x, m_pos.y, 0.f);
+  m_sprite.render(canvas, local);
 }
