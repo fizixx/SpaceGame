@@ -53,7 +53,7 @@ private:
   ca::Vec2 m_pos;
 
   // The time since the last particle was emitted.
-  float m_timeSinceLastParticle{0.f};
+  f32 m_timeSinceLastParticle{0.f};
 
   // All the particles we are rendering.
   std::vector<Particle*> m_particles;

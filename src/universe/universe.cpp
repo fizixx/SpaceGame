@@ -94,7 +94,7 @@ Object* Universe::findObjectAt(const ca::Vec2& pos) const {
 }
 
 void Universe::findObjectsInRadius(const std::set<ObjectType>& objectTypes,
-                                   const ca::Vec2& origin, float radius,
+                                   const ca::Vec2& origin, f32 radius,
                                    std::vector<Object*>* objectsOut) const {
   DCHECK(objectsOut);
 
@@ -103,7 +103,7 @@ void Universe::findObjectsInRadius(const std::set<ObjectType>& objectTypes,
       continue;
     }
 
-    float distance = object->calculateDistanceFrom(origin);
+    f32 distance = object->calculateDistanceFrom(origin);
     if (distance <= radius) {
       objectsOut->emplace_back(object);
     }
@@ -111,9 +111,8 @@ void Universe::findObjectsInRadius(const std::set<ObjectType>& objectTypes,
 }
 
 Object* Universe::findClosestObjectOfType(const ca::Vec2& pos,
-                                          ObjectType objectType,
-                                          float maxRange) {
-  float bestDistance{std::numeric_limits<float>::max()};
+                                          ObjectType objectType, f32 maxRange) {
+  f32 bestDistance{std::numeric_limits<f32>::max()};
   Object* bestObject{nullptr};
 
   for (const auto& object : m_objects) {
@@ -121,7 +120,7 @@ Object* Universe::findClosestObjectOfType(const ca::Vec2& pos,
       continue;
     }
 
-    float distance = object->calculateDistanceFrom(pos);
+    f32 distance = object->calculateDistanceFrom(pos);
 
     if (distance > maxRange) {
       continue;
@@ -242,19 +241,17 @@ void Universe::addObjectInternal(Object* object) {
   createLinksFor(object);
 }
 
-void Universe::createAsteroids(const ca::Vec2& origin, float minRadius,
-                               float maxRadius, size_t count) {
-  const float kPi = 3.1415f;
-
+void Universe::createAsteroids(const ca::Vec2& origin, f32 minRadius,
+                               f32 maxRadius, size_t count) {
   for (size_t i = 0; i < count; ++i) {
     // Get a random direction between 0 and 360.
-    float randDirection = static_cast<float>(std::rand() % 36000) / 100.f;
+    f32 randDirection = static_cast<f32>(std::rand() % 36000) / 100.f;
 
     // Get a random radius between 100 and the max radius.
-    float randRadius =
-        minRadius + static_cast<float>(
-                        std::rand() % (static_cast<int32_t>(
-                                          std::roundl(maxRadius) - minRadius)));
+    f32 randRadius =
+        minRadius + static_cast<f32>(std::rand() %
+                                     (static_cast<int32_t>(
+                                         std::roundl(maxRadius) - minRadius)));
 
     // Get a random starting amount.
     int32_t mineralCount = (std::rand() % 1000) + 100;

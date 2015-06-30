@@ -69,32 +69,22 @@ void Miner::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
 Miner::Laser::Laser(Universe* universe, Miner* miner, Asteroid* asteroid)
   : m_universe(universe), m_miner(miner), m_asteroid(asteroid) {
   // Set up the shape to point to the right thing.
-  const float kLaserWidth{5.f};
+  const f32 kLaserWidth{5.f};
 
-  float xd = m_asteroid->getPos().x - m_miner->getPos().x;
-  float yd = m_asteroid->getPos().y - m_miner->getPos().y;
+  f32 xd = m_asteroid->getPos().x - m_miner->getPos().x;
+  f32 yd = m_asteroid->getPos().y - m_miner->getPos().y;
 
   // Calculate the distance between the source and destination.
-  float distance = std::sqrtf(xd * xd + yd * yd);
+  f32 distance = std::sqrtf(xd * xd + yd * yd);
 
   // Calculate the angle between the source and destination.
-  float angle = std::atan2(yd, xd) * 180.f / 3.1415f;
-
-#if 0
-  m_shape.setPosition(m_miner->getPos());
-  m_shape.setSize(sf::Vector2f{kLaserWidth, distance});
-  m_shape.setOrigin(sf::Vector2f{kLaserWidth / 2.f, 0.f});
-  m_shape.setRotation(angle - 90.f);
-#endif  // 0
+  f32 angle = std::atan2(yd, xd) * 180.f / 3.1415f;
 }
 
 Miner::Laser::~Laser() {
 }
 
 void Miner::Laser::render(ca::Canvas* canvas) const {
-#if 0
-  target.draw(m_shape, states);
-#endif  // 0
 }
 
 void Miner::onObjectRemoved(Object* object) {

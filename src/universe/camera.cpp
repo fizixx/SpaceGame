@@ -28,8 +28,8 @@ void Camera::setViewportDimensions(const ca::Rect<i32>& rect) {
 }
 
 ca::Vec2 Camera::mousePosToUniversePos(const ca::Pos<i32>& mousePos) const {
-  const float width = static_cast<float>(m_viewportSize.width);
-  const float height = static_cast<float>(m_viewportSize.height);
+  const f32 width = static_cast<f32>(m_viewportSize.width);
+  const f32 height = static_cast<f32>(m_viewportSize.height);
   const ca::Rect<f32> viewport{0.f, 0.f, 1.f, 1.f};
 
   const ca::Rect<i32> adjViewport{
@@ -57,8 +57,8 @@ ca::Vec2 Camera::mousePosToUniversePos(const ca::Pos<i32>& mousePos) const {
 }
 
 ca::Pos<i32> Camera::universePosToMousePos(const ca::Vec2& universePos) const {
-  const float width = static_cast<float>(m_viewportSize.width);
-  const float height = static_cast<float>(m_viewportSize.height);
+  const f32 width = static_cast<f32>(m_viewportSize.width);
+  const f32 height = static_cast<f32>(m_viewportSize.height);
 
   // Transform the point by the view matrix.
   const ca::Vec4 normalized =
@@ -83,12 +83,12 @@ ca::Pos<i32> Camera::universePosToMousePos(const ca::Vec2& universePos) const {
 
 void Camera::adjustPosition(const ca::Pos<i32>& delta) {
   m_cameraTarget -=
-      ca::Vec2{static_cast<float>(delta.x), static_cast<float>(delta.y)} *
+      ca::Vec2{static_cast<f32>(delta.x), static_cast<f32>(delta.y)} *
       m_zoomLevel;
 }
 
 void Camera::adjustZoom(i32 delta) {
-  m_targetZoomLevel -= static_cast<float>(delta) / 2.5f;
+  m_targetZoomLevel -= static_cast<f32>(delta) / 2.5f;
 
   if (m_targetZoomLevel < 1.f) {
     m_targetZoomLevel = 1.f;

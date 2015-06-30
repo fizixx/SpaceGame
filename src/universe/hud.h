@@ -43,12 +43,6 @@ public:
   void render(ca::Canvas* canvas) const override;
 
 private:
-  // Shapes the given rectangle around the give object.
-#if 0
-  void adjustShapeOverObject(Object* object, sf::RectangleShape* shape,
-                             int borderSize = 4);
-#endif  // 0
-
   // The universe we're operating on.
   UniverseView* m_universeView;
 

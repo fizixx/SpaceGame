@@ -17,15 +17,15 @@
 
 #include "canvas/math/vec2.h"
 
-extern const float kPi;
+extern const f32 kPi;
 
 // Convert radians to degrees.
-inline float radToDeg(float rad) {
+inline f32 radToDeg(f32 rad) {
   return rad * 180.f / kPi;
 }
 
 // Convert degrees to radians.
-inline float degToRad(float deg) {
+inline f32 degToRad(f32 deg) {
   return deg * kPi / 180.f;
 }
 
@@ -41,9 +41,9 @@ inline T wrap(T value, T min, T max) {
 }
 
 // Calculate the distance between two points.
-float distanceBetween(const ca::Vec2& p1, const ca::Vec2& p2);
+f32 distanceBetween(const ca::Vec2& p1, const ca::Vec2& p2);
 
 // Calculate the direction between two points.
-float directionBetween(const ca::Vec2& p1, const ca::Vec2& p2);
+f32 directionBetween(const ca::Vec2& p1, const ca::Vec2& p2);
 
 #endif  // UTILS_MATH_H_

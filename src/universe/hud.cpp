@@ -83,25 +83,3 @@ void Hud::render(ca::Canvas* canvas) const {
   }
 #endif  // 0
 }
-
-#if 0
-void Hud::adjustShapeOverObject(Object* object, sf::RectangleShape* shape,
-                                int borderSize) {
-  const Camera& camera = m_universeView->getCamera();
-
-  // Get the bounds of the object.
-  sf::FloatRect bounds{object->getBounds()};
-
-  // Convert the bounds to hud coordinates.
-  sf::Vector2f topLeft{
-      camera.universePosToMousePos(sf::Vector2f{bounds.left, bounds.top})};
-  sf::Vector2f bottomRight{camera.universePosToMousePos(
-      sf::Vector2f{bounds.left + bounds.width, bounds.top + bounds.height})};
-
-  shape->setSize(sf::Vector2f{
-      static_cast<float>(bottomRight.x - topLeft.x + borderSize * 2),
-      static_cast<float>(bottomRight.y - topLeft.y + borderSize * 2)});
-  shape->setPosition(sf::Vector2f{static_cast<float>(topLeft.x) - borderSize,
-                                  static_cast<float>(topLeft.y) - borderSize});
-}
-#endif  // 0

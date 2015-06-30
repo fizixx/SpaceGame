@@ -27,10 +27,10 @@
 
 namespace {
 
-const float kMaxTurnRadius = 1.5f;
-const float kMaxTravelSpeed = 5.f;
-const float kMaxAttackSpeed = 3.f;
-const float kMaxEngagementRange = 750.f;
+const f32 kMaxTurnRadius = 1.5f;
+const f32 kMaxTravelSpeed = 5.f;
+const f32 kMaxAttackSpeed = 3.f;
+const f32 kMaxEngagementRange = 750.f;
 
 }  // namespace
 
@@ -96,16 +96,16 @@ void EnemyShip::tick(f32 adjustment) {
   // If we are traveling, update the direction and speed we are traveling in.
   if (m_task == Task::Travel) {
     // Calculate the direction to the target.
-    const float directionToTarget = directionBetween(m_pos, m_travelTargetPos);
+    const f32 directionToTarget = directionBetween(m_pos, m_travelTargetPos);
 
     // If we are not pointing directly towards the target, then we must turn.
     if (m_direction != directionToTarget) {
-      const float leftDiff =
+      const f32 leftDiff =
           wrap(360.f - directionToTarget + m_direction, 0.f, 360.f);
-      const float rightDiff = wrap(directionToTarget - m_direction, 0.f, 360.f);
+      const f32 rightDiff = wrap(directionToTarget - m_direction, 0.f, 360.f);
 
       // Figure out which way to turn.
-      const float turnSide =
+      const f32 turnSide =
           (leftDiff < rightDiff) ? -kMaxTurnRadius : kMaxTurnRadius;
 
       // Adjust the direction towards the target.
@@ -128,7 +128,7 @@ void EnemyShip::tick(f32 adjustment) {
     // If we are heading directly towards the target and the target comes into
     // range, then we start our attack run.
     if (m_direction == directionToTarget) {
-      const float distanceToTarget = distanceBetween(m_pos, m_travelTargetPos);
+      const f32 distanceToTarget = distanceBetween(m_pos, m_travelTargetPos);
       if (distanceToTarget < kMaxEngagementRange) {
         m_task = Task::Attacking;
         // Shoot as soon as we're attacking.
@@ -154,7 +154,7 @@ void EnemyShip::tick(f32 adjustment) {
     m_pos = ca::Vec2{m_pos.x + std::cos(degToRad(m_direction)) * m_speed,
                      m_pos.y + std::sin(degToRad(m_direction)) * m_speed};
 
-    const float directionToTarget = directionBetween(m_pos, m_travelTargetPos);
+    const f32 directionToTarget = directionBetween(m_pos, m_travelTargetPos);
     if (std::abs(directionToTarget - m_direction) > kMaxTurnRadius) {
       // m_direction += (std::rand() % 2 == 0) ? 30.f : -30.f;
       m_task = Task::Egress;
@@ -168,7 +168,7 @@ void EnemyShip::tick(f32 adjustment) {
     m_pos = ca::Vec2{m_pos.x + std::cos(degToRad(m_direction)) * m_speed,
                      m_pos.y + std::sin(degToRad(m_direction)) * m_speed};
 
-    const float distanceToTarget = distanceBetween(m_pos, m_travelTargetPos);
+    const f32 distanceToTarget = distanceBetween(m_pos, m_travelTargetPos);
     if (distanceToTarget > kMaxEngagementRange * 1.5f) {
       m_task = Task::Nothing;
     }
@@ -207,8 +207,6 @@ void EnemyShip::tick(f32 adjustment) {
 #if 0
     m_infoText.setString(ss.str());
     m_infoText.setPosition(m_pos);
-    sf::FloatRect bounds{m_infoText.getLocalBounds()};
-    m_infoText.setOrigin(sf::Vector2f{bounds.width / 2.f, bounds.height / 2.f});
 #endif  // 0
   }
 #endif
@@ -242,7 +240,7 @@ Object* EnemyShip::selectBestTarget() {
 }
 
 void EnemyShip::createEngagementRangeShape() {
-  const float kSpread = 45.f;
+  const f32 kSpread = 45.f;
   const int kSteps = 9;
   static const ca::Color color{255, 0, 0, 127};
 
@@ -254,9 +252,9 @@ void EnemyShip::createEngagementRangeShape() {
   m_engagementRangeShape[0].color = color;
 
   size_t i = 1;
-  const float spreadStep = kSpread / static_cast<float>(kSteps);
-  const float half = kSpread / -2.f;
-  for (float degrees = 0.f; degrees <= kSpread; degrees += spreadStep, ++i) {
+  const f32 spreadStep = kSpread / static_cast<f32>(kSteps);
+  const f32 half = kSpread / -2.f;
+  for (f32 degrees = 0.f; degrees <= kSpread; degrees += spreadStep, ++i) {
     m_engagementRangeShape[i].position.x =
         std::cos(degToRad(half + degrees)) * kMaxEngagementRange;
     m_engagementRangeShape[i].position.y =

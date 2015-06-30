@@ -19,12 +19,12 @@
 
 namespace {
 
-static const float kMaxTurnRadius = 5.f;
-static const float kMaxSpeed = 10.f;
+static const f32 kMaxTurnRadius = 5.f;
+static const f32 kMaxSpeed = 10.f;
 
 }  // namespace
 
-Missile::Missile(Universe* universe, const ca::Vec2& pos, float direction)
+Missile::Missile(Universe* universe, const ca::Vec2& pos, f32 direction)
   : Projectile(universe, ObjectType::Missile, pos), m_direction(direction) {
   m_renderComponent = std::make_unique<SpriteRenderComponent>(
       universe->getResourceManager(), ResourceManager::Texture::Unknown);
@@ -46,7 +46,7 @@ void Missile::launchAt(Object* target) {
   m_task = Task::Launching;
 }
 
-void Missile::setDirection(float direction) {
+void Missile::setDirection(f32 direction) {
   m_direction = direction;
 }
 
@@ -63,16 +63,16 @@ void Missile::tick(f32 adjustment) {
   // If we have a target, get to it.
   if (m_task == Task::Tracking) {
     // Calculate the direction to the target.
-    const float directionToTarget = directionBetween(m_pos, m_target->getPos());
+    const f32 directionToTarget = directionBetween(m_pos, m_target->getPos());
 
     // If we are not pointing directly towards the target, then we must turn.
     if (m_direction != directionToTarget) {
-      const float leftDiff =
+      const f32 leftDiff =
           wrap(360.f - directionToTarget + m_direction, 0.f, 360.f);
-      const float rightDiff = wrap(directionToTarget - m_direction, 0.f, 360.f);
+      const f32 rightDiff = wrap(directionToTarget - m_direction, 0.f, 360.f);
 
       // Figure out which way to turn.
-      const float turnSide =
+      const f32 turnSide =
           (leftDiff < rightDiff) ? -kMaxTurnRadius : kMaxTurnRadius;
 
       // Adjust the direction towards the target.

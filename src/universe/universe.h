@@ -51,13 +51,13 @@ public:
   // Find a list of objects with in a radius to the origin with the specified
   // type.
   void findObjectsInRadius(const std::set<ObjectType>& objectTypes,
-                           const ca::Vec2& origin, float radius,
+                           const ca::Vec2& origin, f32 radius,
                            std::vector<Object*>* objectsOut) const;
 
   // Find the closest object to the given position of the specified type.
   Object* findClosestObjectOfType(
       const ca::Vec2& pos, ObjectType objectType,
-      float maxRange = std::numeric_limits<float>::max());
+      f32 maxRange = std::numeric_limits<f32>::max());
 
   // Create links for the specified object.  This will only create links in one
   // direction.
@@ -88,7 +88,7 @@ private:
 
   // Create count number of asteroids within the given radius around the given
   // origin.
-  void createAsteroids(const ca::Vec2& origin, float minRadius, float maxRadius,
+  void createAsteroids(const ca::Vec2& origin, f32 minRadius, f32 maxRadius,
                        size_t count);
 
   // Do the actual work of deleting an object.

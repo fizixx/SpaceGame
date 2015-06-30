@@ -68,13 +68,13 @@ private:
   ca::Vec2 m_cameraPos;
 
   // The current zoom level of the camera.
-  float m_zoomLevel{1.f};
+  f32 m_zoomLevel{1.f};
 
   // The location where we want the camera to animate to.
   ca::Vec2 m_cameraTarget;
 
   // The target zoom level for the camera.
-  float m_targetZoomLevel{1.f};
+  f32 m_targetZoomLevel{1.f};
 
   // The final calculated transform we use to translate everything.
   ca::Mat4 m_view;

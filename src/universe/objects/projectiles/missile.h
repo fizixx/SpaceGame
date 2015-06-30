@@ -31,7 +31,7 @@ public:
   void launchAt(Object* target);
 
   // Override the direction the missile is currently facing.
-  void setDirection(float direction);
+  void setDirection(f32 direction);
 
   // Override: Projectile
   i32 getDamageAmount() const override;
@@ -49,7 +49,7 @@ private:
   void onObjectRemoved(Object* object);
 
   // The direction we are currently travelling.
-  float m_direction;
+  f32 m_direction;
 
   // Our current task.
   Task m_task{Task::Idle};
@@ -58,10 +58,10 @@ private:
   Object* m_target{nullptr};
 
   // The speed we are travelling at.
-  float m_speed{0.f};
+  f32 m_speed{0.f};
 
   // The time that has passed since we were launched.
-  float m_timeSinceLaunch{0.f};
+  f32 m_timeSinceLaunch{0.f};
 
   // Id for the ObjectRemoved slot.
   size_t m_objectRemovedSlotId;

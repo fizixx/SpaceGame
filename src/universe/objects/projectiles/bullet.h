@@ -28,10 +28,10 @@ public:
 
 private:
   // The direction we are traveling in.
-  float m_direction{0.f};
+  f32 m_direction{0.f};
 
   // The speed we are travelling.
-  float m_speed{0.f};
+  f32 m_speed{0.f};
 
   // The original position we started to travel from.
   ca::Vec2 m_originalPos;
