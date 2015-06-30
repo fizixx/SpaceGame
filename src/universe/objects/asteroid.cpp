@@ -25,9 +25,6 @@ DEFINE_OBJECT(Asteroid, "Power Generator");
 Asteroid::Asteroid(Universe* universe, const ca::Vec2& pos,
                    int32_t initialMinerals)
   : Object(universe, ObjectType::Asteroid, pos), m_minerals(initialMinerals) {
-  // Set the rotation speed.
-  m_rotationSpeed = (static_cast<float>(std::rand() % 100) - 50.f) / 100.f;
-
   ResourceManager::Texture texture = ResourceManager::Texture::Asteroid3;
   if (m_minerals < 700) {
     texture = ResourceManager::Texture::Asteroid2;
@@ -35,11 +32,8 @@ Asteroid::Asteroid(Universe* universe, const ca::Vec2& pos,
     texture = ResourceManager::Texture::Asteroid1;
   }
 
-  m_texture = universe->getResourceManager()->getTexture(texture);
-
-  if (m_texture) {
-    m_sprite.setTexture(m_texture);
-  }
+  m_renderComponent = std::make_unique<SpriteRenderComponent>(
+      universe->getResourceManager(), texture);
 }
 
 Asteroid::~Asteroid() {
@@ -64,16 +58,7 @@ i32 Asteroid::mine(i32 amount) {
   return amountMined;
 }
 
-ca::Rect<f32> Asteroid::getBounds() const {
-  return m_sprite.getBounds();
-}
-
 void Asteroid::tick(float adjustment) {
   // TODO(tiaanl): Add rotation to the astroid to make it appear as if it's
   //               floating.
-}
-
-void Asteroid::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
-  ca::Mat4 local = transform * ca::translate(m_pos.x, m_pos.y, 0.f);
-  m_sprite.render(canvas, local);
 }

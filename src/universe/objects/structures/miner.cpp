@@ -23,11 +23,8 @@ DEFINE_STRUCTURE(Miner, "Miner", -750, 1500);
 
 Miner::Miner(Universe* universe, const ca::Vec2& pos)
   : Structure(universe, ObjectType::Miner, pos, 1500) {
-  m_texture = m_universe->getResourceManager()->getTexture(
-      ResourceManager::Texture::Unknown);
-  if (m_texture) {
-    m_sprite.setTexture(m_texture);
-  }
+  m_renderComponent = std::make_unique<SpriteRenderComponent>(
+    universe->getResourceManager(), ResourceManager::Texture::Unknown);
 
   recreateLasers();
 
@@ -46,10 +43,6 @@ void Miner::moveTo(const ca::Vec2& pos) {
   recreateLasers();
 }
 
-ca::Rect<f32> Miner::getBounds() const {
-  return m_sprite.getBounds();
-}
-
 void Miner::tick(float adjustment) {
   Structure::tick(adjustment);
 
@@ -62,17 +55,15 @@ void Miner::tick(float adjustment) {
 }
 
 void Miner::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
-  const ca::Mat4 local = transform * ca::translate(m_pos.x, m_pos.y, 0.f);
+  // Render the miner first.
+  Structure::render(canvas, transform);
 
+// Now render all the lasers.
 #if 0
-  // Draw all the lasers
   for (const auto& laser : m_lasers) {
     target.draw(*laser, states);
   }
 #endif  // 0
-
-  // Draw the miner itself.
-  m_sprite.render(canvas, local);
 }
 
 Miner::Laser::Laser(Universe* universe, Miner* miner, Asteroid* asteroid)

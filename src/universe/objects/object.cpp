@@ -74,6 +74,10 @@ Object::Object(Universe* universe, ObjectType objectType, const ca::Vec2& pos)
 Object::~Object() {
 }
 
+float Object::calculateDistanceFrom(const ca::Vec2& pos) const {
+  return distanceBetween(m_pos, pos);
+}
+
 void Object::shot(Projectile* projectile) {
   // By default we do nothing when we are shot.
 }
@@ -82,6 +86,17 @@ void Object::moveTo(const ca::Vec2& pos) {
   m_pos = pos;
 }
 
-float Object::calculateDistanceFrom(const ca::Vec2& pos) const {
-  return distanceBetween(m_pos, pos);
+ca::Rect<f32> Object::getBounds() const {
+  if (m_renderComponent) {
+    return m_renderComponent->getBounds();
+  }
+
+  return ca::Rect<f32>{};
+}
+
+void Object::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
+  // Render the RenderComponent if we have one.
+  if (m_renderComponent) {
+    m_renderComponent->render(canvas, transform, m_pos);
+  }
 }

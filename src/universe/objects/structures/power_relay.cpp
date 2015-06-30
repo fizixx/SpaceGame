@@ -22,11 +22,8 @@ DEFINE_STRUCTURE(PowerRelay, "Power Relay", 500, 1000);
 
 PowerRelay::PowerRelay(Universe* universe, const ca::Vec2& pos)
   : Structure(universe, ObjectType::PowerRelay, pos, 500) {
-  m_texture = m_universe->getResourceManager()->getTexture(
-      ResourceManager::Texture::Unknown);
-  if (m_texture) {
-    m_sprite.setTexture(m_texture);
-  }
+  m_renderComponent = std::make_unique<SpriteRenderComponent>(
+      m_universe->getResourceManager(), ResourceManager::Texture::Unknown);
 }
 
 PowerRelay::~PowerRelay() {
@@ -34,13 +31,4 @@ PowerRelay::~PowerRelay() {
 
 void PowerRelay::shot(Projectile* projectile) {
   Structure::shot(projectile);
-}
-
-ca::Rect<f32> PowerRelay::getBounds() const {
-  return m_sprite.getBounds();
-}
-
-void PowerRelay::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
-  ca::Mat4 local = transform * ca::translate(m_pos.x, m_pos.y, 0.f);
-  m_sprite.render(canvas, local);
 }

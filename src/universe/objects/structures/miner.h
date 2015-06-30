@@ -18,8 +18,6 @@
 #include <memory>
 #include <vector>
 
-#include "canvas/rendering/sprite.h"
-
 #include "universe/objects/structures/structure.h"
 #include "universe/observers.h"
 
@@ -34,7 +32,6 @@ public:
 
   // Override: Object
   void moveTo(const ca::Vec2& pos) override;
-  ca::Rect<f32> getBounds() const override;
   void tick(float adjustment) override;
   void render(ca::Canvas* canvas, const ca::Mat4& transform) const override;
 
@@ -86,10 +83,6 @@ private:
 
   // Id for the removed object slot.
   size_t m_removedObjectId;
-
-  // The texture and shape we use to render the power generator.
-  ca::Texture* m_texture;
-  ca::Sprite m_sprite;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(Miner);
 };

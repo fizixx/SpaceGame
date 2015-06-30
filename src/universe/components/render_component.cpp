@@ -12,25 +12,23 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef UNIVERSE_OBJECTS_STRUCTURES_POWER_RELAY_H_
-#define UNIVERSE_OBJECTS_STRUCTURES_POWER_RELAY_H_
+#include "universe/components/render_component.h"
 
-#include "canvas/rendering/sprite.h"
+#include "canvas/math/transform.h"
 
-#include "universe/objects/structures/structure.h"
+SpriteRenderComponent::SpriteRenderComponent(ResourceManager* resourceManager,
+                                             ResourceManager::Texture texture) {
+  m_texture = resourceManager->getTexture(texture);
+  m_sprite.setTexture(m_texture);
+}
 
-class PowerRelay : public Structure {
-  DECLARE_STRUCTURE(PowerRelay);
+ca::Rect<f32> SpriteRenderComponent::getBounds() const {
+  return m_sprite.getBounds();
+}
 
-public:
-  PowerRelay(Universe* universe, const ca::Vec2& pos);
-  ~PowerRelay() override;
-
-  // Override: Object
-  void shot(Projectile* projectile) override;
-
-private:
-  DISALLOW_IMPLICIT_CONSTRUCTORS(PowerRelay);
-};
-
-#endif  // UNIVERSE_OBJECTS_STRUCTURES_POWER_RELAY_H_
+void SpriteRenderComponent::render(ca::Canvas* canvas,
+                                   const ca::Mat4& transform,
+                                   const ca::Vec2& pos) const {
+  const ca::Mat4 local = transform * ca::translate(pos.x, pos.y, 0.f);
+  m_sprite.render(canvas, local);
+}

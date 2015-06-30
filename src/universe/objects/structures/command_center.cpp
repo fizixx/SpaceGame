@@ -22,26 +22,13 @@ DEFINE_STRUCTURE(CommandCenter, "Command Center", 2000, 0);
 
 CommandCenter::CommandCenter(Universe* universe, const ca::Vec2& pos)
   : Structure(universe, ObjectType::CommandCenter, pos, 5000) {
-  m_texture = m_universe->getResourceManager()->getTexture(
-      ResourceManager::Texture::CommandCenter);
-  if (m_texture) {
-    m_sprite.setTexture(m_texture);
-  }
+  m_renderComponent = std::make_unique<SpriteRenderComponent>(
+      universe->getResourceManager(), ResourceManager::Texture::CommandCenter);
 }
 
 CommandCenter::~CommandCenter() {
 }
 
-ca::Rect<f32> CommandCenter::getBounds() const {
-  return m_sprite.getBounds();
-}
-
 void CommandCenter::tick(float adjustment) {
   m_universe->adjustPower(1000);
-}
-
-void CommandCenter::render(ca::Canvas* canvas,
-                           const ca::Mat4& transform) const {
-  ca::Mat4 local = transform * ca::translate(m_pos.x, m_pos.y, 0.f);
-  m_sprite.render(canvas, local);
 }

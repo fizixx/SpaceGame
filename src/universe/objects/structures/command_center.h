@@ -25,20 +25,12 @@ class CommandCenter : public Structure {
 
 public:
   CommandCenter(Universe* universe, const ca::Vec2& pos);
-  virtual ~CommandCenter() override;
+  ~CommandCenter() override;
 
   // Override: Object
-  ca::Rect<f32> getBounds() const override;
   void tick(float adjustment) override;
-  void render(ca::Canvas* canvas, const ca::Mat4& transform) const override;
 
 private:
-  // The texture to render the command center.
-  ca::Texture* m_texture;
-
-  // the shape we use to render the command center.
-  ca::Sprite m_sprite;
-
   DISALLOW_IMPLICIT_CONSTRUCTORS(CommandCenter);
 };
 

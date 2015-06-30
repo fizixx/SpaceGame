@@ -15,8 +15,6 @@
 #ifndef UNIVERSE_OBJECTS_ASTEROID_H_
 #define UNIVERSE_OBJECTS_ASTEROID_H_
 
-#include <vector>
-
 #include "canvas/rendering/sprite.h"
 
 #include "universe/objects/object.h"
@@ -35,22 +33,11 @@ public:
   i32 mine(i32 amount);
 
   // Override: Object
-  ca::Rect<f32> getBounds() const override;
   void tick(float adjustment) override;
-  void render(ca::Canvas* canvas, const ca::Mat4& transform) const override;
 
 private:
   // The amount of minerals we have.
   i32 m_minerals;
-
-  // The speed we are rotating.
-  f32 m_rotationSpeed;
-
-  // The texture we use to render the asteroid.
-  ca::Texture* m_texture;
-
-  // The shape we use to render the power generator.
-  ca::Sprite m_sprite;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(Asteroid);
 };

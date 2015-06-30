@@ -24,6 +24,8 @@
 #include "canvas/utils/rect.h"
 #include "nucleus/macros.h"
 
+#include "universe/components/render_component.h"
+
 class Projectile;
 class Universe;
 
@@ -84,13 +86,13 @@ public:
   virtual void moveTo(const ca::Vec2& pos);
 
   // Return the bounds of the object.
-  virtual ca::Rect<f32> getBounds() const = 0;
+  virtual ca::Rect<f32> getBounds() const;
 
   // Tick the object.
   virtual void tick(float adjustment) = 0;
 
   // Render the object.
-  virtual void render(ca::Canvas* canvas, const ca::Mat4& transform) const = 0;
+  virtual void render(ca::Canvas* canvas, const ca::Mat4& transform) const;
 
 protected:
   // The universe we belong to.
@@ -101,6 +103,9 @@ protected:
 
   // The position of the object in universe coordinates.
   ca::Vec2 m_pos;
+
+  // The render component for this object.
+  std::unique_ptr<RenderComponent> m_renderComponent;
 
 private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(Object);
