@@ -37,6 +37,7 @@ public:
   virtual void onMouseMoved(const ca::MouseEvent& event) = 0;
   virtual void onMousePressed(const ca::MouseEvent& event) = 0;
   virtual void onMouseReleased(const ca::MouseEvent& event) = 0;
+  virtual void onMouseWheel(const ca::MouseWheelEvent& event) = 0;
 };
 
 #endif  // UTILS_COMPONENT_H_

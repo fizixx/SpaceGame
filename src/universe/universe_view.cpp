@@ -165,13 +165,11 @@ void UniverseView::onMouseReleased(const ca::MouseEvent& event) {
   m_mouseHandler = MouseHandler::None;
 }
 
-void UniverseView::onMouseWheel(const ca::MouseEvent& event) {
-  el::View::onMouseWheel(event);
+void UniverseView::onMouseWheel(const ca::MouseWheelEvent& evt) {
+  el::View::onMouseWheel(evt);
 
-#if 0
   // Adjust the camera zoom level.
-  m_camera.adjustZoom(event.mouseWheel.delta);
-#endif  // 0
+  m_camera.adjustZoom(evt.wheelOffset.y);
 }
 
 #if 0

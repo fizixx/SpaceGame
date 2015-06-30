@@ -17,16 +17,20 @@
 GameState::GameState(el::Context* context) : m_uiContext(context) {
 }
 
-void GameState::onMouseMoved(const ca::MouseEvent& event) {
-  m_uiContext->onMouseMoved(event);
+void GameState::onMouseMoved(const ca::MouseEvent& evt) {
+  m_uiContext->onMouseMoved(evt);
 }
 
-void GameState::onMousePressed(const ca::MouseEvent& event) {
-  m_uiContext->onMousePressed(event);
+void GameState::onMousePressed(const ca::MouseEvent& evt) {
+  m_uiContext->onMousePressed(evt);
 }
 
-void GameState::onMouseReleased(const ca::MouseEvent& event) {
-  m_uiContext->onMouseReleased(event);
+void GameState::onMouseReleased(const ca::MouseEvent& evt) {
+  m_uiContext->onMouseReleased(evt);
+}
+
+void GameState::onMouseWheel(const ca::MouseWheelEvent& evt) {
+  m_uiContext->onMouseWheel(evt);
 }
 
 void GameState::tick(float adjustment) {

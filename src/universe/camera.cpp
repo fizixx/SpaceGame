@@ -87,7 +87,7 @@ void Camera::adjustPosition(const ca::Pos<i32>& delta) {
       m_zoomLevel;
 }
 
-void Camera::adjustZoom(int32_t delta) {
+void Camera::adjustZoom(i32 delta) {
   m_targetZoomLevel -= static_cast<float>(delta) / 2.5f;
 
   if (m_targetZoomLevel < 1.f) {
@@ -130,6 +130,9 @@ void Camera::updateView() {
 
   // We use an orthographic projection to render the universe.
   m_view = ca::ortho(-halfWidth, halfWidth, halfHeight, -halfHeight);
+
+  // Scale by the zoom factor.
+  m_view *= ca::scale(1.f / m_zoomLevel, 1.f / m_zoomLevel, 1.f);
 
   // Move the camera to it's position.
   m_view *= ca::translate(-m_cameraPos.x, -m_cameraPos.y, 0.f);

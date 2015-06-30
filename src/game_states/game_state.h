@@ -29,9 +29,10 @@ public:
   ~GameState() override = default;
 
   // Override: Component
-  void onMouseMoved(const ca::MouseEvent& event) override;
-  void onMousePressed(const ca::MouseEvent& event) override;
-  void onMouseReleased(const ca::MouseEvent& event) override;
+  void onMouseMoved(const ca::MouseEvent& evt) override;
+  void onMousePressed(const ca::MouseEvent& evt) override;
+  void onMouseReleased(const ca::MouseEvent& evt) override;
+  void onMouseWheel(const ca::MouseWheelEvent& evt) override;
   void tick(float adjustment) override;
   void render(ca::Canvas* canvas) const override;
 

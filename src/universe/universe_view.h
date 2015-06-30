@@ -52,14 +52,14 @@ public:
 
   // Override: ui::View
   bool handlesInput() const { return true; }
-  bool onMousePressed(const ca::MouseEvent& event) override;
-  bool onMouseDragged(const ca::MouseEvent& event) override;
-  void onMouseMoved(const ca::MouseEvent& event) override;
-  void onMouseReleased(const ca::MouseEvent& event) override;
-  void onMouseWheel(const ca::MouseEvent& event) override;
+  bool onMousePressed(const ca::MouseEvent& evt) override;
+  bool onMouseDragged(const ca::MouseEvent& evt) override;
+  void onMouseMoved(const ca::MouseEvent& evt) override;
+  void onMouseReleased(const ca::MouseEvent& evt) override;
+  void onMouseWheel(const ca::MouseWheelEvent& evt) override;
 #if 0
-  void onKeyPressed(const ca::MouseEvent& event) override;
-  void onKeyReleased(const ca::MouseEvent& event) override;
+  void onKeyPressed(const ca::MouseEvent& evt) override;
+  void onKeyReleased(const ca::MouseEvent& evt) override;
 #endif  // 0
   void tick(float adjustment) override;
   void layout(const ca::Rect<i32>& rect) override;
