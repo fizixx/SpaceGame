@@ -34,10 +34,12 @@ public:
   ~InputComponent() override;
 
   // Handle input on the component.
-  virtual void onMouseMoved(const ca::MouseEvent& event) = 0;
-  virtual void onMousePressed(const ca::MouseEvent& event) = 0;
-  virtual void onMouseReleased(const ca::MouseEvent& event) = 0;
-  virtual void onMouseWheel(const ca::MouseWheelEvent& event) = 0;
+  virtual void onMouseMoved(const ca::MouseEvent& evt) = 0;
+  virtual void onMousePressed(const ca::MouseEvent& evt) = 0;
+  virtual void onMouseReleased(const ca::MouseEvent& evt) = 0;
+  virtual void onMouseWheel(const ca::MouseWheelEvent& evt) = 0;
+  virtual void onKeyPressed(const ca::KeyEvent& evt) = 0;
+  virtual void onKeyReleased(const ca::KeyEvent& evt) = 0;
 };
 
 #endif  // UTILS_COMPONENT_H_

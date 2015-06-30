@@ -33,6 +33,14 @@ void GameState::onMouseWheel(const ca::MouseWheelEvent& evt) {
   m_uiContext->onMouseWheel(evt);
 }
 
+void GameState::onKeyPressed(const ca::KeyEvent& evt) {
+  m_uiContext->onKeyPressed(evt);
+}
+
+void GameState::onKeyReleased(const ca::KeyEvent& evt) {
+  m_uiContext->onKeyReleased(evt);
+}
+
 void GameState::tick(float adjustment) {
   m_uiContext->tick(adjustment);
 }

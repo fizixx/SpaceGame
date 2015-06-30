@@ -172,22 +172,28 @@ void UniverseView::onMouseWheel(const ca::MouseWheelEvent& evt) {
   m_camera.adjustZoom(evt.wheelOffset.y);
 }
 
-#if 0
-void UniverseView::onKeyPressed(sf::Event& event) {
+void UniverseView::onKeyPressed(const ca::KeyEvent& evt) {
 }
 
-void UniverseView::onKeyReleased(sf::Event& event) {
-  if (event.key.code == sf::Keyboard::E) {
-    placeEnemyShip(m_camera.mousePosToUniversePos(m_viewMousePos));
-  } else if (event.key.code == sf::Keyboard::T) {
-    startPlacingObject(std::make_unique<Turret>(
-        m_universe, m_camera.mousePosToUniversePos(m_viewMousePos)));
-  } else if (event.key.code == sf::Keyboard::M) {
-    startPlacingObject(std::make_unique<Miner>(
-      m_universe, m_camera.mousePosToUniversePos(m_viewMousePos)));
+void UniverseView::onKeyReleased(const ca::KeyEvent& evt) {
+  switch (evt.key) {
+    case ca::Key::E:
+      placeEnemyShip(m_camera.mousePosToUniversePos(m_viewMousePos));
+      break;
+
+    case ca::Key::T:
+      startPlacingObject(std::make_unique<Turret>(
+          m_universe, m_camera.mousePosToUniversePos(m_viewMousePos)));
+      break;
+
+    case ca::Key::M:
+      startPlacingObject(std::make_unique<Miner>(
+          m_universe, m_camera.mousePosToUniversePos(m_viewMousePos)));
+
+    default:
+      break;
   }
 }
-#endif  // 0
 
 void UniverseView::tick(float adjustment) {
   m_camera.tick(adjustment);

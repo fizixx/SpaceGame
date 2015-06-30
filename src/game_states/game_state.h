@@ -33,6 +33,8 @@ public:
   void onMousePressed(const ca::MouseEvent& evt) override;
   void onMouseReleased(const ca::MouseEvent& evt) override;
   void onMouseWheel(const ca::MouseWheelEvent& evt) override;
+  void onKeyPressed(const ca::KeyEvent& evt) override;
+  void onKeyReleased(const ca::KeyEvent& evt) override;
   void tick(float adjustment) override;
   void render(ca::Canvas* canvas) const override;
 

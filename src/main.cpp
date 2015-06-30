@@ -68,6 +68,14 @@ public:
     m_gameState->onMouseWheel(evt);
   }
 
+  void onKeyPressed(const ca::KeyEvent& evt) override {
+    m_gameState->onKeyPressed(evt);
+  }
+
+  void onKeyReleased(const ca::KeyEvent& evt) override {
+    m_gameState->onKeyReleased(evt);
+  }
+
   void onPaint(ca::Canvas* canvas) override {
     m_gameState->tick(1.f);
 
