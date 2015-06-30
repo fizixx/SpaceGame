@@ -28,25 +28,8 @@ const float kMaxAttachRange = 2500.f;
 
 Turret::Turret(Universe* universe, const ca::Vec2& pos)
   : Structure(universe, ObjectType::Turret, pos, 500) {
-  // Set up the base shape.
-  {
-#if 0
-    m_baseShape.setRadius(50.f);
-    m_baseShape.setFillColor(sf::Color{0, 255, 0, 255});
-    sf::FloatRect bounds = m_baseShape.getLocalBounds();
-    m_baseShape.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
-#endif  // 0
-  }
-
-  // Set up the turret shape.
-  {
-#if 0
-    m_launcherRailShape.setSize(sf::Vector2f{20.f, 40.f});
-    m_launcherRailShape.setFillColor(sf::Color{0, 127, 0, 255});
-    sf::FloatRect bounds = m_launcherRailShape.getLocalBounds();
-    m_launcherRailShape.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
-#endif  // 0
-  }
+  m_renderComponent = std::make_unique<SpriteRenderComponent>(
+      universe->getResourceManager(), ResourceManager::Texture::Unknown);
 
   // Create our 3 missiles.
   for (auto& missile : m_missiles) {
@@ -71,11 +54,6 @@ Turret::~Turret() {
 
 void Turret::shot(Projectile* projectile) {
   Structure::shot(projectile);
-
-#if 0
-  m_baseShape.setFillColor(
-      sf::Color{0, 255, 0, static_cast<sf::Uint8>(255 * m_hitPoints / 500)});
-#endif  // 0
 }
 
 void Turret::moveTo(const ca::Vec2& pos) {
@@ -85,22 +63,11 @@ void Turret::moveTo(const ca::Vec2& pos) {
   }
 }
 
-ca::Rect<f32> Turret::getBounds() const {
-#if 0
-  sf::FloatRect bounds = m_baseShape.getGlobalBounds();
-  bounds.left += m_pos.x;
-  bounds.top += m_pos.y;
-  return bounds;
-#endif  // 0
-  return ca::Rect<f32>{};
-}
-
 void Turret::tick(float adjustment) {
   Structure::tick(adjustment);
 
   if (m_task == Task::Idle) {
-    // Turn the rails as if they are searching for a target.
-    turnRail(m_turretDirection + 1.f * adjustment);
+    // TODO(tiaanl): Turn the rail so it looks like it's searching for a target.
 
     m_target = findBestTarget();
     if (m_target) {
@@ -109,12 +76,8 @@ void Turret::tick(float adjustment) {
   }
 
   if (m_task == Task::Attacking) {
-    float directionToTarget = directionBetween(m_pos, m_target->getPos());
-
-    // Snap the turret to the target for now.  In future we should have a max
-    // turn radius.
-    turnRail(directionToTarget);
-
+    // TODO(tiaanl): Turn the rail toward the target we're attacking.
+    
     if (m_timeSinceLastShot > 100.f) {
       shoot();
       m_timeSinceLastShot = 0.f;
@@ -124,42 +87,10 @@ void Turret::tick(float adjustment) {
   }
 }
 
-void Turret::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
-#if 0
-  states.transform.translate(m_pos);
-  target.draw(m_baseShape, states);
-  target.draw(m_launcherRailShape, states);
-#endif  // 0
-}
-
 Object* Turret::findBestTarget() {
   // Just find the closest enemy ship for now.
   return m_universe->findClosestObjectOfType(m_pos, ObjectType::EnemyShip,
                                              kMaxAttachRange);
-}
-
-void Turret::turnRail(float direction) {
-  m_turretDirection = direction;
-#if 0
-  m_launcherRailShape.setRotation(m_turretDirection);
-#endif  // 0
-
-  for (size_t i = 0; i < m_missiles.size(); ++i) {
-    // If the missile has been launched, we don't have control over it any more.
-    if (m_missiles[i]->isLaunched()) {
-      continue;
-    }
-
-#if 0
-    sf::Transform transform;
-    transform.rotate(direction);
-    m_missiles[i]->moveTo(
-        m_pos +
-        transform.transformPoint(
-            0.f, static_cast<float>(static_cast<int32_t>(i) - 1) * 15.f));
-    m_missiles[i]->setDirection(direction);
-#endif  // 0
-  }
 }
 
 void Turret::shoot() {

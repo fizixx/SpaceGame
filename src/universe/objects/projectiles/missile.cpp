@@ -26,15 +26,8 @@ static const float kMaxSpeed = 10.f;
 
 Missile::Missile(Universe* universe, const ca::Vec2& pos, float direction)
   : Projectile(universe, ObjectType::Missile, pos), m_direction(direction) {
-  // Set up the shape.
-#if 0
-  m_shape.setPrimitiveType(sf::Triangles);
-  m_shape.append(sf::Vertex{sf::Vector2f{0.f, 0.f}, sf::Color{255, 0, 0, 255}});
-  m_shape.append(
-      sf::Vertex{sf::Vector2f{-10.f, 5.f}, sf::Color{255, 0, 0, 255}});
-  m_shape.append(
-      sf::Vertex{sf::Vector2f{-10.f, -5.f}, sf::Color{255, 0, 0, 255}});
-#endif  // 0
+  m_renderComponent = std::make_unique<SpriteRenderComponent>(
+      universe->getResourceManager(), ResourceManager::Texture::Unknown);
 
   m_objectRemovedSlotId = m_universe->getObjectRemovedSignal().connect(
       nu::slot(&Missile::onObjectRemoved, this));
@@ -59,13 +52,6 @@ void Missile::setDirection(float direction) {
 
 int32_t Missile::getDamageAmount() const {
   return 50;
-}
-
-ca::Rect<f32> Missile::getBounds() const {
-#if 0
-  return m_shape.getBounds();
-#endif  // 0
-  return ca::Rect<f32>{};
 }
 
 void Missile::tick(float adjustment) {
@@ -130,14 +116,6 @@ void Missile::tick(float adjustment) {
       m_universe->removeObject(this);
     }
   }
-}
-
-void Missile::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
-#if 0
-  states.transform.translate(m_pos);
-  states.transform.rotate(m_direction);
-  target.draw(m_shape, states);
-#endif  // 0
 }
 
 void Missile::onObjectRemoved(Object* object) {

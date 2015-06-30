@@ -35,9 +35,7 @@ public:
 
   // Override: Projectile
   i32 getDamageAmount() const override;
-  ca::Rect<f32> getBounds() const override;
   void tick(float adjustment) override;
-  void render(ca::Canvas* canvas, const ca::Mat4& transform) const override;
 
 private:
   enum class Task {
@@ -67,11 +65,6 @@ private:
 
   // Id for the ObjectRemoved slot.
   size_t m_objectRemovedSlotId;
-
-  // The shape we use to render the missile.
-#if 0
-  sf::VertexArray m_shape;
-#endif  // 0
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(Missile);
 };

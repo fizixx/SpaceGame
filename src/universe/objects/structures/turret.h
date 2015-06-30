@@ -32,9 +32,7 @@ public:
   // Override: Object
   void shot(Projectile* projectile) override;
   void moveTo(const ca::Vec2& pos) override;
-  ca::Rect<f32> getBounds() const override;
   void tick(float adjustment) override;
-  void render(ca::Canvas* canvas, const ca::Mat4& transform) const override;
 
 private:
   enum class Task {
@@ -44,9 +42,6 @@ private:
 
   // Find the best target to shoot at.
   Object* findBestTarget();
-
-  // Move the missiles into their positions on the rail.
-  void turnRail(float degrees);
 
   // Shoot the gun.
   void shoot();
@@ -71,16 +66,6 @@ private:
 
   // The RemovedObject slot id.
   size_t m_removedObjectSlotId;
-
-  // The shape we use to render the base of the turret.
-#if 0
-  sf::CircleShape m_baseShape;
-#endif  // 0
-
-  // The shape we use to render the turret.
-#if 0
-  sf::RectangleShape m_launcherRailShape;
-#endif  // 0
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(Turret);
 };
