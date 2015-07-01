@@ -23,22 +23,22 @@ namespace {
 
 static const struct {
   ResourceManager::Texture texture;
-  nu::FilePath::CharType* fileName;
+  const nu::FilePath::CharType* fileName;
 } kTextures[] = {
     {ResourceManager::Texture::Unknown,
-     FILE_PATH_LITERAL("images\\unknown.png")},
+     FILE_PATH_LITERAL("images/unknown.png")},
     {ResourceManager::Texture::MouseCursor,
-     FILE_PATH_LITERAL("images\\mouse_cursor.png")},
+     FILE_PATH_LITERAL("images/mouse_cursor.png")},
     {ResourceManager::Texture::CameraTarget,
-     FILE_PATH_LITERAL("images\\camera_target.png")},
+     FILE_PATH_LITERAL("images/camera_target.png")},
     {ResourceManager::Texture::CommandCenter,
-     FILE_PATH_LITERAL("images\\objects\\command_center.png")},
+     FILE_PATH_LITERAL("images/objects/command_center.png")},
     {ResourceManager::Texture::Asteroid1,
-     FILE_PATH_LITERAL("images\\objects\\asteroid_1.png")},
+     FILE_PATH_LITERAL("images/objects/asteroid_1.png")},
     {ResourceManager::Texture::Asteroid2,
-     FILE_PATH_LITERAL("images\\objects\\asteroid_2.png")},
+     FILE_PATH_LITERAL("images/objects/asteroid_2.png")},
     {ResourceManager::Texture::Asteroid3,
-     FILE_PATH_LITERAL("images\\objects\\asteroid_3.png")},
+     FILE_PATH_LITERAL("images/objects/asteroid_3.png")},
 };
 
 }  // namespace
@@ -51,8 +51,8 @@ ResourceManager::~ResourceManager() {
 
 bool ResourceManager::loadAll(const nu::FilePath& root) {
   if (!m_fontStore.load(Font::Default,
-                        loaders::fromFile<ca::Font>(root.append(
-                            FILE_PATH_LITERAL("fonts\\arial.ttf"))))) {
+                        loaders::fromFile<ca::Font>(
+root.append(FILE_PATH_LITERAL("fonts")).append("arial.ttf")))) {
     LOG(Error) << "Could not load default font.";
     return false;
   }

@@ -35,7 +35,11 @@ public:
 
     // Initialize the resource manager.
     if (!m_resourceManager.loadAll(nu::FilePath(
+#if OS(WIN)
             FILE_PATH_LITERAL("C:\\Workspace\\SpaceGame\\res\\")))) {
+#else
+        FILE_PATH_LITERAL("/Users/tiaanl/Workspace/SpaceGame/res/")))) {
+#endif
       return false;
     }
 
@@ -45,9 +49,6 @@ public:
     // Construct the universe game state.
     m_gameState = std::make_unique<GameStateUniverse>(&m_resourceManager,
                                                       m_uiContext.get());
-
-    using Clock = std::chrono::high_resolution_clock;
-    auto lastTick = Clock::now();
 
     return ca::WindowDelegate::onWindowCreated();
   }
