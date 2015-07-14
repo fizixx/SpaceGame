@@ -18,12 +18,11 @@
 #include "utils/math.h"
 #include "utils/stream_operators.h"
 
-Bullet::Bullet(Universe* universe, const ca::Vec2& pos, f32 direction,
+Bullet::Bullet(Universe* universe, const ca::Vec2& launchPos, f32 direction,
                f32 speed)
-  : Projectile(universe, ObjectType::Bullet, pos), m_direction(direction),
-    m_speed(speed), m_originalPos(pos) {
+  : Projectile(universe, ObjectType::Bullet, launchPos, direction, speed) {
   m_renderComponent = std::make_unique<SpriteRenderComponent>(
-      universe->getResourceManager(), ResourceManager::Texture::Unknown);
+      universe->getResourceManager(), ResourceManager::Texture::Bullet);
 }
 
 Bullet::~Bullet() {
@@ -49,7 +48,7 @@ void Bullet::tick(f32 adjustment) {
 
   // If the distance from our current position to the original position is more
   // than our range, then just die.
-  if (distanceBetween(m_pos, m_originalPos) > 1500.f) {
+  if (distanceBetween(m_pos, m_launchPos) > 1500.f) {
     shouldDie = true;
   }
 

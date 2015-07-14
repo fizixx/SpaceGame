@@ -14,13 +14,10 @@
 
 #include "universe/objects/projectiles/projectile.h"
 
-#include <cmath>
-
-#include "utils/math.h"
-
 Projectile::Projectile(Universe* universe, ObjectType objectType,
-                       const ca::Vec2& pos)
-  : Object(universe, objectType, pos) {
+                       const ca::Vec2& launchPos, f32 direction, f32 speed)
+  : Object(universe, objectType, launchPos), m_direction(direction),
+    m_speed(speed), m_launchPos(launchPos) {
 }
 
 Projectile::~Projectile() {

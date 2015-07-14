@@ -21,7 +21,7 @@
 DEFINE_OBJECT(Asteroid, "Power Generator");
 
 Asteroid::Asteroid(Universe* universe, const ca::Vec2& pos,
-                   int32_t initialMinerals)
+                   i32 initialMinerals)
   : Object(universe, ObjectType::Asteroid, pos), m_minerals(initialMinerals) {
   ResourceManager::Texture texture = ResourceManager::Texture::Asteroid3;
   if (m_minerals < 700) {
@@ -37,7 +37,7 @@ Asteroid::Asteroid(Universe* universe, const ca::Vec2& pos,
 Asteroid::~Asteroid() {
 }
 
-void Asteroid::setMiniralCount(int32_t mineralCount) {
+void Asteroid::setMiniralCount(i32 mineralCount) {
   m_minerals = mineralCount;
 }
 

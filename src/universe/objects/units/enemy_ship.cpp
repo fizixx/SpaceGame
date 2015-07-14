@@ -39,7 +39,7 @@ EnemyShip::EnemyShip(Universe* universe, const ca::Vec2& pos)
     m_smokeEmitter(std::bind(&EnemyShip::createSmokeParticle, this,
                              std::placeholders::_1, std::placeholders::_2)) {
   m_renderComponent = std::make_unique<SpriteRenderComponent>(
-      universe->getResourceManager(), ResourceManager::Texture::Unknown);
+      universe->getResourceManager(), ResourceManager::Texture::EnemyShip);
 
 #if BUILD(DEBUG) && 0
   // Set up the info text.
@@ -55,12 +55,12 @@ EnemyShip::EnemyShip(Universe* universe, const ca::Vec2& pos)
 
   createEngagementRangeShape();
 
-  objectRemovedId = m_universe->getObjectRemovedSignal().connect(
+  m_objectRemovedId = m_universe->getObjectRemovedSignal().connect(
       nu::slot(&EnemyShip::onObjectRemoved, this));
 }
 
 EnemyShip::~EnemyShip() {
-  m_universe->getObjectRemovedSignal().disconnect(objectRemovedId);
+  m_universe->getObjectRemovedSignal().disconnect(m_objectRemovedId);
 }
 
 void EnemyShip::setTarget(Object* target) {
@@ -156,7 +156,7 @@ void EnemyShip::tick(f32 adjustment) {
 
     const f32 directionToTarget = directionBetween(m_pos, m_travelTargetPos);
     if (std::abs(directionToTarget - m_direction) > kMaxTurnRadius) {
-      // m_direction += (std::rand() % 2 == 0) ? 30.f : -30.f;
+      m_direction += (std::rand() % 2 == 0) ? 30.f : -30.f;
       m_task = Task::Egress;
     }
   }
@@ -251,7 +251,7 @@ void EnemyShip::createEngagementRangeShape() {
   m_engagementRangeShape[0].position = sf::Vector2f(75.f, 0.f);
   m_engagementRangeShape[0].color = color;
 
-  size_t i = 1;
+  usize i = 1;
   const f32 spreadStep = kSpread / static_cast<f32>(kSteps);
   const f32 half = kSpread / -2.f;
   for (f32 degrees = 0.f; degrees <= kSpread; degrees += spreadStep, ++i) {

@@ -16,6 +16,8 @@
 
 #include "canvas/math/transform.h"
 
+#include "utils/math.h"
+
 SpriteRenderComponent::SpriteRenderComponent(ResourceManager* resourceManager,
                                              ResourceManager::Texture texture) {
   m_texture = resourceManager->getTexture(texture);
@@ -28,7 +30,10 @@ ca::Rect<f32> SpriteRenderComponent::getBounds() const {
 
 void SpriteRenderComponent::render(ca::Canvas* canvas,
                                    const ca::Mat4& transform,
-                                   const ca::Vec2& pos) const {
-  const ca::Mat4 local = transform * ca::translate(pos.x, pos.y, 0.f);
+                                   const ca::Vec2& pos, f32 direction) const {
+  ca::Mat4 local{transform};
+  local *= ca::translate(pos.x, pos.y, 0.f);
+  local *= ca::rotate(degToRad(direction), ca::Vec3{0.0f, 0.0f, 1.0f});
+
   m_sprite.render(canvas, local);
 }

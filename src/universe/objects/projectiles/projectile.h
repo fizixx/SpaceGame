@@ -19,10 +19,21 @@
 
 class Projectile : public Object {
 public:
-  Projectile(Universe* universe, ObjectType objectType, const ca::Vec2& pos);
+  Projectile(Universe* universe, ObjectType objectType,
+             const ca::Vec2& launchPos, f32 direction, f32 speed);
   ~Projectile() override;
 
-  virtual int32_t getDamageAmount() const = 0;
+  virtual i32 getDamageAmount() const = 0;
+
+protected:
+  // The direction the projectile travelling.
+  f32 m_direction{0.f};
+
+  // The speed the projectile is traveling at.
+  f32 m_speed{0.f};
+
+  // The position the projectile was launched from.
+  ca::Vec2 m_launchPos;
 
 private:
   DISALLOW_COPY_AND_ASSIGN(Projectile);

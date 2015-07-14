@@ -97,6 +97,6 @@ ca::Rect<f32> Object::getBounds() const {
 void Object::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
   // Render the RenderComponent if we have one.
   if (m_renderComponent) {
-    m_renderComponent->render(canvas, transform, m_pos);
+    m_renderComponent->render(canvas, transform, m_pos, m_direction);
   }
 }

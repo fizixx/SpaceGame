@@ -19,7 +19,8 @@
 
 class Bullet : public Projectile {
 public:
-  Bullet(Universe* universe, const ca::Vec2& pos, f32 direction, f32 speed);
+  Bullet(Universe* universe, const ca::Vec2& launchPos, f32 direction,
+         f32 speed);
   ~Bullet() override;
 
   // Override: Projectile
@@ -27,15 +28,6 @@ public:
   void tick(f32 adjustment) override;
 
 private:
-  // The direction we are traveling in.
-  f32 m_direction{0.f};
-
-  // The speed we are travelling.
-  f32 m_speed{0.f};
-
-  // The original position we started to travel from.
-  ca::Vec2 m_originalPos;
-
   DISALLOW_COPY_AND_ASSIGN(Bullet);
 };
 

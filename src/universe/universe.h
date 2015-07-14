@@ -64,12 +64,12 @@ public:
   void createLinksFor(Object* object);
 
   // Power
-  int32_t getPower() const { return m_totalPower; }
-  void adjustPower(int32_t amount);
+  i32 getPower() const { return m_totalPower; }
+  void adjustPower(i32 amount);
 
   // Minerals
-  int32_t getMinerals() const { return m_totalMinerals; }
-  void adjustMinerals(int32_t amount);
+  i32 getMinerals() const { return m_totalMinerals; }
+  void adjustMinerals(i32 amount);
 
   // Update the entire universe.  This should run at 60fps.
   void tick(f32 adjustment);
@@ -89,7 +89,7 @@ private:
   // Create count number of asteroids within the given radius around the given
   // origin.
   void createAsteroids(const ca::Vec2& origin, f32 minRadius, f32 maxRadius,
-                       size_t count);
+                       usize count);
 
   // Do the actual work of deleting an object.
   void removeObjectInternal(Object* object);
@@ -118,10 +118,10 @@ private:
   bool m_inDestructor{false};
 
   // The total amount of power in the universe.
-  int32_t m_totalPower{0};
+  i32 m_totalPower{0};
 
   // The total amount of minerals in the universe.
-  int32_t m_totalMinerals{5000};
+  i32 m_totalMinerals{5000};
 
   // Signal that is emitted when an object is removed from the universe.
   ObjectRemovedSignal m_objectRemovedSignal;

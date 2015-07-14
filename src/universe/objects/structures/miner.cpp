@@ -116,7 +116,7 @@ void Miner::mineAsteroids() {
   for (auto& laser : m_lasers) {
     Asteroid* asteroid = laser->getAsteroid();
     // Mine the asteroid.
-    int32_t amountMined = asteroid->mine(10);
+    i32 amountMined = asteroid->mine(10);
     m_universe->adjustMinerals(amountMined);
   }
 }

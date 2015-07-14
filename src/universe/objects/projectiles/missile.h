@@ -48,23 +48,17 @@ private:
   // Called when the universe removed an object.
   void onObjectRemoved(Object* object);
 
-  // The direction we are currently travelling.
-  f32 m_direction;
-
   // Our current task.
   Task m_task{Task::Idle};
 
   // The target we are attacking.
   Object* m_target{nullptr};
 
-  // The speed we are travelling at.
-  f32 m_speed{0.f};
-
   // The time that has passed since we were launched.
   f32 m_timeSinceLaunch{0.f};
 
   // Id for the ObjectRemoved slot.
-  size_t m_objectRemovedSlotId;
+  usize m_objectRemovedSlotId;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(Missile);
 };

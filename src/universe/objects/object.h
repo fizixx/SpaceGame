@@ -16,6 +16,7 @@
 #define UNIVERSE_OBJECTS_OBJECT_H_
 
 #include <cstdint>
+#include <memory>
 #include <set>
 
 #include "canvas/math/vec2.h"
@@ -103,6 +104,9 @@ protected:
 
   // The position of the object in universe coordinates.
   ca::Vec2 m_pos;
+
+  // The rotation of the object.
+  f32 m_direction{0.f};
 
   // The render component for this object.
   std::unique_ptr<RenderComponent> m_renderComponent;

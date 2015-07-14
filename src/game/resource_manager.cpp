@@ -39,6 +39,11 @@ static const struct {
      FILE_PATH_LITERAL("images/objects/asteroid_2.png")},
     {ResourceManager::Texture::Asteroid3,
      FILE_PATH_LITERAL("images/objects/asteroid_3.png")},
+
+    {ResourceManager::Texture::EnemyShip,
+     FILE_PATH_LITERAL("images/objects/enemy_ship.png")},
+    {ResourceManager::Texture::Bullet,
+     FILE_PATH_LITERAL("images/objects/bullet.png")},
 };
 
 }  // namespace
@@ -52,12 +57,13 @@ ResourceManager::~ResourceManager() {
 bool ResourceManager::loadAll(const nu::FilePath& root) {
   if (!m_fontStore.load(Font::Default,
                         loaders::fromFile<ca::Font>(
-root.append(FILE_PATH_LITERAL("fonts")).append("arial.ttf")))) {
+                            root.append(FILE_PATH_LITERAL("fonts"))
+                                .append(FILE_PATH_LITERAL("arial.ttf"))))) {
     LOG(Error) << "Could not load default font.";
     return false;
   }
 
-  for (size_t i = 0; i < ARRAY_SIZE(kTextures); ++i) {
+  for (usize i = 0; i < ARRAY_SIZE(kTextures); ++i) {
     if (!m_textureStore.load(kTextures[i].texture,
                              loaders::fromFile<ca::Texture>(
                                  root.append(kTextures[i].fileName)))) {

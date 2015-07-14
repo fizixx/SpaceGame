@@ -37,12 +37,3 @@ if(APPLE)
     ${OSX_APPKIT_LIBRARY}
   )
 endif()
-
-# tools/model_convert
-
-add_executable("ModelConvert"
-  "tools/model_convert/model_convert.cpp"
-  "tools/model_convert/parser.cpp"
-  "tools/model_convert/parser.h"
-)
-target_link_libraries("ModelConvert" "nucleus")

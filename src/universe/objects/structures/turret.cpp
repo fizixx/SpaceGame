@@ -98,7 +98,7 @@ void Turret::shoot() {
 
   // Find a missile that we can launch.
   Missile* ready = nullptr;
-  for (size_t i = 0; i < m_missiles.size(); ++i) {
+  for (usize i = 0; i < m_missiles.size(); ++i) {
     if (m_missiles[i] && !m_missiles[i]->isLaunched()) {
       ready = m_missiles[i];
       break;
@@ -113,7 +113,7 @@ void Turret::shoot() {
 void Turret::onObjectRemoved(Object* object) {
   // If the object is one of our missiles, then we should create a missile in
   // it's place.
-  for (size_t i = 0; i < m_missiles.size(); ++i) {
+  for (usize i = 0; i < m_missiles.size(); ++i) {
     if (m_missiles[i] == object) {
       m_missiles[i] = static_cast<Missile*>(m_universe->addObject(
           std::make_unique<Missile>(m_universe, m_pos, m_turretDirection)));

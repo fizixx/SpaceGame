@@ -35,6 +35,9 @@ public:
     Asteroid1,
     Asteroid2,
     Asteroid3,
+
+    EnemyShip,
+    Bullet,
   };
 
   ResourceManager();

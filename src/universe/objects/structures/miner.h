@@ -82,7 +82,7 @@ private:
   std::vector<std::unique_ptr<Laser>> m_lasers;
 
   // Id for the removed object slot.
-  size_t m_removedObjectId;
+  usize m_removedObjectId;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(Miner);
 };

@@ -65,7 +65,7 @@ private:
   std::array<Missile*, 3> m_missiles;
 
   // The RemovedObject slot id.
-  size_t m_removedObjectSlotId;
+  usize m_removedObjectSlotId;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(Turret);
 };

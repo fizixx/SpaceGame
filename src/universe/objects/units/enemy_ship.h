@@ -68,9 +68,6 @@ private:
   // This ship's current task.
   Task m_task{Task::Nothing};
 
-  // The direction the ship is traveling in.
-  float m_direction{0.f};
-
   // The current speed that we are traveling at.
   float m_speed{0.f};
 
@@ -88,9 +85,7 @@ private:
   ca::Text m_infoText;
 #endif  // BUILD(DEBUG)
 
-  int stepper{0};
-
-  size_t objectRemovedId;
+  usize m_objectRemovedId;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(EnemyShip);
 };

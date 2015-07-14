@@ -24,10 +24,10 @@ static const f32 kMaxSpeed = 10.f;
 
 }  // namespace
 
-Missile::Missile(Universe* universe, const ca::Vec2& pos, f32 direction)
-  : Projectile(universe, ObjectType::Missile, pos), m_direction(direction) {
+Missile::Missile(Universe* universe, const ca::Vec2& launchPos, f32 direction)
+  : Projectile(universe, ObjectType::Missile, launchPos, direction, 0.f) {
   m_renderComponent = std::make_unique<SpriteRenderComponent>(
-      universe->getResourceManager(), ResourceManager::Texture::Unknown);
+      universe->getResourceManager(), ResourceManager::Texture::Bullet);
 
   m_objectRemovedSlotId = m_universe->getObjectRemovedSignal().connect(
       nu::slot(&Missile::onObjectRemoved, this));
@@ -50,7 +50,7 @@ void Missile::setDirection(f32 direction) {
   m_direction = direction;
 }
 
-int32_t Missile::getDamageAmount() const {
+i32 Missile::getDamageAmount() const {
   return 50;
 }
 

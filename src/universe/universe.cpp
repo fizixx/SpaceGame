@@ -82,7 +82,7 @@ void Universe::removeObject(Object* object) {
 }
 
 Object* Universe::findObjectAt(const ca::Vec2& pos) const {
-  for (size_t i = m_objects.size() - 1; i != -1; --i) {
+  for (usize i = m_objects.size() - 1; i != -1; --i) {
     if (m_objects[i] &&
         m_objects[i]->getBounds().contains(ca::Pos<f32>{pos.x, pos.y})) {
       return m_objects[i];
@@ -185,11 +185,11 @@ void Universe::createLinksFor(Object* object) {
   }
 }
 
-void Universe::adjustPower(int32_t amount) {
+void Universe::adjustPower(i32 amount) {
   m_totalPower += amount;
 }
 
-void Universe::adjustMinerals(int32_t amount) {
+void Universe::adjustMinerals(i32 amount) {
   m_totalMinerals += amount;
 }
 
@@ -242,19 +242,19 @@ void Universe::addObjectInternal(Object* object) {
 }
 
 void Universe::createAsteroids(const ca::Vec2& origin, f32 minRadius,
-                               f32 maxRadius, size_t count) {
-  for (size_t i = 0; i < count; ++i) {
+                               f32 maxRadius, usize count) {
+  for (usize i = 0; i < count; ++i) {
     // Get a random direction between 0 and 360.
     f32 randDirection = static_cast<f32>(std::rand() % 36000) / 100.f;
 
     // Get a random radius between 100 and the max radius.
     f32 randRadius =
         minRadius + static_cast<f32>(std::rand() %
-                                     (static_cast<int32_t>(
+                                     (static_cast<i32>(
                                          std::roundl(maxRadius) - minRadius)));
 
     // Get a random starting amount.
-    int32_t mineralCount = (std::rand() % 1000) + 100;
+    i32 mineralCount = (std::rand() % 1000) + 100;
 
     ca::Vec2 pos{origin.x + randRadius * std::cosf(randDirection),
                  origin.y + randRadius * std::sinf(randDirection)};

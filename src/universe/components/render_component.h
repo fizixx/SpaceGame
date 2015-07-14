@@ -28,7 +28,7 @@ public:
 
   // Render this component.
   virtual void render(ca::Canvas* canvas, const ca::Mat4& transform,
-                      const ca::Vec2& pos) const = 0;
+                      const ca::Vec2& pos, float rotation) const = 0;
 };
 
 class SpriteRenderComponent : public RenderComponent {
@@ -39,7 +39,7 @@ public:
   // Override: RenderComponent
   ca::Rect<f32> getBounds() const override;
   void render(ca::Canvas* canvas, const ca::Mat4& transform,
-              const ca::Vec2& pos) const override;
+              const ca::Vec2& pos, f32 direction) const override;
 
 private:
   // The texture we render.
